@@ -1,17 +1,29 @@
-<h1>Log In</h1>
+<div class="auth-page group">
+  <h1>Log in</h1>
 
-<form action="<%= session_url %>" method="post">
-  <input type="hidden"
-         name="authenticity_token"
-         value="<%= form_authenticity_token %>">
+  <form action="<%= session_url %>" method="post">
+    <input type="hidden"
+           name="authenticity_token"
+           value="<%= form_authenticity_token %>">
 
-  <label for="username">Username</label><br>
-  <input id="username" type="text" name="name" value="">
-  <br>
+    <label for="username">Username</label><br>
+    <input id="username" type="text" name="user[username]" value="">
+    <br>
 
-  <label for="password">Password</label><br>
-  <input id="password" type="password" name="name" value="">
-  <br>
+    <label for="password">Password</label><br>
+    <input id="password" type="password" name="user[password]" value="">
+    <br>
 
-  <input class="submit" type="submit" name="name" value="Log In">
-</form>
+    <input class="submit"
+           type="submit"
+           name="user[passwordconfirm]"
+           value="Log In">
+  </form>
+
+  <!-- TODO enable forgot your password functionaliy using emails -->
+  <div class="join-block">
+    Don't have an account?
+    <a class="join-button" href="<%= new_user_url %>">Join Clickapedia</a>
+  </div>
+
+</div>

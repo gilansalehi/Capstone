@@ -1,4 +1,6 @@
+<div class="auth-page group">
 
+<h1>Create account</h1>
 
 <form action="<%= users_url %>" method="post">
   <input type="hidden"
@@ -13,5 +15,20 @@
   <input id="password" type="password" name="user[password]" value="">
   <br>
 
-  <input class="submit" type="submit" value="Sign Up">
+  <label for="password2">Confirm password</label><br>
+  <input id="password2" type="password" name="user[password_confirm]" value="">
+  <br>
+
+  <label for="email">Email address (optional)</label><br>
+  <input id="email" type="text" name="user[email]" value="">
+  <br>
+
+  <input class="submit" type="submit" value="Create account">
 </form>
+
+  <div class="stats">
+    Clickapedia is made by people like you.
+
+  </div>
+
+</div>
