@@ -10,4 +10,8 @@ class Article < ActiveRecord::Base
     primary_key: :id
   )
 
+  def self.whats_new
+
+  end
+
 end
