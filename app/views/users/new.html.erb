@@ -1,30 +1,41 @@
 <div class="auth-page group">
 
-<h1>Create account</h1>
+  <h1>Create account</h1>
 
-<form action="<%= users_url %>" method="post">
-  <input type="hidden"
-         name="authenticity_token"
-         value="<%= form_authenticity_token %>">
+  <% if flash[:errors] %>
+    <ul class="errors">
+    <% flash[:errors].each do |error| %>
+      <li><%= error %></li>
+    <% end %>
+    </ul>
+  <% end %>
 
-  <label for="username">Username</label><br>
-  <input id="username" type="text" name="user[username]" value="">
-  <br>
+  <form action="<%= users_url %>" method="post">
+    <input type="hidden"
+           name="authenticity_token"
+           value="<%= form_authenticity_token %>">
 
-  <label for="password">Password</label><br>
-  <input id="password" type="password" name="user[password]" value="">
-  <br>
+    <label for="username">Username</label><br>
+    <input id="username" type="text" name="user[username]" value="">
+    <br>
 
-  <label for="password2">Confirm password</label><br>
-  <input id="password2" type="password" name="user[password_confirm]" value="">
-  <br>
+    <label for="password">Password</label><br>
+    <input id="password" type="password" name="user[password]" value="">
+    <br>
 
-  <label for="email">Email address (optional)</label><br>
-  <input id="email" type="text" name="user[email]" value="">
-  <br>
+    <label for="password2">Confirm password</label><br>
+    <input id="password2"
+           type="password"
+           name="user[password_confirm]"
+           value="">
+    <br>
 
-  <input class="submit" type="submit" value="Create account">
-</form>
+    <label for="email">Email address (optional)</label><br>
+    <input id="email" type="text" name="user[email]" value="">
+    <br>
+
+    <input class="submit" type="submit" value="Create account">
+  </form>
 
   <div class="stats">
     Clickapedia is made by people like you.

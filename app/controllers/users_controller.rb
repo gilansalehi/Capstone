@@ -5,12 +5,15 @@ class UsersController < ApplicationController
   end
 
   def create
+    if params[:user][:password] != params[:user][:password_confirm]
+      flash.now[:errors] = ["Password must match password confirmation"]
+      render :new
+      return
+    end
+
     @user = User.new(user_params)
 
-    if user_params[:password] != user_params[:passwordconfirm]
-      flash.now[:errors] = "Password must match password confirmation"
-      render :new
-    elsif @user.save
+    if @user.save
       sign_in!(@user)
       redirect_to root_url
     else
@@ -25,6 +28,6 @@ class UsersController < ApplicationController
 
   private
   def user_params
-    params.require(:user).permit(:username, :password, :passwordconfirm)
+    params.require(:user).permit(:username, :password)
   end
 end

@@ -1,6 +1,14 @@
 <div class="auth-page group">
   <h1>Log in</h1>
 
+  <% if flash[:errors] %>
+    <ul class="errors">
+    <% flash[:errors].each do |error| %>
+      <li><%= error %></li>
+    <% end %>
+    </ul>
+  <% end %>
+
   <form action="<%= session_url %>" method="post">
     <input type="hidden"
            name="authenticity_token"
@@ -14,10 +22,7 @@
     <input id="password" type="password" name="user[password]" value="">
     <br>
 
-    <input class="submit"
-           type="submit"
-           name="user[passwordconfirm]"
-           value="Log In">
+    <input class="submit" type="submit" value="Log In">
   </form>
 
   <!-- TODO enable forgot your password functionaliy using emails -->
