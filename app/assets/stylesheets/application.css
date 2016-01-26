@@ -120,6 +120,13 @@ form > .submit {
   font-weight: bold;
 }
 
+form > .submit:hover {
+  background: #008c6d;
+  border: 1px solid #008c6d;
+  cursor: pointer;
+
+}
+
 .auth-page > .join-block {
   display: block;
   width: 316px;
@@ -139,4 +146,31 @@ form > .submit {
   border-radius: 2px;
   margin: 3px 0;
   padding: 7px;
+}
+
+.auth-page > .join-block > a:hover {
+  background: #2962cc;
+  border: 1px solid #2962cc;
+}
+
+.auth-page > .demo-user {
+  display: block;
+  width: 316px;
+  /*margin: 10px 0;*/
+}
+
+.auth-page > .demo-user > input {
+  display: block;
+  background: #ff8696;
+  border: 1px solid #ff8696;
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  border-radius: 2px;
+  padding: 7px;
+}
+
+.auth-page > .demo-user > input:hover {
+  background: #ff4444;
+  border: 1px solid #ff4444;
 }

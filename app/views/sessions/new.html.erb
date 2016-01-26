@@ -39,4 +39,12 @@
     <a class="join-button" href="<%= new_user_url %>">Join Clickapedia</a>
   </div>
 
+  <form class="demo-user" action="<%= session_url %>" method="post">
+    <input type="hidden"
+           name="authenticity_token"
+           value="<%= form_authenticity_token %>">
+    <input type="hidden" name="user[username]" value="guest">
+    <input type="hidden" name="user[password]" value="password">
+    <input class="demo-user submit" type="submit" value="Log In As Guest">
+  </form>
 </div>
