@@ -9,7 +9,7 @@ class UsersController < ApplicationController
       flash.now[:errors] = ["Password must match password confirmation"]
       render :new
       return
-    end
+    end # TODO this in react auth once we learn that.
 
     @user = User.new(user_params)
 

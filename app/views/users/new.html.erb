@@ -16,22 +16,35 @@
            value="<%= form_authenticity_token %>">
 
     <label for="username">Username</label><br>
-    <input id="username" type="text" name="user[username]" value="">
+    <input id="username"
+           type="text"
+           name="user[username]"
+           placeholder="Enter your username"
+           value="">
     <br>
 
     <label for="password">Password</label><br>
-    <input id="password" type="password" name="user[password]" value="">
+    <input id="password"
+           type="password"
+           name="user[password]"
+           placeholder="Enter your password"
+           value="">
     <br>
 
     <label for="password2">Confirm password</label><br>
     <input id="password2"
            type="password"
            name="user[password_confirm]"
+           placeholder="Enter your password again"
            value="">
     <br>
 
     <label for="email">Email address (optional)</label><br>
-    <input id="email" type="text" name="user[email]" value="">
+    <input id="email"
+           type="text"
+           name="user[email]"
+           placeholder="Enter your email address"
+           value="">
     <br>
 
     <input class="submit" type="submit" value="Create account">
