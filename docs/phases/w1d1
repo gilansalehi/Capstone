@@ -1,0 +1,29 @@
+# Phase 1: Set Up
+
+## Rails
+### Models
+* User
+* Article
+
+### Controllers
+* UsersController (create, new, show)
+* SessionsController (create, new, destroy)
+* Api::ArticlesController (create, destroy, index, show, update)
+
+### Views
+* users/new.html.erb
+* session/new.html.erb
+* article/index.json.jbuilder
+* article/show.json.jbuilder
+
+## Flux
+### Views (React Components)
+
+### Stores
+
+### Actions
+
+### ApiUtil
+
+## Gems/Libraries
+* BCrypt (Gem)

@@ -1,0 +1,33 @@
+# W1D3: Homepage and mini catch-up day.
+
+## Rails
+### Models
+
+### Controllers
+
+### Views
+
+## Flux
+### Views (React Components)
+* ArticlesIndex
+  - Homepage
+* ArticleFragment
+
+### Stores
+
+### Actions
+* ApiActions.receiveTodaysArticles -> triggered by ApiUtil
+* ApiActions.receiveSingleArticle
+* ApiActions.deleteArticle
+* ArticleActions.fetchSingleArticle
+* ArticleActions.createArticle
+* ArticleActions.destroyArticle
+* Will finish any of the above not completed on Day 2
+
+### ApiUtil
+* ApiUtil.fetchSingleArticle
+* ApiUtil.createArticle
+* ApiUtil.destroyArticle
+
+## Gems/Libraries
+* Flux Dispatcher (npm)

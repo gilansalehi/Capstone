@@ -1,0 +1,23 @@
+# W1D4: Edit Article page
+
+## Rails
+### Models
+
+### Controllers
+
+### Views
+
+## Flux
+### Views (React Components)
+* ArticleEdit
+
+### Stores
+
+### Actions
+* ApiActions.editArticle
+* ArticleActions.updateArticle
+
+### ApiUtil
+* ApiUtil.editArticle
+
+## Gems/Libraries

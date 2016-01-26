@@ -1,0 +1,34 @@
+# Phase 2: Article Page
+
+## Rails
+### Models
+
+### Controllers
+
+### Views
+
+## Flux
+### Views (React Components)
+* ArticlesIndex
+  - Homepage
+* ArticleShow
+
+### Stores
+* Article
+
+### Actions
+* ApiActions.receiveTodaysArticles -> triggered by ApiUtil
+* ApiActions.receiveSingleArticle
+* ApiActions.deleteArticle
+* ArticleActions.fetchSingleArticle
+* ArticleActions.createArticle
+* ArticleActions.destroyArticle
+
+### ApiUtil
+* ApiUtil.fetchSingleArticle
+* ApiUtil.createArticle
+* ApiUtil.editArticle
+* ApiUtil.destroyArticle
+
+## Gems/Libraries
+* Flux Dispatcher (npm)

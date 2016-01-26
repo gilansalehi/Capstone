@@ -1,0 +1,21 @@
+# Wikiwand Magic
+
+* Apply a totally different set of CSS styles to every page, making it
+beautiful.
+
+# Homepage Newsfeed
+
+* Display a "What's New" column, of the most recently created articles.
+  * SQL query to the database LIMIT 10 order by Date Created DESC.
+  * create a article fragment view in react as a link to those pages.
+
+# Editor Rating
+
+Wikipedia's greatest strength is also its weakness: anyone can edit a page.
+I'd like to implement a feature that will hopefully prevent vandals from
+editing pages.  In order to edit a page, your account must have a certain
+minimum editor rating with the community to qualify as a trusted source.
+I will assign each user a score based on: how much content they generate, how
+frequently or infrequently their content is edited by other users, how
+recently they became an editor, and other significant markers of a user's
+trustworthiness.

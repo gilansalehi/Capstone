@@ -1,0 +1,29 @@
+# W1D4: Edit Article page
+
+## Rails
+### Models
+
+### Controllers
+
+### Views
+
+## Flux
+### Views (React Components)
+* ArticleEdit
+  - advanced styling.
+
+* ArticleShow, ArticlesIndex
+  - advanced CSS
+
+### Stores
+
+### Actions
+* ApiActions.editArticle
+* ArticleActions.updateArticle
+* any of the above not finished on w1d4.
+
+### ApiUtil
+* ApiUtil.editArticle
+* any of the above not finished on w1d4.
+
+## Gems/Libraries
