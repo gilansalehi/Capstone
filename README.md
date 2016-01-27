@@ -1,3 +1,9 @@
+# TODO:
+// fix article rendering to include paragraph breaks
+// fix article rendering to include images
+// Implement nav bar
+// set up react router
+
 # Clickapedia
 
 [Heroku link][heroku] **NB:** This should be a link to your production site
@@ -14,8 +20,9 @@ Clickapedia allows users to:
 
 <!-- This is a Markdown checklist. Use it to keep track of your progress! -->
 
-- [ ] Create an account
-- [ ] Log in / Log out
+- [x] Create an account
+- [x] Log in / Log out
+- [x] read an article...
 - [ ] Create, read, edit, and delete articles
 - [ ] Search the database for articles related to a search term
 - [ ] Tag articles with bibliographical information.

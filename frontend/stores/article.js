@@ -31,6 +31,9 @@ ArticleStore.firstArticle = function () {
   return _articles[0];
 };
 
+ArticleStore.firstNArticles = function (n) {
+  return _articles.slice(0, n);
+};
 // for testing
 window.ArticleStore = ArticleStore;
 

@@ -52,3 +52,9 @@ article1 = Article.create!(title: "Ocean",
   liquid water within a circumstellar habitable zone. Ocean planets are a
   hypothetical type of planet with a surface completely covered with
   liquid.[11][12])", author_id: 1)
+
+article2 = Article.create!(
+  title: "Second Test Article",
+  body: "blah blah blah",
+  author_id: 1
+  )

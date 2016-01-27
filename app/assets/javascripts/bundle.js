@@ -24332,7 +24332,7 @@
 	var ApiUtil = __webpack_require__(230);
 	var History = __webpack_require__(159).History;
 	
-	// write the store first...
+	// this is the display logic for a single article.
 	
 	var Article = React.createClass({
 	  displayName: 'Article',
@@ -24425,6 +24425,9 @@
 	  return _articles[0];
 	};
 	
+	ArticleStore.firstNArticles = function (n) {
+	  return _articles.slice(0, n);
+	};
 	// for testing
 	window.ArticleStore = ArticleStore;
 	
