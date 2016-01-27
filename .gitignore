@@ -14,4 +14,4 @@
 
 # Ignore node modules and bundle.js
 /node_modules/
-/bundle.js
+/app/assets/javascripts/bundle.js

@@ -3,7 +3,7 @@ module.exports = {
   entry: "./frontend/clickapedia.jsx",
   output: {
     path: "./",
-    filename: "bundle.js"
+    filename: "app/assets/javascripts/bundle.js"
   },
   module: {
     loaders: [
