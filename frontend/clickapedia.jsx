@@ -4,12 +4,13 @@ var ReactDOM = require('react-dom');
 var Router = require('react-router').Router;
 var Route = require('react-router').Route;
 var IndexRoute = require('react-router').IndexRoute;
+var Article = require('./components/article.jsx');
 
 // var App = require('./components/app.jsx');
 
 // var routes = (
 //   <Route path="/" component={App}>
-//     <Route path="pokemon/:pokemonId" component={PokemonDetail}>
+//     <Route path="article/:articleId" component={Article}>
 //       <Route path="toys/:toyId" component={ToyDetail} />
 //     </Route>
 //   </Route>
@@ -22,14 +23,16 @@ var IndexRoute = require('react-router').IndexRoute;
 //   );
 // });
 
-var MyComponent = React.createClass({
+var Main = React.createClass({
   render: function () {
     return(
-      <div>Hello World</div>
+      <div>Hello this is dog
+        <Article />
+      </div>
     );
   }
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-  ReactDOM.render(<MyComponent />, document.getElementById('main'));
+  ReactDOM.render(<Main />, document.getElementById('root'));
 });
