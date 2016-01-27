@@ -174,3 +174,7 @@ form > .submit:hover {
   background: #ff4444;
   border: 1px solid #ff4444;
 }
+
+.article {
+  margin: 20px;
+}

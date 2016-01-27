@@ -51,6 +51,7 @@
 	var Route = __webpack_require__(159).Route;
 	var IndexRoute = __webpack_require__(159).IndexRoute;
 	var Article = __webpack_require__(208);
+	var ArticleStore = __webpack_require__(209);
 	
 	// var App = require('./components/app.jsx');
 	
@@ -69,21 +70,20 @@
 	//   );
 	// });
 	
-	var Main = React.createClass({
-	  displayName: 'Main',
+	var App = React.createClass({
+	  displayName: 'App',
 	
 	  render: function () {
 	    return React.createElement(
 	      'div',
 	      null,
-	      'Hello this is dog',
 	      React.createElement(Article, null)
 	    );
 	  }
 	});
 	
 	document.addEventListener("DOMContentLoaded", function () {
-	  ReactDOM.render(React.createElement(Main, null), document.getElementById('root'));
+	  ReactDOM.render(React.createElement(App, null), document.getElementById('root'));
 	});
 
 /***/ },
@@ -24329,6 +24329,7 @@
 	var React = __webpack_require__(1);
 	var ReactRouter = __webpack_require__(159);
 	var ArticleStore = __webpack_require__(209);
+	var ApiUtil = __webpack_require__(230);
 	var History = __webpack_require__(159).History;
 	
 	// write the store first...
@@ -24340,14 +24341,14 @@
 	
 	  getInitialState: function () {
 	    return {
-	      title: "Placeholder",
-	      article: "So Fascinating"
+	      title: "Article Title...",
+	      body: "Article Body..."
 	    };
 	  },
 	
 	  componentDidMount: function () {
 	    this.articleListener = ArticleStore.addListener(this.__onChange);
-	    ApiUtil.fetchArticle();
+	    ApiUtil.fetchArticles();
 	  },
 	
 	  handleClick: function (e) {
@@ -24368,21 +24369,16 @@
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: 'article' },
 	      React.createElement(
 	        'h1',
 	        { onClick: this.handleClick },
-	        '(this.state.title)'
+	        this.state.title
 	      ),
 	      React.createElement(
 	        'article',
 	        null,
 	        this.state.body
-	      ),
-	      React.createElement(
-	        'p',
-	        null,
-	        this.state.bibliography
 	      )
 	    );
 	  }
@@ -24403,6 +24399,7 @@
 	var _articles = [];
 	
 	var resetArticles = function (articles) {
+	  console.log("Articles reset");
 	  _articles = articles.slice();
 	};
 	
@@ -24420,7 +24417,7 @@
 	};
 	
 	// for testing
-	var ArticleStore = window.ArticleStore;
+	window.ArticleStore = ArticleStore;
 	
 	module.exports = ArticleStore;
 
@@ -30832,7 +30829,12 @@
 /* 226 */
 /***/ function(module, exports) {
 
-
+	var ArticleConstants = {
+	  ARTICLE_RECEIVED: "ARTICLE_RECEIVED",
+	  ARTICLES_RECEIVED: "ARTICLES_RECEIVED"
+	};
+	
+	module.exports = ArticleConstants;
 
 /***/ },
 /* 227 */
@@ -31094,6 +31096,82 @@
 	
 	module.exports = Dispatcher;
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
+
+/***/ },
+/* 230 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var ApiActions = __webpack_require__(231);
+	
+	var ApiUtil = {
+	  fetchArticles: function (articles) {
+	    $.ajax({
+	      url: '/api/articles',
+	      method: 'GET',
+	      dataType: 'json',
+	      success: function (data) {
+	        console.log("Fetched All Articles");
+	        ApiActions.allArticles(data);
+	      },
+	      error: function () {
+	        console.log("Error with fetchArticles");
+	      }
+	    });
+	  }
+	
+	};
+	
+	// fetchArticle: function (article) {
+	//   var id = article.id; // more details
+	//   $.ajax({
+	//     url: '/api/articles/' + id,
+	//     method: 'GET',
+	//     dataType: 'json',
+	//     success: function (article) {
+	//       console.log("Fetched Article Successfully");
+	//       ApiActions.addArticle(article);
+	//     },
+	//     error: function () {
+	//       console.log("Error with fetchArticle");
+	//     },
+	//   });
+	// },
+	
+	module.exports = ApiUtil;
+
+/***/ },
+/* 231 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(227);
+	var ArticleConstants = __webpack_require__(226);
+	
+	// var ApiActions = {
+	//   receiveAll: function(articles){
+	//     AppDispatcher.dispatch({
+	//       actionType: BenchConstants.BENCHES_RECEIVED,
+	//       benches: benches
+	//     });
+	//   }
+	// };
+	
+	var ApiActions = {
+	  allArticles: function (articles) {
+	    AppDispatcher.dispatch({
+	      actionType: ArticleConstants.ARTICLES_RECEIVED,
+	      articles: articles
+	    });
+	  },
+	
+	  addArticle: function (article) {
+	    AppDispatcher.dispatch({
+	      actionType: ArticleConstants.ARTICLE_RECEIVED,
+	      article: article
+	    });
+	  }
+	};
+	
+	module.exports = ApiActions;
 
 /***/ }
 /******/ ]);

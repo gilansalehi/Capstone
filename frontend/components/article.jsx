@@ -1,6 +1,7 @@
 var React = require('react');
 var ReactRouter = require('react-router');
 var ArticleStore = require('../stores/article.js');
+var ApiUtil = require('../util/api_util.js');
 var History = require('react-router').History;
 
 
@@ -11,14 +12,14 @@ var Article = React.createClass({
 
   getInitialState: function () {
     return ({
-      title: "Placeholder",
-      article: "So Fascinating"
+      title: "Article Title...",
+      body: "Article Body..."
     });
   },
 
   componentDidMount: function () {
     this.articleListener = ArticleStore.addListener(this.__onChange);
-    ApiUtil.fetchArticle();
+    ApiUtil.fetchArticles();
   },
 
   handleClick: function (e) {
@@ -38,10 +39,9 @@ var Article = React.createClass({
 
   render: function () {
     return (
-      <div>
-        <h1 onClick={this.handleClick}>(this.state.title)</h1>
+      <div className="article">
+        <h1 onClick={this.handleClick}>{this.state.title}</h1>
         <article>{this.state.body}</article>
-        <p>{this.state.bibliography}</p>
       </div>
     );
   }

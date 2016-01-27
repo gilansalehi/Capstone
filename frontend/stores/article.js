@@ -8,6 +8,7 @@ var ArticleStore = new Store(AppDispatcher);
 var _articles = [];
 
 var resetArticles = function (articles) {
+  console.log("Articles reset");
   _articles = articles.slice();
 };
 
@@ -25,6 +26,6 @@ ArticleStore.__onDispatch = function (payload) {
 };
 
 // for testing
-var ArticleStore = window.ArticleStore;
+window.ArticleStore = ArticleStore;
 
 module.exports = ArticleStore;

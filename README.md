@@ -140,3 +140,5 @@ to show them off for everyone.
 - [ ] Make homepage into a newsfeed updated daily.
 - [ ] Implement editor authority feature, preventing low-level editors from
       vandalizing the articles of high-level contributors.
+- [ ] STAR WARS STYLE: Using CSS wizardry, create a view mode that will tilt
+      transform, and scroll the article to look like the Star Wars opening crawl.

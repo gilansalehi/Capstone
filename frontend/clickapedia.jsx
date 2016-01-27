@@ -5,6 +5,7 @@ var Router = require('react-router').Router;
 var Route = require('react-router').Route;
 var IndexRoute = require('react-router').IndexRoute;
 var Article = require('./components/article.jsx');
+var ArticleStore = require('./stores/article.js');
 
 // var App = require('./components/app.jsx');
 
@@ -23,10 +24,11 @@ var Article = require('./components/article.jsx');
 //   );
 // });
 
-var Main = React.createClass({
+var App = React.createClass({
   render: function () {
     return(
-      <div>Hello this is dog
+      <div>
+        {/* NAV BAR GOES HERE... */}
         <Article />
       </div>
     );
@@ -34,5 +36,5 @@ var Main = React.createClass({
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-  ReactDOM.render(<Main />, document.getElementById('root'));
+  ReactDOM.render(<App />, document.getElementById('root'));
 });

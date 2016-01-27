@@ -51,6 +51,4 @@ article1 = Article.create!(title: "Ocean",
   may also exist on exoplanets and exomoons, including surface oceans of
   liquid water within a circumstellar habitable zone. Ocean planets are a
   hypothetical type of planet with a surface completely covered with
-  liquid.[11][12])",
-
-  autor_id: 1)
+  liquid.[11][12])", author_id: 1)
