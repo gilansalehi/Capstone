@@ -9,6 +9,10 @@ var ApiUtil = require('../util/api_util.js');
 var History = require('react-router').History;
 
 // this is the display logic for the main page.
+// The main page should render an Article Fragment for the 20 most recent
+// articles in the database.  Style the Article Fragments to be divs with fixed
+// widths and heights, float them to the left with a margin of 20px, making them
+// main page index a cool tilework of articles.
 
 var ArticleIndex = React.createClass({
   mixins: [History],
@@ -16,7 +20,7 @@ var ArticleIndex = React.createClass({
   getInitialState: function () {
     return ({
       title: new Date(),
-      articles: "fetch the articles"
+      articles: ["fetch the articles"]
     });
   },
 
@@ -33,7 +37,7 @@ var ArticleIndex = React.createClass({
   },
 
   __onChange: function () {
-    var articles = ArticleStore.firstNArticles(); // change to first n articles...
+    var articles = ArticleStore.firstNArticles(10);
     console.log("there was a change!");
     // ApiUtil.fetchArticle();
     this.setState({ title: new Date(), articles: articles });
@@ -44,13 +48,21 @@ var ArticleIndex = React.createClass({
   },
 
   render: function () {
-    var articles = this.state.articles.map(function (article) {
-      return (
-        <li>
-          <a href="">{article.title}</a>
-        </li>
-      );
-    });
+
+    var articles;
+
+    if (this.state.articles) {
+      articles = this.state.articles.map(function (article) {
+        return (
+          <li key={article.id}>
+            <a href="">{article.title}</a>
+          </li>
+        );
+      });
+    } else {
+      articles = <div>No articles to render</div>;
+    }
+
     return (
       <div className="index">
         <ul className="articles-list">

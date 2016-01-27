@@ -4,7 +4,9 @@ var ReactDOM = require('react-dom');
 var Router = require('react-router').Router;
 var Route = require('react-router').Route;
 var IndexRoute = require('react-router').IndexRoute;
+
 var Article = require('./components/article.jsx');
+var ArticleIndex = require('./components/article_index.jsx');
 var ArticleStore = require('./stores/article.js');
 
 // var App = require('./components/app.jsx');
@@ -29,6 +31,7 @@ var App = React.createClass({
     return(
       <div>
         {/* NAV BAR GOES HERE... */}
+        <ArticleIndex />
         <Article />
       </div>
     );

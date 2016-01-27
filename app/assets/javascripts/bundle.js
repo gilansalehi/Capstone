@@ -50,7 +50,9 @@
 	var Router = __webpack_require__(159).Router;
 	var Route = __webpack_require__(159).Route;
 	var IndexRoute = __webpack_require__(159).IndexRoute;
+	
 	var Article = __webpack_require__(208);
+	var ArticleIndex = __webpack_require__(232);
 	var ArticleStore = __webpack_require__(209);
 	
 	// var App = require('./components/app.jsx');
@@ -77,6 +79,7 @@
 	    return React.createElement(
 	      'div',
 	      null,
+	      React.createElement(ArticleIndex, null),
 	      React.createElement(Article, null)
 	    );
 	  }
@@ -31185,6 +31188,99 @@
 	};
 	
 	module.exports = ApiActions;
+
+/***/ },
+/* 232 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// This is the Homepage that displays what's new and various other things
+	// users might find interesting.
+	
+	var React = __webpack_require__(1);
+	var ReactRouter = __webpack_require__(159);
+	var ArticleStore = __webpack_require__(209);
+	var Article = __webpack_require__(208);
+	var ApiUtil = __webpack_require__(230);
+	var History = __webpack_require__(159).History;
+	
+	// this is the display logic for the main page.
+	// The main page should render an Article Fragment for the 20 most recent
+	// articles in the database.  Style the Article Fragments to be divs with fixed
+	// widths and heights, float them to the left with a margin of 20px, making them
+	// main page index a cool tilework of articles.
+	
+	var ArticleIndex = React.createClass({
+	  displayName: 'ArticleIndex',
+	
+	  mixins: [History],
+	
+	  getInitialState: function () {
+	    return {
+	      title: new Date(),
+	      articles: ["fetch the articles"]
+	    };
+	  },
+	
+	  componentDidMount: function () {
+	    this.articleListener = ArticleStore.addListener(this.__onChange);
+	    ApiUtil.fetchArticles();
+	  },
+	
+	  handleClick: function (e) {
+	    e.preventDefault();
+	    // var id = e.currentTarget......id
+	    // History.pushState(null, "/article/" + id, {})
+	    alert("You clicked the title");
+	  },
+	
+	  __onChange: function () {
+	    var articles = ArticleStore.firstNArticles(10);
+	    console.log("there was a change!");
+	    // ApiUtil.fetchArticle();
+	    this.setState({ title: new Date(), articles: articles });
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.articleListener.remove();
+	  },
+	
+	  render: function () {
+	
+	    var articles;
+	
+	    if (this.state.articles) {
+	      articles = this.state.articles.map(function (article) {
+	        return React.createElement(
+	          'li',
+	          { key: article.id },
+	          React.createElement(
+	            'a',
+	            { href: '' },
+	            article.title
+	          )
+	        );
+	      });
+	    } else {
+	      articles = React.createElement(
+	        'div',
+	        null,
+	        'No articles to render'
+	      );
+	    }
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'index' },
+	      React.createElement(
+	        'ul',
+	        { className: 'articles-list' },
+	        articles
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = ArticleIndex;
 
 /***/ }
 /******/ ]);
