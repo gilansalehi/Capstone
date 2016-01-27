@@ -3,9 +3,13 @@
 
 var React = require('react');
 var ReactRouter = require('react-router');
+
 var ArticleStore = require('../stores/article.js');
-var Article = require('./article.jsx');
 var ApiUtil = require('../util/api_util.js');
+
+var Article = require('./article.jsx');
+var ArticleFragment = require('./article_fragment.jsx');
+
 var History = require('react-router').History;
 
 // this is the display logic for the main page.
@@ -20,7 +24,7 @@ var ArticleIndex = React.createClass({
   getInitialState: function () {
     return ({
       title: new Date(),
-      articles: ["fetch the articles"]
+      articles: [{title: "temp", body: "temp"}]
     });
   },
 
@@ -55,7 +59,7 @@ var ArticleIndex = React.createClass({
       articles = this.state.articles.map(function (article) {
         return (
           <li key={article.id}>
-            <a href="">{article.title}</a>
+            <ArticleFragment article={article} />
           </li>
         );
       });

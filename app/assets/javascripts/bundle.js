@@ -31198,9 +31198,13 @@
 	
 	var React = __webpack_require__(1);
 	var ReactRouter = __webpack_require__(159);
+	
 	var ArticleStore = __webpack_require__(209);
-	var Article = __webpack_require__(208);
 	var ApiUtil = __webpack_require__(230);
+	
+	var Article = __webpack_require__(208);
+	var ArticleFragment = __webpack_require__(233);
+	
 	var History = __webpack_require__(159).History;
 	
 	// this is the display logic for the main page.
@@ -31217,7 +31221,7 @@
 	  getInitialState: function () {
 	    return {
 	      title: new Date(),
-	      articles: ["fetch the articles"]
+	      articles: [{ title: "temp", body: "temp" }]
 	    };
 	  },
 	
@@ -31253,11 +31257,7 @@
 	        return React.createElement(
 	          'li',
 	          { key: article.id },
-	          React.createElement(
-	            'a',
-	            { href: '' },
-	            article.title
-	          )
+	          React.createElement(ArticleFragment, { article: article })
 	        );
 	      });
 	    } else {
@@ -31281,6 +31281,67 @@
 	});
 	
 	module.exports = ArticleIndex;
+
+/***/ },
+/* 233 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ReactRouter = __webpack_require__(159);
+	var ArticleStore = __webpack_require__(209);
+	var ApiUtil = __webpack_require__(230);
+	var History = __webpack_require__(159).History;
+	
+	// This file is a helper to render article teasers on the homepage.
+	// and perhaps at the end of other articles to show off related articles...
+	// MAKE SURE TO PASS AN ARTICLE AS A PROP TO THE FRAGMENT
+	
+	var ArticleFragment = React.createClass({
+	  displayName: 'ArticleFragment',
+	
+	  // mixins: [History],
+	  getInitialState: function () {
+	    return {
+	      article: this.props.article,
+	      article_id: this.props.article.id
+	    };
+	  },
+	
+	  handleClick: function (e) {
+	    e.preventDefault();
+	    alert("STILL NEED TO IMPLEMENT ROUTER TO FOLLOW LINK");
+	  },
+	
+	  render: function () {
+	    debugger;
+	    var title, fragment;
+	
+	    if (this.state.article) {
+	      title = this.state.article.title;
+	      fragment = this.state.article.body.slice(0, 140) + "...";
+	    } else {
+	      title = "...";
+	      fragment = "...";
+	    }
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'article-fragment', onClick: this.handleClick },
+	      React.createElement(
+	        'h2',
+	        null,
+	        title
+	      ),
+	      React.createElement(
+	        'article',
+	        null,
+	        fragment
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = ArticleFragment;
 
 /***/ }
 /******/ ]);

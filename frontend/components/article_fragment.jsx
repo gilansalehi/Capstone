@@ -10,7 +10,6 @@ var History = require('react-router').History;
 
 var ArticleFragment = React.createClass({
   // mixins: [History],
-
   getInitialState: function () {
     return ({
       article: this.props.article,
@@ -24,12 +23,20 @@ var ArticleFragment = React.createClass({
   },
 
   render: function () {
+    debugger
+    var title, fragment;
 
-    var fragment = this.state.article.body.slice(0, 140) + "...";
+    if (this.state.article) {
+      title = this.state.article.title;
+      fragment = this.state.article.body.slice(0, 140) + "...";
+    } else {
+      title = "...";
+      fragment = "...";
+    }
 
     return (
       <div className="article-fragment" onClick={this.handleClick}>
-        <h2>{this.article.title}</h2>
+        <h2>{title}</h2>
         <article>{fragment}</article>
       </div>
     );
