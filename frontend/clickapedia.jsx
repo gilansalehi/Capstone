@@ -8,6 +8,7 @@ var IndexRoute = require('react-router').IndexRoute;
 var Article = require('./components/article.jsx');
 var ArticleIndex = require('./components/article_index.jsx');
 var ArticleStore = require('./stores/article.js');
+var NavBar = require('./components/nav_bar.jsx');
 
 // var App = require('./components/app.jsx');
 
@@ -30,7 +31,7 @@ var App = React.createClass({
   render: function () {
     return(
       <div>
-        {/* NAV BAR GOES HERE... */}
+        <NavBar />
         <ArticleIndex />
         <Article />
       </div>

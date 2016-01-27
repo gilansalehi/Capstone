@@ -183,3 +183,42 @@ form > .submit:hover {
 .index {
   margin: 20px;
 }
+
+/*=== REACT NAV BAR ===*/
+
+.nav-bar {
+  display: block;
+  /*position: fixed;*/
+}
+
+.nav-header {
+  display: block;
+  min-width: 600px;
+  margin: auto;
+  background: #FFC;
+}
+
+.nav-header > .nav-logo {
+  display: block;
+  float: left;
+}
+
+.nav-header > .nav-list {
+  display: block;
+  float: right;
+}
+
+.nav-header > .nav-list > li {
+  display: block;
+  float: left;
+  padding: 10px;
+}
+
+.sidebar {
+  display: none;
+}
+
+.nav-bar:hover > .sidebar {
+  display: block;
+  cursor: grab;
+}

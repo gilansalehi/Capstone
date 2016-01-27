@@ -54,6 +54,7 @@
 	var Article = __webpack_require__(208);
 	var ArticleIndex = __webpack_require__(232);
 	var ArticleStore = __webpack_require__(209);
+	var NavBar = __webpack_require__(234);
 	
 	// var App = require('./components/app.jsx');
 	
@@ -79,6 +80,7 @@
 	    return React.createElement(
 	      'div',
 	      null,
+	      React.createElement(NavBar, null),
 	      React.createElement(ArticleIndex, null),
 	      React.createElement(Article, null)
 	    );
@@ -24435,6 +24437,8 @@
 	window.ArticleStore = ArticleStore;
 	
 	module.exports = ArticleStore;
+	
+	// Masonry
 
 /***/ },
 /* 210 */
@@ -31342,6 +31346,105 @@
 	});
 	
 	module.exports = ArticleFragment;
+
+/***/ },
+/* 234 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// this file will replace the current logic above yield in the application
+	// layout page.
+	
+	var React = __webpack_require__(1);
+	var ReactRouter = __webpack_require__(159);
+	//
+	// var ArticleStore = require('../stores/article.js');
+	// var ApiUtil = require('../util/api_util.js');
+	//
+	// var Article = require('./article.jsx');
+	// var ArticleFragment = require('./article_fragment.jsx');
+	//
+	var History = __webpack_require__(159).History;
+	
+	var NavBar = React.createClass({
+	  displayName: 'NavBar',
+	
+	  mixins: [History],
+	
+	  getInitialState: function () {
+	    return {
+	      logo: "Clickapedia",
+	      list: ["float-right"],
+	      sidebar: ["To Do..."]
+	    };
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'nav',
+	      { className: 'nav-bar' },
+	      React.createElement(
+	        'div',
+	        { className: 'nav-header group' },
+	        React.createElement(
+	          'h1',
+	          { className: 'nav-logo' },
+	          'Clickapedia'
+	        ),
+	        React.createElement(
+	          'ul',
+	          { className: 'nav-list' },
+	          React.createElement(
+	            'li',
+	            { key: '1' },
+	            'Nav Icon 1'
+	          ),
+	          React.createElement(
+	            'li',
+	            { key: '2' },
+	            'Nav Icon 2'
+	          ),
+	          React.createElement(
+	            'li',
+	            { key: '3' },
+	            'Nav Icon 3'
+	          ),
+	          React.createElement(
+	            'li',
+	            { key: '4' },
+	            'Nav Icon 4'
+	          ),
+	          React.createElement(
+	            'li',
+	            { key: '5' },
+	            'Nav Icon 5'
+	          )
+	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'sidebar' },
+	        'Break out into its own component'
+	      )
+	    );
+	  }
+	});
+	
+	// TODO: INCLUDE THIS CODE:
+	// <div class="nav group">
+	//   <% if current_user %>
+	//     <ul>
+	//       <li><%= current_user.username %></li>
+	//       <li><%= link_to "Logout", session_url, method: :delete %></li>
+	//     </ul>
+	//   <% else %>
+	//     <ul>
+	//       <li><%= link_to "Log in", new_session_url %></li>
+	//       <li><%= link_to "Join Clickapedia", new_user_url %></li>
+	//     </ul>
+	//   <% end %>
+	// </div>
+	
+	module.exports = NavBar;
 
 /***/ }
 /******/ ]);
