@@ -31270,7 +31270,7 @@
 	
 	    return React.createElement(
 	      'div',
-	      { className: 'index' },
+	      { className: 'index group' },
 	      React.createElement(
 	        'ul',
 	        { className: 'articles-list' },
@@ -31303,7 +31303,8 @@
 	  getInitialState: function () {
 	    return {
 	      article: this.props.article,
-	      article_id: this.props.article.id
+	      article_id: this.props.article.id,
+	      article_img: "OPTIONAL"
 	    };
 	  },
 	
@@ -31313,12 +31314,11 @@
 	  },
 	
 	  render: function () {
-	    debugger;
 	    var title, fragment;
 	
 	    if (this.state.article) {
 	      title = this.state.article.title;
-	      fragment = this.state.article.body.slice(0, 140) + "...";
+	      fragment = this.state.article.body.slice(0, 280) + "...";
 	    } else {
 	      title = "...";
 	      fragment = "...";
@@ -31329,12 +31329,12 @@
 	      { className: 'article-fragment', onClick: this.handleClick },
 	      React.createElement(
 	        'h2',
-	        null,
+	        { className: 'frag-title' },
 	        title
 	      ),
 	      React.createElement(
 	        'article',
-	        null,
+	        { className: 'frag-text' },
 	        fragment
 	      )
 	    );

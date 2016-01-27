@@ -54,7 +54,19 @@ article1 = Article.create!(title: "Ocean",
   liquid.[11][12])", author_id: 1)
 
 article2 = Article.create!(
-  title: "Second Test Article",
-  body: "blah blah blah",
+  title: "Pirates",
+  body: "Piracy is an act of robbery or criminal violence at sea. Those who engage in acts of piracy are called pirates. The earliest documented instances of piracy were in the 14th century BC, when the Sea Peoples, a group of ocean raiders, attacked the ships of the Aegean and Mediterranean civilizations. Narrow channels which funnel shipping into predictable routes have long created opportunities for piracy,[1] as well as for privateering and commerce raiding. Privateering uses similar methods to piracy, but the captain acts under orders of the state authorizing the capture of merchant ships belonging to an enemy nation, making it a legitimate form of war-like activity by non-state actors.[2](For a land-based parallel, compare the association of bandits and brigands with mountain passes.[3]) Historic examples include the waters of Gibraltar, the Strait of Malacca, Madagascar, the Gulf of Aden, and the English Channel, whose geographic strictures facilitated pirate attacks.[4]
+
+While the term can include acts committed in the air, on land (especially across national borders or in connection with taking over and robbing a car or train), or in other major bodies of water or on a shore, this article focuses on maritime piracy. It does not normally include crimes committed against people traveling on the same vessel as the perpetrator (e.g. one passenger stealing from others on the same vessel). Piracy or pirating is the name of a specific crime under customary international law and also the name of a number of crimes under the municipal law of a number of states. In the 2000s, seaborne piracy against transport vessels remains a significant issue (with estimated worldwide losses of US$16 billion per year in 2007),[5][6] particularly in the waters between the Red Sea and Indian Ocean, off the Somali coast, and also in the Strait of Malacca and Singapore. Modern pirates favor using small boats and taking advantage of the small number of crew members on modern cargo vessels and transport ships. They also use large vessels to supply the smaller attack/boarding vessels. The international community is facing many challenges in bringing modern pirates to justice, as these attacks often occur in international waters.[7]",
   author_id: 1
   )
+
+article3 = Article.create!(
+  title: "The Fifth Element",
+  body: "The Fifth Element (French: Le Cinquième Élément) is a 1997 English-language French science fiction action film directed and co-written by Luc Besson. It stars Bruce Willis, Gary Oldman and Milla Jovovich. Mostly set in the 23rd century, the film's central plot involves the survival of planet Earth, which becomes the responsibility of Korben Dallas (Willis), a taxicab driver and former special forces major, after a young woman (Jovovich) falls into his cab. Dallas joins forces with her to recover four mystical stones essential for the defence of Earth against an impending attack.
+
+Besson started writing the story that became The Fifth Element when he was 16 years old; he was 38 when the film opened in cinemas. Besson wanted to shoot the film in France, but suitable locations could not be found; filming took place instead in London and Mauritania. Comics writers Jean Giraud and Jean-Claude Mézières, whose comics provided inspiration for parts of the film, were hired for production design. Costume design was by Jean Paul Gaultier.
+
+The Fifth Element received mainly positive reviews, although it tended to polarize critics. It has been called both the best and worst summer blockbuster of all time. The film was a financial success, earning more than $263 million at the box office on a $90 million budget. At the time of its release it was the most expensive European film ever made, and it remained the highest-grossing French film at the international box office until the release of The Intouchables in 2011.",
+  author_id: 1
+)

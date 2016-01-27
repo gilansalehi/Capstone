@@ -58,9 +58,7 @@ var ArticleIndex = React.createClass({
     if (this.state.articles) {
       articles = this.state.articles.map(function (article) {
         return (
-          <li key={article.id}>
-            <ArticleFragment article={article} />
-          </li>
+          <li key={article.id}><ArticleFragment article={article} /></li>
         );
       });
     } else {
@@ -68,7 +66,7 @@ var ArticleIndex = React.createClass({
     }
 
     return (
-      <div className="index">
+      <div className="index group">
         <ul className="articles-list">
           {articles}
         </ul>

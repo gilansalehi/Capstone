@@ -1,3 +1,46 @@
 // Place all the styles related to the Articles controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.index {
+  background: #fff;
+}
+
+.articles-list {
+  display: block;
+  margin: auto;
+  background: #fff;
+}
+
+.article-fragment {
+  display: block;
+  float: left;
+
+  width: 200px;
+  padding: 10px;
+  margin: 10px;
+
+  background: #EFFBF2;
+  border: 1px solid #CEE3F6;
+}
+
+.article-fragment:hover {
+  background: #CEF6E3;
+  cursor: grab;
+}
+
+.article-fragment > .frag-title {
+  font-size: 20px;
+  text-align: left;
+  font-weight: bold;
+  // font-family: serif;
+  font: Garamond; // allow for user to change style from serif to sans-serif
+  // font-style: italic;
+  border-bottom: 1px solid #CEE3F6;
+  margin-bottom: 5px;
+}
+
+.article-fragment > .frag-text {
+  text-size: 10px;
+  color: #666;
+}

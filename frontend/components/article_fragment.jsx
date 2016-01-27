@@ -13,7 +13,8 @@ var ArticleFragment = React.createClass({
   getInitialState: function () {
     return ({
       article: this.props.article,
-      article_id: this.props.article.id
+      article_id: this.props.article.id,
+      article_img: "OPTIONAL"
     });
   },
 
@@ -23,12 +24,11 @@ var ArticleFragment = React.createClass({
   },
 
   render: function () {
-    debugger
     var title, fragment;
 
     if (this.state.article) {
       title = this.state.article.title;
-      fragment = this.state.article.body.slice(0, 140) + "...";
+      fragment = this.state.article.body.slice(0, 280) + "...";
     } else {
       title = "...";
       fragment = "...";
@@ -36,8 +36,8 @@ var ArticleFragment = React.createClass({
 
     return (
       <div className="article-fragment" onClick={this.handleClick}>
-        <h2>{title}</h2>
-        <article>{fragment}</article>
+        <h2 className="frag-title">{title}</h2>
+        <article className="frag-text">{fragment}</article>
       </div>
     );
   }
