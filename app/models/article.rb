@@ -11,7 +11,7 @@ class Article < ActiveRecord::Base
   )
 
   def self.whats_new
-
+    
   end
 
 end
