@@ -6,6 +6,20 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
+def lor_ip(n)
+  loremIpsum = "Lorem ipsum dolor sit amet, ubique populo appellantur ex sit, enim elit ceteros ne mei. Quas munere prompta ad usu, et duo integre incorrupte dissentiunt. In vel hendrerit repudiandae, iisque vidisse no usu, quodsi atomorum eam ea. Sale feugait quaerendum eu sit, ut wisi liber vel. Ne putant invidunt euripidis per, at odio agam ius, ad eos aliquid argumentum elaboraret.
+
+Pro at omnis incorrupte, et porro homero eam, ei fugit viderer sea. Te tation aliquid vis. Veniam delectus detraxit in cum. Sed homero voluptaria eu, ut mel alii noster dolorum. Ei elit nulla sensibus cum.
+
+Nam at delenit nonumes minimum. Erat novum an vim. Vix error iriure sensibus id. Deserunt recteque expetenda ius ei, at rebum decore conceptam duo.
+
+Democritum reprehendunt ex usu, ne augue homero libris duo, labores constituam eum ei. Tollit noster expetenda cu his, mel eu recteque signiferumque. Legere libris interesset pro ea, ne has atqui tritani definiebas. Sit ad ludus alterum suscipit. An vix putant habemus percipitur. Vix magna patrioque suscipiantur ei.
+
+Vim et molestie eloquentiam, recusabo principes eam ne, luptatum tacimates cum eu. Et qui voluptatum constituam, everti noluisse sea eu, no eum facilisi perfecto consulatu. Veri forensibus mel et, te graece admodum quo. Graecis invidunt at quo, per facer civibus ut. Est fierent maluisset ne."
+
+  return loremIpsum[0, n]
+end
+
 guest = User.create!(username: "guest", password: "password")
 article1 = Article.create!(title: "Ocean",
   body: "An ocean (from Ancient Greek Ὠκεανός, transc. Okeanós, the sea of
@@ -59,7 +73,7 @@ article2 = Article.create!(
 
 While the term can include acts committed in the air, on land (especially across national borders or in connection with taking over and robbing a car or train), or in other major bodies of water or on a shore, this article focuses on maritime piracy. It does not normally include crimes committed against people traveling on the same vessel as the perpetrator (e.g. one passenger stealing from others on the same vessel). Piracy or pirating is the name of a specific crime under customary international law and also the name of a number of crimes under the municipal law of a number of states. In the 2000s, seaborne piracy against transport vessels remains a significant issue (with estimated worldwide losses of US$16 billion per year in 2007),[5][6] particularly in the waters between the Red Sea and Indian Ocean, off the Somali coast, and also in the Strait of Malacca and Singapore. Modern pirates favor using small boats and taking advantage of the small number of crew members on modern cargo vessels and transport ships. They also use large vessels to supply the smaller attack/boarding vessels. The international community is facing many challenges in bringing modern pirates to justice, as these attacks often occur in international waters.[7]",
   author_id: 1
-  )
+)
 
 article3 = Article.create!(
   title: "The Fifth Element",
@@ -70,3 +84,13 @@ Besson started writing the story that became The Fifth Element when he was 16 ye
 The Fifth Element received mainly positive reviews, although it tended to polarize critics. It has been called both the best and worst summer blockbuster of all time. The film was a financial success, earning more than $263 million at the box office on a $90 million budget. At the time of its release it was the most expensive European film ever made, and it remained the highest-grossing French film at the international box office until the release of The Intouchables in 2011.",
   author_id: 1
 )
+
+article4 = Article.create!(title: "Title4", body: lor_ip(140), author_id: 1)
+article5 = Article.create!(title: "Title5", body: lor_ip(300), author_id: 1)
+article6 = Article.create!(title: "Title6", body: lor_ip(440), author_id: 1)
+article7 = Article.create!(title: "Title7", body: lor_ip(600), author_id: 1)
+article8 = Article.create!(title: "Title8", body: lor_ip(250), author_id: 1)
+article9 = Article.create!(title: "Title9", body: lor_ip(1000), author_id: 1)
+article10 = Article.create!(title: "Title10", body: lor_ip(800), author_id: 1)
+article11 = Article.create!(title: "Title11", body: lor_ip(640), author_id: 1)
+article12 = Article.create!(title: "Title12", body: lor_ip(400), author_id: 1)
