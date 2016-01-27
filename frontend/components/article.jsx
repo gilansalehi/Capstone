@@ -30,7 +30,10 @@ var Article = React.createClass({
   },
 
   __onChange: function () {
+    var article = ArticleStore.firstArticle();
     console.log("there was a change!");
+    // ApiUtil.fetchArticle();
+    this.setState({ title: article.title, body: article.body });
   },
 
   componentWillUnmount: function () {

@@ -17,12 +17,18 @@ ArticleStore.all = function () {
 };
 
 ArticleStore.__onDispatch = function (payload) {
+  console.log("Store got a dispatch...");
   switch (payload.actionType) {
-    case ArticleConstants.ARTICLES_RECEVIED:
-      var results = resetArticles(payload.articles);
+    case ArticleConstants.ARTICLES_RECEIVED:
+      console.log("Store got the articles!");
+      resetArticles(payload.articles);
       ArticleStore.__emitChange();
       break;
   }
+};
+
+ArticleStore.firstArticle = function () {
+  return _articles[0];
 };
 
 // for testing
