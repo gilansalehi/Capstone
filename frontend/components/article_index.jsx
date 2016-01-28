@@ -9,6 +9,7 @@ var ApiUtil = require('../util/api_util.js');
 
 var Article = require('./article.jsx');
 var ArticleFragment = require('./article_fragment.jsx');
+var WikiFetcher = require('./wiki_fetcher.jsx');
 
 var History = require('react-router').History;
 
@@ -72,6 +73,7 @@ var ArticleIndex = React.createClass({
         <ul className="articles-list">
           {articles}
         </ul>
+        <WikiFetcher />
       </div>
     );
   }

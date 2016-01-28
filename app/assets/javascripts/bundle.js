@@ -30864,7 +30864,7 @@
 	    var host = "https://en.wikipedia.org/w/api.php?";
 	    var action = "action=parse&";
 	    var page = "page=" + title;
-	    var format = "format=json";
+	    var format = "&format=json";
 	
 	    var urlString = host + action + page + format;
 	
@@ -30873,6 +30873,7 @@
 	      url: urlString,
 	      contentType: "application/json; charset=utf-8",
 	      dataType: 'json',
+	      headers: { 'Api-User-Agent': 'Clickapedia/0.0.1 (http://clickapedia.herokuapp.com/; gilansalehi@gmail.com)' },
 	      success: function (data) {
 	        console.log(JSON.parse(data));
 	      },
@@ -30881,51 +30882,9 @@
 	      }
 	    });
 	  }
-	
-	  //       type: "GET",
-	  //       url: urlString,
-	  //       contentType: "application/json; charset=utf-8",
-	  //       async: false,
-	  //       dataType: "jsonp",
-	  //       headers: { 'Api-User-Agent': 'GilansProject (http://clickapedia.herokuapp.com/; gilansalehi@gmail.com)' },
-	  //       success: function (data, textStatus, jqXHR) {
-	  //           console.log(data);
-	  //       },
-	  //       error: function (errorMessage) {
-	  //         console.log(errorMessage);
-	  //       }
-	  //   });
-	  //   $.ajax({
-	  //     type: 'GET',
-	  //     url: urlString,
-	  //     contentType: "application/json; charset=utf-8",
-	  //     dataType: 'json',
-	  //     headers: {
-	  //       'Api-User-Agent': 'GilansProject (https://clickapedia.herokuapp.com/; gilansalehi@gmail.com)',
-	  //       'Access-Control-Allow-Origin': 'GET',
-	  //     },
-	  //     success: function(data) {
-	  //       JSON.parse(data);
-	  //     },
-	  //     error: function (message) {
-	  //       console.log(message);
-	  //     }
-	  //   });
-	  // }
 	};
 	
 	window.ApiUtil = ApiUtil;
-	
-	// $.ajax( {
-	//     url: remoteUrlWithOrigin,
-	//     data: queryData,
-	//     dataType: 'json',
-	//     type: 'POST',
-	//     headers: { 'Api-User-Agent': 'Example/1.0' },
-	//     success: function(data) {
-	//        // do something with data
-	//     }
-	// } );
 	
 	module.exports = ApiUtil;
 
@@ -30979,6 +30938,7 @@
 	
 	var Article = __webpack_require__(206);
 	var ArticleFragment = __webpack_require__(231);
+	var WikiFetcher = __webpack_require__(234);
 	
 	var History = __webpack_require__(159).History;
 	
@@ -31050,7 +31010,8 @@
 	        'ul',
 	        { className: 'articles-list' },
 	        articles
-	      )
+	      ),
+	      React.createElement(WikiFetcher, null)
 	    );
 	  }
 	});
@@ -31300,6 +31261,63 @@
 	});
 	
 	module.exports = NavBar;
+
+/***/ },
+/* 233 */,
+/* 234 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ReactRouter = __webpack_require__(159);
+	var ArticleStore = __webpack_require__(207);
+	var ApiUtil = __webpack_require__(228);
+	var History = __webpack_require__(159).History;
+	
+	// this is the display logic for a single article.
+	
+	var WikiFetcher = React.createClass({
+	  displayName: 'WikiFetcher',
+	
+	  mixins: [History],
+	
+	  getInitialState: function () {
+	    return { value: "" };
+	  },
+	
+	  handleChange: function (e) {
+	    this.setState({ value: event.target.value });
+	  },
+	
+	  handleSubmit: function (title) {
+	    e.preventDefault();
+	    ApiUtil.fetchFromWikipedia(title);
+	  },
+	
+	  render: function () {
+	    var value = this.state.value;
+	    return React.createElement(
+	      'form',
+	      null,
+	      React.createElement(
+	        'label',
+	        null,
+	        'wikiFetcher',
+	        React.createElement('input', { className: 'wiki-fetcher',
+	          type: 'text',
+	          onChange: this.handleChange,
+	          onSubmit: this.handleSubmit,
+	          value: value })
+	      ),
+	      React.createElement(
+	        'input',
+	        { type: 'submit', onSubmit: this.handleSubmit },
+	        'Submit'
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = WikiFetcher;
 
 /***/ }
 /******/ ]);
