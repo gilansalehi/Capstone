@@ -56,7 +56,6 @@
 	var ArticleIndex = __webpack_require__(230);
 	var ArticleStore = __webpack_require__(207);
 	var NavBar = __webpack_require__(232);
-	var Sidebar = __webpack_require__(233);
 	
 	// var App = require('./components/app.jsx');
 	// document.addEventListener("DOMContentLoaded", function () {
@@ -30859,9 +30858,74 @@
 	        console.log("Error with fetchArticle");
 	      }
 	    });
+	  },
+	
+	  fetchFromWikipedia: function (title) {
+	    var host = "https://en.wikipedia.org/w/api.php?";
+	    var action = "action=parse&";
+	    var page = "page=" + title;
+	    var format = "format=json";
+	
+	    var urlString = host + action + page + format;
+	
+	    $.ajax({
+	      type: 'GET',
+	      url: urlString,
+	      contentType: "application/json; charset=utf-8",
+	      dataType: 'json',
+	      success: function (data) {
+	        console.log(JSON.parse(data));
+	      },
+	      error: function (message) {
+	        console.log(message);
+	      }
+	    });
 	  }
 	
+	  //       type: "GET",
+	  //       url: urlString,
+	  //       contentType: "application/json; charset=utf-8",
+	  //       async: false,
+	  //       dataType: "jsonp",
+	  //       headers: { 'Api-User-Agent': 'GilansProject (http://clickapedia.herokuapp.com/; gilansalehi@gmail.com)' },
+	  //       success: function (data, textStatus, jqXHR) {
+	  //           console.log(data);
+	  //       },
+	  //       error: function (errorMessage) {
+	  //         console.log(errorMessage);
+	  //       }
+	  //   });
+	  //   $.ajax({
+	  //     type: 'GET',
+	  //     url: urlString,
+	  //     contentType: "application/json; charset=utf-8",
+	  //     dataType: 'json',
+	  //     headers: {
+	  //       'Api-User-Agent': 'GilansProject (https://clickapedia.herokuapp.com/; gilansalehi@gmail.com)',
+	  //       'Access-Control-Allow-Origin': 'GET',
+	  //     },
+	  //     success: function(data) {
+	  //       JSON.parse(data);
+	  //     },
+	  //     error: function (message) {
+	  //       console.log(message);
+	  //     }
+	  //   });
+	  // }
 	};
+	
+	window.ApiUtil = ApiUtil;
+	
+	// $.ajax( {
+	//     url: remoteUrlWithOrigin,
+	//     data: queryData,
+	//     dataType: 'json',
+	//     type: 'POST',
+	//     headers: { 'Api-User-Agent': 'Example/1.0' },
+	//     success: function(data) {
+	//        // do something with data
+	//     }
+	// } );
 	
 	module.exports = ApiUtil;
 
@@ -31197,18 +31261,19 @@
 	  },
 	
 	  render: function () {
-	    // var path = ['app', 'assets', 'images', 'icons', 'svg'].join("/");
-	    // var img = '/book236.svg';
-	    // debugger
-	    // return <object type="image/svg+xml" data={path + img}></object>;
+	    // var path = ['app', 'assets', 'images', 'icons'].join("/");
+	    // var img = 'book236.svg';
+	    // return <object type="image/svg+xml"
+	    //                data="book236.svg"></object>;
 	    return React.createElement(
 	      'div',
 	      { className: 'toggle', onClick: this.toggleShow },
-	      'BOOK'
+	      'BOOK',
+	      React.createElement('i', { 'class': 'fa fa-bars' })
 	    );
 	  }
 	});
-	//
+	
 	var Sidebar = React.createClass({
 	  displayName: 'Sidebar',
 	
@@ -31235,42 +31300,6 @@
 	});
 	
 	module.exports = NavBar;
-
-/***/ },
-/* 233 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var ReactRouter = __webpack_require__(159);
-	
-	var History = __webpack_require__(159).History;
-	
-	var Sidebar = React.createClass({
-	  displayName: 'Sidebar',
-	
-	  render: function () {
-	    var pageHeaders = ["header 1", "header 2", "header 3", "etc"];
-	    var headerList = pageHeaders.map(function (header) {
-	      return React.createElement(
-	        'li',
-	        null,
-	        header
-	      );
-	    });
-	
-	    return React.createElement(
-	      'div',
-	      { className: 'sidebar group' },
-	      React.createElement(
-	        'ul',
-	        { className: 'sidebar-list' },
-	        headerList
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = Sidebar;
 
 /***/ }
 /******/ ]);

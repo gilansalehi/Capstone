@@ -95,16 +95,19 @@ var SidebarToggle = React.createClass({
   },
 
   render: function () {
-    // var path = ['app', 'assets', 'images', 'icons', 'svg'].join("/");
-    // var img = '/book236.svg';
-    // debugger
-    // return <object type="image/svg+xml" data={path + img}></object>;
-    return <div className="toggle" onClick={this.toggleShow}>BOOK</div>;
+    // var path = ['app', 'assets', 'images', 'icons'].join("/");
+    // var img = 'book236.svg';
+    // return <object type="image/svg+xml"
+    //                data="book236.svg"></object>;
+    return (
+      <div className="toggle" onClick={this.toggleShow}>BOOK
+        <i class="fa fa-bars"></i>
+      </div>
+    );
   }
 });
-//
-var Sidebar = React.createClass({
 
+var Sidebar = React.createClass({
 
   render: function () {
     var pageHeaders = ["header 1", "header 2", "header 3", "etc"];

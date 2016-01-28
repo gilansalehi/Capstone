@@ -10,7 +10,6 @@ var Article = require('./components/article.jsx');
 var ArticleIndex = require('./components/article_index.jsx');
 var ArticleStore = require('./stores/article.js');
 var NavBar = require('./components/nav_bar.jsx');
-var Sidebar = require('./components/side_bar.jsx');
 
 // var App = require('./components/app.jsx');
 // document.addEventListener("DOMContentLoaded", function () {
