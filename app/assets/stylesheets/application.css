@@ -188,6 +188,7 @@ form > .submit:hover {
 
 .nav-bar {
   display: block;
+  /*float: left;*/
   /*position: fixed;*/
 }
 

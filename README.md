@@ -149,3 +149,5 @@ to show them off for everyone.
       vandalizing the articles of high-level contributors.
 - [ ] STAR WARS STYLE: Using CSS wizardry, create a view mode that will tilt
       transform, and scroll the article to look like the Star Wars opening crawl.
+http://www.9bitstudios.com/2014/03/getting-data-from-the-wikipedia-api-using-jquery/
+https://www.mediawiki.org/wiki/API:Main_page
