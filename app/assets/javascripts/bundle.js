@@ -31095,7 +31095,7 @@
 	          React.createElement(
 	            'li',
 	            { key: '1' },
-	            'Nav Icon 1'
+	            'Current User'
 	          ),
 	          React.createElement(
 	            'li',

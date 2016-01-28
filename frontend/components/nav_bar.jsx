@@ -29,7 +29,7 @@ var NavBar = React.createClass({
         <div className="nav-header group">
           <a className="nav-logo" href="#/">Clickapedia</a>
           <ul className="nav-list">
-            <li key="1">Nav Icon 1</li>
+            <li key="1">Current User</li>
             <li key="2">Nav Icon 2</li>
             <li key="3">Nav Icon 3</li>
             <li key="4">Nav Icon 4</li>
