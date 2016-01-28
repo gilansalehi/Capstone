@@ -3,13 +3,7 @@
 
 var React = require('react');
 var ReactRouter = require('react-router');
-//
-// var ArticleStore = require('../stores/article.js');
-// var ApiUtil = require('../util/api_util.js');
-//
-// var Article = require('./article.jsx');
-// var ArticleFragment = require('./article_fragment.jsx');
-//
+
 var History = require('react-router').History;
 
 var NavBar = React.createClass({
@@ -25,36 +19,107 @@ var NavBar = React.createClass({
 
   render: function () {
     return (
-      <nav className="nav-bar">
+      <nav className="nav-bar group">
         <div className="nav-header group">
-          <a className="nav-logo" href="#/">Clickapedia</a>
+          <SidebarToggle />
+          <a className="nav-logo" href="/">Clickapedia</a>
           <ul className="nav-list">
-            <li key="1">Current User</li>
-            <li key="2">Nav Icon 2</li>
-            <li key="3">Nav Icon 3</li>
-            <li key="4">Nav Icon 4</li>
-            <li key="5">Nav Icon 5</li>
+            <li key="1"><CurrentUser /></li>
+            <li key="2"><LogInOut /></li>
           </ul>
         </div>
-        <div className="sidebar">Break out into its own component</div>
+        <Sidebar />
       </nav>
     );
   }
 });
 
-// TODO: INCLUDE THIS CODE:
-// <div class="nav group">
-//   <% if current_user %>
-//     <ul>
-//       <li><%= current_user.username %></li>
-//       <li><%= link_to "Logout", session_url, method: :delete %></li>
-//     </ul>
-//   <% else %>
-//     <ul>
-//       <li><%= link_to "Log in", new_session_url %></li>
-//       <li><%= link_to "Join Clickapedia", new_user_url %></li>
-//     </ul>
-//   <% end %>
-// </div>
+var CurrentUser = React.createClass({
+  render: function () {
+    var links;
+    var root = document.getElementById('root');
+    var user = root.dataset.user;
+
+    if (user) {
+      links = <div>{user}</div>;
+    } else {
+      links = "";
+    }
+
+    return (
+      <div>{links}</div>
+    );
+  }
+});
+
+var LogInOut = React.createClass({
+  render: function () {
+    var link;
+    var root = document.getElementById('root');
+    var user = root.dataset.user;
+
+    if (user) {
+      links = (
+        <a href="/session/new">Log out</a> // make this actually work???
+      );
+    } else {
+      links = <a href="/session/new">Log in</a>;
+    }
+
+    return (
+      <div>{links}</div>
+    );
+  }
+});
+
+var SidebarToggle = React.createClass({
+  getInitialState: function () {
+    return ({ mode: "showing" });
+  },
+
+  toggleShow: function () {
+    if (this.state.mode === "hiding") {
+      this.show();
+    } else {
+      this.hide();
+    }
+    alert(this.state.mode);
+  },
+
+  hide: function () {
+    this.setState({ mode: "hiding" });
+  },
+
+  show: function () {
+    this.setState({ mode: "showing" });
+  },
+
+  render: function () {
+    // var path = ['app', 'assets', 'images', 'icons', 'svg'].join("/");
+    // var img = '/book236.svg';
+    // debugger
+    // return <object type="image/svg+xml" data={path + img}></object>;
+    return <div className="toggle" onClick={this.toggleShow}>BOOK</div>;
+  }
+});
+//
+var Sidebar = React.createClass({
+
+
+  render: function () {
+    var pageHeaders = ["header 1", "header 2", "header 3", "etc"];
+    var headerList = pageHeaders.map(function (header) {
+      return <li>{header}</li>;
+    });
+
+    return(
+    <div className="sidebar group">
+      <ul className="sidebar-list">
+        {headerList}
+      </ul>
+    </div>
+    );
+  }
+});
 
 module.exports = NavBar;

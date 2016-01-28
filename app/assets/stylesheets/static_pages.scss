@@ -1,3 +1,80 @@
 // Place all the styles related to the StaticPages controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+// NAV BAR
+
+.nav-bar {
+  display: block;
+  position: fixed;
+  width: 100%;
+}
+
+.nav-header {
+  display: block;
+  min-width: 600px;
+  margin: auto;
+  background-color: rgba(240, 240, 240, 0.5);
+  border-bottom: 1px solid #ccc;
+}
+
+.nav-header > .nav-logo {
+  display: block;
+  float: left;
+  font-size: 30px;
+  padding: 5px 10px;
+  font-family: serif;
+  font: Garamond;
+}
+
+.nav-header > .nav-list {
+  display: block;
+  float: right;
+  margin: 8px 10px 0 0;
+}
+
+.nav-header > .nav-list > li {
+  display: block;
+  float: left;
+  color: black;
+  padding: 10px;
+}
+
+// SIDEBAR
+
+.toggle {
+  display: block;
+  position: relative;
+  float: left;
+  padding-top: 20px;
+}
+
+.sidebar {
+  display: block;
+  float: left;
+  height: 100%;
+  max-width: 180px;
+  // position: fixed;
+  background: #999;
+  color: white;
+}
+
+.sidebar-list {
+  display: block;
+  // position: absolute;
+  width: 180px;
+}
+
+.hiding {
+  left: -150px;
+}
+
+.sidebar-list > li {
+  padding: 5px;
+  border-bottom: 1px solid #ddd;
+}
+
+.sidebar-list > li:hover {
+  background: #666;
+}

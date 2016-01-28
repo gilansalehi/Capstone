@@ -56,6 +56,7 @@
 	var ArticleIndex = __webpack_require__(230);
 	var ArticleStore = __webpack_require__(207);
 	var NavBar = __webpack_require__(232);
+	var Sidebar = __webpack_require__(233);
 	
 	// var App = require('./components/app.jsx');
 	// document.addEventListener("DOMContentLoaded", function () {
@@ -73,7 +74,15 @@
 	      'div',
 	      null,
 	      React.createElement(NavBar, null),
-	      this.props.children
+	      React.createElement(
+	        'content',
+	        { className: 'content group' },
+	        React.createElement(
+	          'div',
+	          null,
+	          this.props.children
+	        )
+	      )
 	    );
 	  }
 	});
@@ -86,11 +95,13 @@
 	);
 	
 	document.addEventListener("DOMContentLoaded", function () {
-	  ReactDOM.render(React.createElement(
-	    Router,
-	    null,
-	    routes
-	  ), document.getElementById('root'));
+	  if (document.getElementById('root')) {
+	    ReactDOM.render(React.createElement(
+	      Router,
+	      null,
+	      routes
+	    ), document.getElementById('root'));
+	  }
 	});
 
 /***/ },
@@ -31055,13 +31066,7 @@
 	
 	var React = __webpack_require__(1);
 	var ReactRouter = __webpack_require__(159);
-	//
-	// var ArticleStore = require('../stores/article.js');
-	// var ApiUtil = require('../util/api_util.js');
-	//
-	// var Article = require('./article.jsx');
-	// var ArticleFragment = require('./article_fragment.jsx');
-	//
+	
 	var History = __webpack_require__(159).History;
 	
 	var NavBar = React.createClass({
@@ -31080,13 +31085,14 @@
 	  render: function () {
 	    return React.createElement(
 	      'nav',
-	      { className: 'nav-bar' },
+	      { className: 'nav-bar group' },
 	      React.createElement(
 	        'div',
 	        { className: 'nav-header group' },
+	        React.createElement(SidebarToggle, null),
 	        React.createElement(
 	          'a',
-	          { className: 'nav-logo', href: '#/' },
+	          { className: 'nav-logo', href: '/' },
 	          'Clickapedia'
 	        ),
 	        React.createElement(
@@ -31095,55 +31101,176 @@
 	          React.createElement(
 	            'li',
 	            { key: '1' },
-	            'Current User'
+	            React.createElement(CurrentUser, null)
 	          ),
 	          React.createElement(
 	            'li',
 	            { key: '2' },
-	            'Nav Icon 2'
-	          ),
-	          React.createElement(
-	            'li',
-	            { key: '3' },
-	            'Nav Icon 3'
-	          ),
-	          React.createElement(
-	            'li',
-	            { key: '4' },
-	            'Nav Icon 4'
-	          ),
-	          React.createElement(
-	            'li',
-	            { key: '5' },
-	            'Nav Icon 5'
+	            React.createElement(LogInOut, null)
 	          )
 	        )
 	      ),
-	      React.createElement(
+	      React.createElement(Sidebar, null)
+	    );
+	  }
+	});
+	
+	var CurrentUser = React.createClass({
+	  displayName: 'CurrentUser',
+	
+	  render: function () {
+	    var links;
+	    var root = document.getElementById('root');
+	    var user = root.dataset.user;
+	
+	    if (user) {
+	      links = React.createElement(
 	        'div',
-	        { className: 'sidebar' },
-	        'Break out into its own component'
+	        null,
+	        user
+	      );
+	    } else {
+	      links = "";
+	    }
+	
+	    return React.createElement(
+	      'div',
+	      null,
+	      links
+	    );
+	  }
+	});
+	
+	var LogInOut = React.createClass({
+	  displayName: 'LogInOut',
+	
+	  render: function () {
+	    var link;
+	    var root = document.getElementById('root');
+	    var user = root.dataset.user;
+	
+	    if (user) {
+	      links = React.createElement(
+	        'a',
+	        { href: '/session/new' },
+	        'Log out'
+	      ) // make this actually work???
+	      ;
+	    } else {
+	        links = React.createElement(
+	          'a',
+	          { href: '/session/new' },
+	          'Log in'
+	        );
+	      }
+	
+	    return React.createElement(
+	      'div',
+	      null,
+	      links
+	    );
+	  }
+	});
+	
+	var SidebarToggle = React.createClass({
+	  displayName: 'SidebarToggle',
+	
+	  getInitialState: function () {
+	    return { mode: "showing" };
+	  },
+	
+	  toggleShow: function () {
+	    if (this.state.mode === "hiding") {
+	      this.show();
+	    } else {
+	      this.hide();
+	    }
+	    alert(this.state.mode);
+	  },
+	
+	  hide: function () {
+	    this.setState({ mode: "hiding" });
+	  },
+	
+	  show: function () {
+	    this.setState({ mode: "showing" });
+	  },
+	
+	  render: function () {
+	    // var path = ['app', 'assets', 'images', 'icons', 'svg'].join("/");
+	    // var img = '/book236.svg';
+	    // debugger
+	    // return <object type="image/svg+xml" data={path + img}></object>;
+	    return React.createElement(
+	      'div',
+	      { className: 'toggle', onClick: this.toggleShow },
+	      'BOOK'
+	    );
+	  }
+	});
+	//
+	var Sidebar = React.createClass({
+	  displayName: 'Sidebar',
+	
+	  render: function () {
+	    var pageHeaders = ["header 1", "header 2", "header 3", "etc"];
+	    var headerList = pageHeaders.map(function (header) {
+	      return React.createElement(
+	        'li',
+	        null,
+	        header
+	      );
+	    });
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'sidebar group' },
+	      React.createElement(
+	        'ul',
+	        { className: 'sidebar-list' },
+	        headerList
 	      )
 	    );
 	  }
 	});
 	
-	// TODO: INCLUDE THIS CODE:
-	// <div class="nav group">
-	//   <% if current_user %>
-	//     <ul>
-	//       <li><%= current_user.username %></li>
-	//       <li><%= link_to "Logout", session_url, method: :delete %></li>
-	//     </ul>
-	//   <% else %>
-	//     <ul>
-	//       <li><%= link_to "Log in", new_session_url %></li>
-	//       <li><%= link_to "Join Clickapedia", new_user_url %></li>
-	//     </ul>
-	//   <% end %>
-	// </div>
-	
 	module.exports = NavBar;
+
+/***/ },
+/* 233 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ReactRouter = __webpack_require__(159);
+	
+	var History = __webpack_require__(159).History;
+	
+	var Sidebar = React.createClass({
+	  displayName: 'Sidebar',
+	
+	  render: function () {
+	    var pageHeaders = ["header 1", "header 2", "header 3", "etc"];
+	    var headerList = pageHeaders.map(function (header) {
+	      return React.createElement(
+	        'li',
+	        null,
+	        header
+	      );
+	    });
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'sidebar group' },
+	      React.createElement(
+	        'ul',
+	        { className: 'sidebar-list' },
+	        headerList
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = Sidebar;
 
 /***/ }
 /******/ ]);

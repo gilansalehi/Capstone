@@ -1,3 +1,109 @@
 // Place all the styles related to the Sessions controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+/* = LOG IN AND SIGN UP = */
+
+.auth-page {
+  margin: 20px;
+  font-size: 14px;
+}
+
+h1 {
+  font-size: 30px;
+  font-family: Garamond;
+  border-bottom: 1px solid #aaa;
+}
+
+form {
+  padding: 20px 0;
+  display: block;
+}
+
+form > label {
+
+}
+
+form > input {
+  display: block;
+  padding: 7px;
+  width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  margin: 3px 0;
+}
+
+form > .submit {
+  display: block;
+  width: 316px;
+  background: #00af89;
+  text-align: center;
+  color: white;
+  border: 1px solid #00af89;
+  font-weight: bold;
+}
+
+form > .submit:hover {
+  background: #008c6d;
+  border: 1px solid #008c6d;
+  cursor: pointer;
+
+}
+
+.auth-page > .join-block {
+  display: block;
+  width: 316px;
+  text-align: center;
+}
+
+.auth-page > .join-block > label {
+}
+
+.auth-page > .join-block > a {
+  display: block;
+  background: #347bff;
+  text-align: center;
+  color: white;
+  border: 1px solid #347bff;
+  font-weight: bold;
+  border-radius: 2px;
+  margin: 3px 0;
+  padding: 7px;
+}
+
+.auth-page > .join-block > a:hover {
+  background: #2962cc;
+  border: 1px solid #2962cc;
+}
+
+.auth-page > .demo-user {
+  display: block;
+  width: 316px;
+  /*margin: 10px 0;*/
+}
+
+.auth-page > .demo-user > input {
+  display: block;
+  background: #ff6666;
+  border: 1px solid #ff6666;
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  border-radius: 2px;
+  padding: 7px;
+}
+
+.auth-page > .demo-user > input:hover {
+  background: #ff4444;
+  border: 1px solid #ff4444;
+}
+
+.article {
+  margin: 20px;
+  max-width: 1000px;
+}
+
+.index {
+  margin: 20px;
+}

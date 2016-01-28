@@ -8,19 +8,7 @@
 </head>
 <body>
 
-<div class="nav group">
-  <% if current_user %>
-    <ul>
-      <li><%= current_user.username %></li>
-      <li><%= link_to "Logout", session_url, method: :delete %></li>
-    </ul>
-  <% else %>
-    <ul>
-      <li><%= link_to "Log in", new_session_url %></li>
-      <li><%= link_to "Join Clickapedia", new_user_url %></li>
-    </ul>
-  <% end %>
-</div>
+<div id='root' data-user="<%= current_user && current_user.username %>"></div>
 
 <%= yield %>
 
