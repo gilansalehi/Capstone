@@ -9,7 +9,8 @@ var History = require('react-router').History;
 // MAKE SURE TO PASS AN ARTICLE AS A PROP TO THE FRAGMENT
 
 var ArticleFragment = React.createClass({
-  // mixins: [History],
+  mixins: [History],
+
   getInitialState: function () {
     return ({
       article: this.props.article,
@@ -18,15 +19,17 @@ var ArticleFragment = React.createClass({
     });
   },
 
-  handleClick: function (e) {
-    e.preventDefault();
-    alert("STILL NEED TO IMPLEMENT ROUTER TO FOLLOW LINK");
-  },
+  // handleClick: function (e) {
+  //   e.preventDefault();
+  //   var id = this.state.article_id;
+  //   this.history.pushState(null, "/article/" + id, {});
+  // },
 
   render: function () {
-    var title, fragment;
+    var title, fragment, id;
 
     if (this.state.article) {
+      id = this.state.article.id;
       title = this.state.article.title;
       fragment = this.state.article.body.slice(0, 280) + "...";
     } else {
@@ -35,10 +38,10 @@ var ArticleFragment = React.createClass({
     }
 
     return (
-      <div className="article-fragment" onClick={this.handleClick}>
+      <a href={"#/article/" + id} className="article-fragment">
         <h2 className="frag-title">{title}</h2>
         <article className="frag-text">{fragment}</article>
-      </div>
+      </a>
     );
   }
 });

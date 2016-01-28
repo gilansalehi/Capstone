@@ -33,12 +33,12 @@ var ArticleIndex = React.createClass({
     ApiUtil.fetchArticles();
   },
 
-  handleClick: function (e) {
-    e.preventDefault();
-    // var id = e.currentTarget......id
-    // History.pushState(null, "/article/" + id, {})
-    alert("You clicked the title");
-  },
+  // handleClick: function (e) {
+  //   e.preventDefault();
+  //   debugger
+  //   // var id = e.currentTarget......id
+  //   History.pushState(null, "/article/" + id, {});
+  // },
 
   __onChange: function () {
     var articles = ArticleStore.firstNArticles(10);
@@ -58,7 +58,9 @@ var ArticleIndex = React.createClass({
     if (this.state.articles) {
       articles = this.state.articles.map(function (article) {
         return (
-          <li key={article.id}><ArticleFragment article={article} /></li>
+          <li key={article.id}>
+              <ArticleFragment article={article} />
+          </li>
         );
       });
     } else {

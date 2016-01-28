@@ -16,21 +16,21 @@ var ApiUtil = {
     });
   },
 
-  // fetchArticle: function (article) {
-  //   var id = article.id; // more details
-  //   $.ajax({
-  //     url: '/api/articles/' + id,
-  //     method: 'GET',
-  //     dataType: 'json',
-  //     success: function (article) {
-  //       console.log("Fetched Article Successfully");
-  //       ApiActions.addArticle(article);
-  //     },
-  //     error: function () {
-  //       console.log("Error with fetchArticle");
-  //     },
-  //   });
-  // },
+  fetchArticle: function (id) {
+    // debugger
+    $.ajax({
+      url: '/api/articles/' + id,
+      method: 'GET',
+      dataType: 'json',
+      success: function (article) {
+        console.log("Fetched Article Successfully");
+        ApiActions.addArticle(article);
+      },
+      error: function () {
+        console.log("Error with fetchArticle");
+      },
+    });
+  },
 
 };
 

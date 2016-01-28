@@ -27,7 +27,7 @@ var NavBar = React.createClass({
     return (
       <nav className="nav-bar">
         <div className="nav-header group">
-          <h1 className="nav-logo">Clickapedia</h1>
+          <a className="nav-logo" href="#/">Clickapedia</a>
           <ul className="nav-list">
             <li key="1">Nav Icon 1</li>
             <li key="2">Nav Icon 2</li>

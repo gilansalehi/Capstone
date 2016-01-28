@@ -6,6 +6,7 @@ var AppDispatcher = require("../dispatcher/dispatcher");
 var ArticleStore = new Store(AppDispatcher);
 
 var _articles = [];
+var _latestArticle = [];
 
 var resetArticles = function (articles) {
   console.log("Articles reset");
@@ -24,11 +25,18 @@ ArticleStore.__onDispatch = function (payload) {
       resetArticles(payload.articles);
       ArticleStore.__emitChange();
       break;
+    case ArticleConstants.ARTICLE_RECEIVED:
+      console.log("Store got an article...");
+      if (_articles.indexOf(payload) === -1) { _articles.push(payload); }
+      _currentArticle = payload;
+      ArticleStore.__emitChange();
+      break;
   }
 };
 
-ArticleStore.firstArticle = function () {
-  return _articles[0];
+ArticleStore.fetchArticle = function () {
+  console.log(_currentArticle);
+  return _currentArticle.article;
 };
 
 ArticleStore.firstNArticles = function (n) {

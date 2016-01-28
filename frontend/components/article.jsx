@@ -18,20 +18,12 @@ var Article = React.createClass({
 
   componentDidMount: function () {
     this.articleListener = ArticleStore.addListener(this.__onChange);
-    ApiUtil.fetchArticles();
-  },
-
-  handleClick: function (e) {
-    e.preventDefault();
-    // var id = e.currentTarget......id
-    // History.pushState(null, "/article/" + id, {})
-    alert("You clicked the title");
+    ApiUtil.fetchArticle(this.props.params.article_id);
   },
 
   __onChange: function () {
-    var article = ArticleStore.firstArticle();
-    console.log("there was a change!");
-    // ApiUtil.fetchArticle();
+    var article = ArticleStore.fetchArticle();
+    console.log("got a new article");
     this.setState({ title: article.title, body: article.body });
   },
 
@@ -42,7 +34,7 @@ var Article = React.createClass({
   render: function () {
     return (
       <div className="article">
-        <h1 onClick={this.handleClick}>{this.state.title}</h1>
+        <h1>{this.state.title}</h1>
         <article>{this.state.body}</article>
       </div>
     );
