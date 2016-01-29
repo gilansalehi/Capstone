@@ -24100,7 +24100,6 @@
 	
 	  __onChange: function () {
 	    var article = ArticleStore.fetchArticle();
-	    console.log("got a new article");
 	    this.setState({ title: article.title, body: article.body });
 	  },
 	
@@ -24142,7 +24141,6 @@
 	var _latestArticle = [];
 	
 	var resetArticles = function (articles) {
-	  console.log("Articles reset");
 	  _articles = articles.slice();
 	};
 	
@@ -24151,15 +24149,12 @@
 	};
 	
 	ArticleStore.__onDispatch = function (payload) {
-	  console.log("Store got a dispatch...");
 	  switch (payload.actionType) {
 	    case ArticleConstants.ARTICLES_RECEIVED:
-	      console.log("Store got the articles!");
 	      resetArticles(payload.articles);
 	      ArticleStore.__emitChange();
 	      break;
 	    case ArticleConstants.ARTICLE_RECEIVED:
-	      console.log("Store got an article...");
 	      if (_articles.indexOf(payload) === -1) {
 	        _articles.push(payload);
 	      }
@@ -24170,7 +24165,6 @@
 	};
 	
 	ArticleStore.fetchArticle = function () {
-	  console.log(_currentArticle);
 	  return _currentArticle.article;
 	};
 	
@@ -30873,28 +30867,21 @@
 	      method: 'GET',
 	      dataType: 'json',
 	      success: function (data) {
-	        console.log("Fetched All Articles");
 	        ApiActions.allArticles(data);
 	      },
-	      error: function () {
-	        console.log("Error with fetchArticles");
-	      }
+	      error: function () {}
 	    });
 	  },
 	
 	  fetchArticle: function (id) {
-	    // debugger
 	    $.ajax({
 	      url: '/api/articles/' + id,
 	      method: 'GET',
 	      dataType: 'json',
 	      success: function (article) {
-	        console.log("Fetched Article Successfully");
 	        ApiActions.addArticle(article);
 	      },
-	      error: function () {
-	        console.log("Error with fetchArticle");
-	      }
+	      error: function () {}
 	    });
 	  },
 	
@@ -30913,12 +30900,8 @@
 	      contentType: "application/json; charset=utf-8",
 	      dataType: 'json',
 	      headers: { 'Api-User-Agent': 'Clickapedia/0.0.1 (http://clickapedia.herokuapp.com/; gilansalehi@gmail.com)' },
-	      success: function (data) {
-	        console.log(JSON.parse(data));
-	      },
-	      error: function (message) {
-	        console.log(message);
-	      }
+	      success: function (data) {},
+	      error: function (message) {}
 	    });
 	  }
 	};
@@ -30945,7 +30928,6 @@
 	
 	var ApiActions = {
 	  allArticles: function (articles) {
-	    console.log("Dispatching all articles...");
 	    AppDispatcher.dispatch({
 	      actionType: ArticleConstants.ARTICLES_RECEIVED,
 	      articles: articles
@@ -31013,7 +30995,6 @@
 	
 	  __onChange: function () {
 	    var articles = ArticleStore.firstNArticles(10);
-	    console.log("there was a change!");
 	    // ApiUtil.fetchArticle();
 	    this.setState({ title: new Date(), articles: articles });
 	  },
@@ -31163,14 +31144,9 @@
 	        React.createElement('input', { className: 'wiki-fetcher',
 	          type: 'text',
 	          onChange: this.handleChange,
-	          onSubmit: this.handleSubmit,
 	          value: value })
 	      ),
-	      React.createElement(
-	        'input',
-	        { type: 'submit', onSubmit: this.handleSubmit },
-	        'Submit'
-	      )
+	      React.createElement('input', { type: 'submit', value: 'submit', onSubmit: this.handleSubmit })
 	    );
 	  }
 	});
@@ -31186,6 +31162,8 @@
 	
 	var React = __webpack_require__(1);
 	var ReactRouter = __webpack_require__(159);
+	var SessionsApiUtil = __webpack_require__(243);
+	var CurrentUserStore = __webpack_require__(241);
 	
 	var History = __webpack_require__(159).History;
 	
@@ -31195,14 +31173,21 @@
 	  mixins: [History],
 	
 	  getInitialState: function () {
-	    return {
-	      logo: "Clickapedia",
-	      list: ["float-right"],
-	      sidebar: ["To Do..."]
-	    };
+	    return { currentUser: CurrentUserStore.currentUser() };
+	  },
+	
+	  componentDidMount: function () {
+	    CurrentUserStore.addListener(this._onChange);
+	  },
+	
+	  _onChange: function () {
+	    this.setState({ currentUser: CurrentUserStore.currentUser() });
+	    console.log(this.state);
 	  },
 	
 	  render: function () {
+	    var currentUser = this.state.currentUser;
+	
 	    return React.createElement(
 	      'nav',
 	      { className: 'nav-bar group' },
@@ -31221,12 +31206,12 @@
 	          React.createElement(
 	            'li',
 	            { key: '1' },
-	            React.createElement(CurrentUser, null)
+	            React.createElement(CurrentUser, { currentUser: currentUser })
 	          ),
 	          React.createElement(
 	            'li',
 	            { key: '2' },
-	            React.createElement(LogInOut, null)
+	            React.createElement(LogInOut, { currentUser: currentUser })
 	          )
 	        )
 	      )
@@ -31238,24 +31223,27 @@
 	  displayName: 'CurrentUser',
 	
 	  render: function () {
-	    var links;
-	    var root = document.getElementById('root');
-	    var user = root.dataset.user;
+	    var link;
+	    var user = this.props.currentUser;
 	
 	    if (user) {
-	      links = React.createElement(
+	      link = React.createElement(
 	        'div',
 	        null,
-	        user
+	        user.username
 	      );
 	    } else {
-	      links = "";
+	      link = React.createElement(
+	        'div',
+	        null,
+	        'no user'
+	      );
 	    }
 	
 	    return React.createElement(
 	      'div',
-	      null,
-	      links
+	      { className: 'current-user' },
+	      link
 	    );
 	  }
 	});
@@ -31263,25 +31251,25 @@
 	var LogInOut = React.createClass({
 	  displayName: 'LogInOut',
 	
-	  render: function () {
-	    var link;
-	    var root = document.getElementById('root');
-	    var user = root.dataset.user;
+	  handleLogout: function () {
+	    SessionsApiUtil.logout();
+	  },
 	
-	    if (user) {
+	  render: function () {
+	    var user = this.props.currentUser;
+	    if (user.id) {
+	      links = React.createElement(
+	        'a',
+	        { href: '#/', onClick: this.handleLogout },
+	        'Log out'
+	      );
+	    } else {
 	      links = React.createElement(
 	        'a',
 	        { href: '#/login' },
-	        'Log out'
-	      ) // make this actually work???
-	      ;
-	    } else {
-	        links = React.createElement(
-	          'a',
-	          { href: '#/login' },
-	          'Log in'
-	        );
-	      }
+	        'Log in'
+	      );
+	    }
 	
 	    return React.createElement(
 	      'div',
@@ -31324,7 +31312,7 @@
 	      'div',
 	      { className: 'toggle', onClick: this.toggleShow },
 	      'BOOK',
-	      React.createElement('i', { 'class': 'fa fa-bars' })
+	      React.createElement('i', { className: 'fa fa-bars' })
 	    );
 	  }
 	});
@@ -31373,7 +31361,7 @@
 	    var headerList = pageHeaders.map(function (header) {
 	      return React.createElement(
 	        'li',
-	        null,
+	        { key: header },
 	        header
 	      );
 	    });
@@ -31407,8 +31395,8 @@
 	
 	  submit: function (e) {
 	    e.preventDefault();
-	
 	    var credentials = $(e.currentTarget).serializeJSON();
+	
 	    SessionsApiUtil.login(credentials, function () {
 	      this.history.pushState({}, "/");
 	    }.bind(this));
@@ -31634,10 +31622,7 @@
 	      success: function (user) {
 	        UserActions.receiveUser(user);
 	      },
-	      error: function (msg) {
-	        console.log("fetch user failed");
-	        console.log(msg);
-	      }
+	      error: function (msg) {}
 	    });
 	  },
 	
@@ -31649,13 +31634,10 @@
 	      data: attrs,
 	      success: function (user) {
 	        UserActions.receiveUser(user);
-	        CurrentUserActions.receiveCurrentUser();
+	        CurrentUserActions.receiveCurrentUser(user);
 	        callback && callback();
 	      },
-	      error: function (msg) {
-	        console.log("create user failed");
-	        console.log(msg);
-	      }
+	      error: function (msg) {}
 	    });
 	  }
 	};
@@ -31710,9 +31692,17 @@
 	    case CurrentUserConstants.RECEIVE_CURRENT_USER:
 	      _currentUserHasBeenFetched = true;
 	      _currentUser = payload.currentUser;
+	      CurrentUserStore.__emitChange();
+	      break;
+	    case CurrentUserConstants.DELETE_CURRENT_USER:
+	      _currentUserHasBeenFetched = false;
+	      _currentUser = {};
+	      CurrentUserStore.__emitChange();
 	      break;
 	  }
 	};
+	
+	window.CurrentUserStore = CurrentUserStore;
 	
 	module.exports = CurrentUserStore;
 
@@ -31721,7 +31711,8 @@
 /***/ function(module, exports) {
 
 	var CurrentUserConstants = {
-	  RECEIVE_CURRENT_USER: "RECEIVE_CURRENT_USER"
+	  RECEIVE_CURRENT_USER: "RECEIVE_CURRENT_USER",
+	  DELETE_CURRENT_USER: "DELETE_CURRENT_USER"
 	};
 	
 	module.exports = CurrentUserConstants;
@@ -31742,9 +31733,10 @@
 	      success: function (currentUser) {
 	        CurrentUserActions.receiveCurrentUser(currentUser);
 	        success && success();
+	        console.log("login success");
 	      },
-	      error: function () {
-	        console.log("Log in failed.");
+	      error: function (msg) {
+	        console.log("login error");
 	      }
 	    });
 	  },
@@ -31759,8 +31751,8 @@
 	        CurrentUserActions.deleteCurrentUser(currentUser);
 	        success && success();
 	      },
-	      error: function () {
-	        console.log("Log out failed.");
+	      error: function (msg) {
+	        debugger;
 	      }
 	    });
 	  },
@@ -31771,14 +31763,16 @@
 	      type: 'GET',
 	      dataType: 'json',
 	      success: function (currentUser) {
-	        console.log("fetched current user");
 	        CurrentUserActions.receiveCurrentUser(currentUser);
+	        console.log(currentUser);
 	        callback && callback();
 	      }
 	    });
 	  }
 	
 	};
+	
+	window.SessionsApiUtil = SessionsApiUtil;
 	
 	module.exports = SessionsApiUtil;
 
@@ -31790,9 +31784,17 @@
 	var CurrentUserConstants = __webpack_require__(242);
 	
 	var CurrentUserActions = {
+	
 	  receiveCurrentUser: function (currentUser) {
 	    AppDispatcher.dispatch({
 	      actionType: CurrentUserConstants.RECEIVE_CURRENT_USER,
+	      currentUser: currentUser
+	    });
+	  },
+	
+	  deleteCurrentUser: function (currentUser) {
+	    AppDispatcher.dispatch({
+	      actionType: CurrentUserConstants.DELETE_CURRENT_USER,
 	      currentUser: currentUser
 	    });
 	  }

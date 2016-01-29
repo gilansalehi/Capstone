@@ -10,9 +10,10 @@ var SessionsApiUtil = {
       success: function (currentUser) {
         CurrentUserActions.receiveCurrentUser(currentUser);
         success && success();
+        console.log("login success");
       },
-      error: function () {
-        console.log("Log in failed.");
+      error: function (msg) {
+        console.log("login error");
       }
     });
   },
@@ -27,8 +28,8 @@ var SessionsApiUtil = {
         CurrentUserActions.deleteCurrentUser(currentUser);
         success && success();
       },
-      error: function () {
-        console.log("Log out failed.");
+      error: function (msg) {
+        debugger
       }
     });
   },
@@ -39,13 +40,15 @@ var SessionsApiUtil = {
       type: 'GET',
       dataType: 'json',
       success: function (currentUser) {
-        console.log("fetched current user");
         CurrentUserActions.receiveCurrentUser(currentUser);
+        console.log(currentUser);
         callback && callback();
       }
     });
   }
 
 };
+
+window.SessionsApiUtil = SessionsApiUtil;
 
 module.exports = SessionsApiUtil;

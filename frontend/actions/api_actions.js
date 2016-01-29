@@ -12,7 +12,6 @@ var ArticleConstants = require('../constants/article_constants');
 
 var ApiActions = {
   allArticles: function (articles) {
-    console.log("Dispatching all articles...");
     AppDispatcher.dispatch({
       actionType: ArticleConstants.ARTICLES_RECEIVED,
       articles: articles

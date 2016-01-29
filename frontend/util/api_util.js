@@ -7,27 +7,22 @@ var ApiUtil = {
       method: 'GET',
       dataType: 'json',
       success: function (data) {
-        console.log("Fetched All Articles");
         ApiActions.allArticles(data);
       },
       error: function () {
-        console.log("Error with fetchArticles");
       }
     });
   },
 
   fetchArticle: function (id) {
-    // debugger
     $.ajax({
       url: '/api/articles/' + id,
       method: 'GET',
       dataType: 'json',
       success: function (article) {
-        console.log("Fetched Article Successfully");
         ApiActions.addArticle(article);
       },
       error: function () {
-        console.log("Error with fetchArticle");
       },
     });
   },
@@ -48,10 +43,8 @@ var ApiUtil = {
       dataType: 'json',
       headers: { 'Api-User-Agent': 'Clickapedia/0.0.1 (http://clickapedia.herokuapp.com/; gilansalehi@gmail.com)' },
       success: function(data) {
-        console.log(JSON.parse(data));
       },
       error: function (message) {
-        console.log(message);
       }
     });
   }

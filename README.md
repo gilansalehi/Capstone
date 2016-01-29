@@ -233,6 +233,15 @@ $.ajax( {
     }
 } );
 
-...where the 'headers' object should resemble something like this:
+...where the 'headers' object should resemble something like this (presumably):
 
 { 'Api-User-Agent': 'MyCoolTool/1.1 (https://example.org/MyCoolTool/; MyCoolTool@example.org) BasedOnSuperLib/1.4'}
+
+Anyway, that's as far as I've gotten.  Once I can get the json for a wikipedia Page
+by putting it's title into an ajax request my project is like 65% complete, and
+I will have the most bomb-ass seed data of literally all time.  Any chance you can help
+me structure an ajax query to avoid the Access Control Allow Origin problem?
+
+You're the best.
+
+NOKOGIRI

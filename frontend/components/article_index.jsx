@@ -43,7 +43,6 @@ var ArticleIndex = React.createClass({
 
   __onChange: function () {
     var articles = ArticleStore.firstNArticles(10);
-    console.log("there was a change!");
     // ApiUtil.fetchArticle();
     this.setState({ title: new Date(), articles: articles });
   },

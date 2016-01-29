@@ -8,7 +8,7 @@ var Sidebar = React.createClass({
   render: function () {
     var pageHeaders = ["header 1", "header 2", "header 3", "etc"];
     var headerList = pageHeaders.map(function (header) {
-      return <li>{header}</li>;
+      return <li key={header}>{header}</li>;
     });
 
     return(

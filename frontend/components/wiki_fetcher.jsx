@@ -31,12 +31,10 @@ var WikiFetcher = React.createClass({
           <input className="wiki-fetcher"
                  type="text"
                  onChange={this.handleChange}
-                 onSubmit={this.handleSubmit}
-                 value={value}>
-          </input>
+                 value={value} />
         </label>
 
-        <input type="submit" onSubmit={this.handleSubmit}>Submit</input>
+        <input type="submit" value="submit" onSubmit={this.handleSubmit} />
       </form>
     );
   },

@@ -8,7 +8,7 @@ var _currentUserHasBeenFetched = false;
 var CurrentUserStore = new Store(AppDispatcher);
 
 CurrentUserStore.currentUser = function () {
-    return $.extend({}, _currentUser);
+  return $.extend({}, _currentUser);
 };
 
 CurrentUserStore.isLoggedIn = function () {
@@ -24,8 +24,16 @@ CurrentUserStore.__onDispatch = function (payload) {
     case CurrentUserConstants.RECEIVE_CURRENT_USER:
       _currentUserHasBeenFetched = true;
       _currentUser = payload.currentUser;
+      CurrentUserStore.__emitChange();
+      break;
+    case CurrentUserConstants.DELETE_CURRENT_USER:
+      _currentUserHasBeenFetched = false;
+      _currentUser = {};
+      CurrentUserStore.__emitChange();
       break;
   }
 };
+
+window.CurrentUserStore = CurrentUserStore;
 
 module.exports = CurrentUserStore;

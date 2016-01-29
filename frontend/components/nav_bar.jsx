@@ -3,6 +3,8 @@
 
 var React = require('react');
 var ReactRouter = require('react-router');
+var SessionsApiUtil = require('./../util/sessions_api_util.js');
+var CurrentUserStore = require('./../stores/current_user_store.js');
 
 var History = require('react-router').History;
 
@@ -10,22 +12,29 @@ var NavBar = React.createClass({
   mixins: [History],
 
   getInitialState: function () {
-    return ({
-      logo: "Clickapedia",
-      list: ["float-right"],
-      sidebar: ["To Do..."]
-    });
+    return ({ currentUser: CurrentUserStore.currentUser() });
+  },
+
+  componentDidMount: function () {
+    CurrentUserStore.addListener(this._onChange);
+  },
+
+  _onChange: function () {
+    this.setState({ currentUser: CurrentUserStore.currentUser() });
+    console.log(this.state);
   },
 
   render: function () {
+    var currentUser = this.state.currentUser;
+
     return (
       <nav className="nav-bar group">
         <div className="nav-header group">
           <SidebarToggle />
           <a className="nav-logo" href="/">Clickapedia</a>
           <ul className="nav-list">
-            <li key="1"><CurrentUser /></li>
-            <li key="2"><LogInOut /></li>
+            <li key="1"><CurrentUser currentUser={currentUser} /></li>
+            <li key="2"><LogInOut currentUser={currentUser} /></li>
           </ul>
         </div>
       </nav>
@@ -35,32 +44,27 @@ var NavBar = React.createClass({
 
 var CurrentUser = React.createClass({
   render: function () {
-    var links;
-    var root = document.getElementById('root');
-    var user = root.dataset.user;
+    var link;
+    var user = this.props.currentUser;
 
-    if (user) {
-      links = <div>{user}</div>;
-    } else {
-      links = "";
-    }
+    if (user) { link = <div>{user.username}</div>; }
+    else { link = <div>no user</div>; }
 
     return (
-      <div>{links}</div>
+      <div className="current-user">{link}</div>
     );
   }
 });
 
 var LogInOut = React.createClass({
-  render: function () {
-    var link;
-    var root = document.getElementById('root');
-    var user = root.dataset.user;
+  handleLogout: function () {
+    SessionsApiUtil.logout();
+  },
 
-    if (user) {
-      links = (
-        <a href="#/login">Log out</a> // make this actually work???
-      );
+  render: function () {
+    var user = this.props.currentUser;
+    if (user.id) {
+      links = (<a href="#/" onClick={this.handleLogout}>Log out</a>);
     } else {
       links = <a href="#/login">Log in</a>;
     }
@@ -100,7 +104,7 @@ var SidebarToggle = React.createClass({
     //                data="book236.svg"></object>;
     return (
       <div className="toggle" onClick={this.toggleShow}>BOOK
-        <i class="fa fa-bars"></i>
+        <i className="fa fa-bars"></i>
       </div>
     );
   }

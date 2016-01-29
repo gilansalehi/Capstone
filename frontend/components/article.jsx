@@ -23,7 +23,6 @@ var Article = React.createClass({
 
   __onChange: function () {
     var article = ArticleStore.fetchArticle();
-    console.log("got a new article");
     this.setState({ title: article.title, body: article.body });
   },
 

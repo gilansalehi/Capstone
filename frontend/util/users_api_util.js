@@ -11,8 +11,7 @@ var UsersApiUtil = {
         UserActions.receiveUser(user);
       },
       error: function (msg) {
-        console.log("fetch user failed");
-        console.log(msg);
+
       }
     });
   },
@@ -25,15 +24,14 @@ var UsersApiUtil = {
       data: attrs,
       success: function (user) {
         UserActions.receiveUser(user);
-        CurrentUserActions.receiveCurrentUser();
+        CurrentUserActions.receiveCurrentUser(user);
         callback && callback();
       },
       error: function (msg) {
-        console.log("create user failed");
-        console.log(msg);
+
       }
     });
   }
-}
+};
 
 module.exports = UsersApiUtil;

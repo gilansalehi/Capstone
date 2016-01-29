@@ -10,7 +10,7 @@ class Api::UsersController < ApplicationController
 
     if @user.save
       sign_in!(@user)
-      render "/"
+      render "api/articles/index"
     else
       flash.now[:errors] = @user.errors.full_messages
       render json: ["Error with create user"]
