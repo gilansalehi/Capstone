@@ -26,41 +26,41 @@ var UserForm = React.createClass({
         <form onSubmit={ this.submit }>
           <input type="hidden"
                  name="authenticity_token"
-                 value="<%= form_authenticity_token %>" />
+                 value="<%= form_authenticity_token %>"></input>
 
-          <label for="username">Username</label><br>
+          <label for="username">Username</label><br></br>
           <input id="username"
                  type="text"
                  name="user[username]"
                  placeholder="Enter your username"
-                 value="" />
-          <br>
+                 value=""></input>
+          <br></br>
 
-          <label for="password">Password</label><br>
+          <label for="password">Password</label><br></br>
           <input id="password"
                  type="password"
                  name="user[password]"
                  placeholder="Enter your password"
-                 value="" />
-          <br>
+                 value=""></input>
+          <br></br>
 
-          <label for="password2">Confirm password</label><br>
+          <label for="password2">Confirm password</label><br></br>
           <input id="password2"
                  type="password"
                  name="user[password_confirm]"
                  placeholder="Enter your password again"
-                 value="" />
-          <br>
+                 value=""></input>
+          <br></br>
 
-          <label for="email">Email address (optional)</label><br>
+          <label for="email">Email address (optional)</label><br></br>
           <input id="email"
                  type="text"
                  name="user[email]"
                  placeholder="Enter your email address"
-                 value="" />
-          <br>
+                 value=""></input>
+          <br></br>
 
-          <input class="submit" type="submit" value="Create account" />
+          <input class="submit" type="submit" value="Create account"></input>
         </form>
 
         <div class="stats">

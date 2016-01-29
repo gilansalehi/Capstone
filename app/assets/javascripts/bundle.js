@@ -56,10 +56,12 @@
 	var ArticleIndex = __webpack_require__(230);
 	var ArticleStore = __webpack_require__(207);
 	var NavBar = __webpack_require__(233);
-	var Sidebar = __webpack_require__(238);
+	var Sidebar = __webpack_require__(234);
+	var SessionForm = __webpack_require__(235);
+	var UserForm = __webpack_require__(236);
 	
-	var CurrentUserStore = __webpack_require__(234);
-	var SessionsApiUtil = __webpack_require__(236);
+	var CurrentUserStore = __webpack_require__(241);
+	var SessionsApiUtil = __webpack_require__(243);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -108,7 +110,13 @@
 	  Route,
 	  { path: '/', component: App },
 	  React.createElement(IndexRoute, { component: ArticleIndex }),
-	  React.createElement(Route, { path: 'article/:article_id', component: Article })
+	  React.createElement(
+	    Route,
+	    { path: 'article/:article_id', component: Article },
+	    React.createElement(Route, { path: 'login', component: SessionForm }),
+	    React.createElement(Route, { path: 'users/new', component: UserForm }),
+	    React.createElement(Route, { path: 'users/:id', component: UserShow })
+	  )
 	);
 	
 	document.addEventListener("DOMContentLoaded", function () {
@@ -31345,8 +31353,346 @@
 /* 234 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var React = __webpack_require__(1);
+	var ReactRouter = __webpack_require__(159);
+	
+	var History = __webpack_require__(159).History;
+	
+	var Sidebar = React.createClass({
+	  displayName: 'Sidebar',
+	
+	  render: function () {
+	    var pageHeaders = ["header 1", "header 2", "header 3", "etc"];
+	    var headerList = pageHeaders.map(function (header) {
+	      return React.createElement(
+	        'li',
+	        null,
+	        header
+	      );
+	    });
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'sidebar group' },
+	      React.createElement(
+	        'ul',
+	        { className: 'sidebar-list' },
+	        headerList
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = Sidebar;
+
+/***/ },
+/* 235 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var History = __webpack_require__(159).History;
+	// var SessionsApiUtil = require('./../../util/sessions_api_util');
+	
+	var SessionForm = React.createClass({
+	  displayName: 'SessionForm',
+	
+	  mixins: [History],
+	
+	  submit: function (e) {
+	    e.preventDefault();
+	
+	    var credentials = $(e.currentTarget).serializeJSON();
+	    SessionsApiUtil.login(credentials, function () {
+	      this.history.pushState({}, "/");
+	    }.bind(this));
+	  },
+	
+	  render: function () {
+	
+	    return React.createElement(
+	      'div',
+	      { 'class': 'auth-page group' },
+	      React.createElement(
+	        'h1',
+	        null,
+	        'Log in'
+	      ),
+	      React.createElement(
+	        'form',
+	        { onSubmit: this.submit },
+	        React.createElement('input', { type: 'hidden',
+	          name: 'authenticity_token',
+	          value: '<%= form_authenticity_token %>' }),
+	        React.createElement(
+	          'label',
+	          { 'for': 'username' },
+	          'Username'
+	        ),
+	        React.createElement('br', null),
+	        React.createElement('input', { id: 'username',
+	          type: 'text',
+	          name: 'user[username]',
+	          placeholder: 'Enter your username',
+	          value: '' }),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          { 'for': 'password' },
+	          'Password'
+	        ),
+	        React.createElement('br', null),
+	        React.createElement('input', { id: 'password',
+	          type: 'password',
+	          name: 'user[password]',
+	          placeholder: 'Enter your password',
+	          value: '' }),
+	        React.createElement('br', null),
+	        React.createElement('input', { 'class': 'submit', type: 'submit', value: 'Log In' })
+	      ),
+	      React.createElement(
+	        'div',
+	        { 'class': 'join-block' },
+	        'Don\'t have an account?',
+	        React.createElement(
+	          'a',
+	          { 'class': 'join-button', href: '<%= new_user_url %>' },
+	          'Join Clickapedia'
+	        )
+	      ),
+	      React.createElement(
+	        'form',
+	        { onSubmit: this.submit },
+	        React.createElement('input', { type: 'hidden',
+	          name: 'authenticity_token',
+	          value: '<%= form_authenticity_token %>' }),
+	        React.createElement('input', { type: 'hidden', name: 'user[username]', value: 'guest' }),
+	        React.createElement('input', { type: 'hidden', name: 'user[password]', value: 'password' }),
+	        React.createElement('input', { 'class': 'demo-user submit', type: 'submit', value: 'Log In As Guest' })
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = SessionForm;
+
+/***/ },
+/* 236 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var History = __webpack_require__(159).History;
+	var UserStore = __webpack_require__(237);
+	var UsersApiUtil = __webpack_require__(239);
+	// var SessionsApiUtil = require('./../../util/sessions_api_util');
+	
+	var UserForm = React.createClass({
+	  displayName: 'UserForm',
+	
+	  mixins: [History],
+	
+	  submit: function (e) {
+	    e.preventDefault();
+	
+	    var credentials = $(e.currentTarget).serializeJSON();
+	    UsersApiUtil.login(credentials, function () {
+	      this.history.pushState({}, "/");
+	    }.bind(this));
+	  },
+	
+	  render: function () {
+	
+	    return React.createElement(
+	      'div',
+	      { 'class': 'auth-page group' },
+	      React.createElement(
+	        'h1',
+	        null,
+	        'Create account'
+	      ),
+	      React.createElement(
+	        'form',
+	        { onSubmit: this.submit },
+	        React.createElement('input', { type: 'hidden',
+	          name: 'authenticity_token',
+	          value: '<%= form_authenticity_token %>' }),
+	        React.createElement(
+	          'label',
+	          { 'for': 'username' },
+	          'Username'
+	        ),
+	        React.createElement('br', null),
+	        React.createElement('input', { id: 'username',
+	          type: 'text',
+	          name: 'user[username]',
+	          placeholder: 'Enter your username',
+	          value: '' }),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          { 'for': 'password' },
+	          'Password'
+	        ),
+	        React.createElement('br', null),
+	        React.createElement('input', { id: 'password',
+	          type: 'password',
+	          name: 'user[password]',
+	          placeholder: 'Enter your password',
+	          value: '' }),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          { 'for': 'password2' },
+	          'Confirm password'
+	        ),
+	        React.createElement('br', null),
+	        React.createElement('input', { id: 'password2',
+	          type: 'password',
+	          name: 'user[password_confirm]',
+	          placeholder: 'Enter your password again',
+	          value: '' }),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          { 'for': 'email' },
+	          'Email address (optional)'
+	        ),
+	        React.createElement('br', null),
+	        React.createElement('input', { id: 'email',
+	          type: 'text',
+	          name: 'user[email]',
+	          placeholder: 'Enter your email address',
+	          value: '' }),
+	        React.createElement('br', null),
+	        React.createElement('input', { 'class': 'submit', type: 'submit', value: 'Create account' })
+	      ),
+	      React.createElement(
+	        'div',
+	        { 'class': 'stats' },
+	        'Clickapedia is made by people like you.'
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = UserForm;
+
+/***/ },
+/* 237 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var AppDispatcher = __webpack_require__(225);
-	var CurrentUserConstants = __webpack_require__(235);
+	var UserConstants = __webpack_require__(238);
+	var Store = __webpack_require__(208).Store;
+	
+	var _users = [];
+	// var CHANGE_EVENT = "change";
+	
+	var _addUser = function (newUser) {
+	  _users.unshift(newUser);
+	};
+	
+	var UsersStore = new Store(AppDispatcher);
+	
+	UsersStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case UserConstants.RECEIVE_USER:
+	      _addUser(payload.user);
+	      UsersStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	// UsersStore.findUserById = function (id) {
+	//   for (var i = 0; i < _users.length; i++) {
+	//     if (_users[i].id === id) {
+	//       return _users[i];
+	//     }
+	//   }
+	//
+	//   return;
+	// };
+	
+	module.exports = UsersStore;
+
+/***/ },
+/* 238 */
+/***/ function(module, exports) {
+
+	var UserConstants = {
+	  RECEIVE_USER: "RECEIVE_USER"
+	};
+	
+	module.exports = UserConstants;
+
+/***/ },
+/* 239 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var UserActions = __webpack_require__(240);
+	
+	var UsersApiUtil = {
+	  fetchUser: function (id) {
+	    $.ajax({
+	      url: '/api/users/' + id,
+	      type: 'GET',
+	      dataType: 'json',
+	      success: function (user) {
+	        UserActions.receiveUser(user);
+	      },
+	      error: function (msg) {
+	        console.log("fetch user failed");
+	        console.log(msg);
+	      }
+	    });
+	  },
+	
+	  createUser: function (attrs, callback) {
+	    $.ajax({
+	      url: '/api/users',
+	      method: 'POST',
+	      dataType: 'json',
+	      data: attrs,
+	      success: function (user) {
+	        UserActions.receiveUser(user);
+	        CurrentUserActions.receiveCurrentUser();
+	        callback && callback();
+	      },
+	      error: function (msg) {
+	        console.log("create user failed");
+	        console.log(msg);
+	      }
+	    });
+	  }
+	};
+	
+	module.exports = UsersApiUtil;
+
+/***/ },
+/* 240 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(225);
+	var UserConstants = __webpack_require__(238);
+	
+	var UserActions = {
+	  receiveUser: function (user) {
+	    AppDispatcher.dispatch({
+	      actionType: UserConstants.RECEIVE_USER,
+	      user: user
+	    });
+	  }
+	};
+	
+	module.exports = UserActions;
+
+/***/ },
+/* 241 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(225);
+	var CurrentUserConstants = __webpack_require__(242);
 	var Store = __webpack_require__(208).Store;
 	
 	var _currentUser = {};
@@ -31378,7 +31724,7 @@
 	module.exports = CurrentUserStore;
 
 /***/ },
-/* 235 */
+/* 242 */
 /***/ function(module, exports) {
 
 	var CurrentUserConstants = {
@@ -31388,10 +31734,10 @@
 	module.exports = CurrentUserConstants;
 
 /***/ },
-/* 236 */
+/* 243 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var CurrentUserActions = __webpack_require__(237);
+	var CurrentUserActions = __webpack_require__(244);
 	
 	var SessionsApiUtil = {
 	  login: function (credentials, success) {
@@ -31444,11 +31790,11 @@
 	module.exports = SessionsApiUtil;
 
 /***/ },
-/* 237 */
+/* 244 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(225);
-	var CurrentUserConstants = __webpack_require__(235);
+	var CurrentUserConstants = __webpack_require__(242);
 	
 	var CurrentUserActions = {
 	  receiveCurrentUser: function (currentUser) {
@@ -31460,42 +31806,6 @@
 	};
 	
 	module.exports = CurrentUserActions;
-
-/***/ },
-/* 238 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var ReactRouter = __webpack_require__(159);
-	
-	var History = __webpack_require__(159).History;
-	
-	var Sidebar = React.createClass({
-	  displayName: 'Sidebar',
-	
-	  render: function () {
-	    var pageHeaders = ["header 1", "header 2", "header 3", "etc"];
-	    var headerList = pageHeaders.map(function (header) {
-	      return React.createElement(
-	        'li',
-	        null,
-	        header
-	      );
-	    });
-	
-	    return React.createElement(
-	      'div',
-	      { className: 'sidebar group' },
-	      React.createElement(
-	        'ul',
-	        { className: 'sidebar-list' },
-	        headerList
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = Sidebar;
 
 /***/ }
 /******/ ]);

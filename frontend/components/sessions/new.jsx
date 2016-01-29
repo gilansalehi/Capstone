@@ -23,25 +23,25 @@ var SessionForm = React.createClass({
         <form onSubmit={ this.submit } >
           <input type="hidden"
                  name="authenticity_token"
-                 value="<%= form_authenticity_token %>">
+                 value="<%= form_authenticity_token %>"></input>
 
-          <label for="username">Username</label><br>
+          <label for="username">Username</label><br></br>
           <input id="username"
                  type="text"
                  name="user[username]"
                  placeholder="Enter your username"
-                 value="">
-          <br>
+                 value=""></input>
+          <br></br>
 
-          <label for="password">Password</label><br>
+          <label for="password">Password</label><br></br>
           <input id="password"
                  type="password"
                  name="user[password]"
                  placeholder="Enter your password"
-                 value="">
-          <br>
+                 value=""></input>
+          <br></br>
 
-          <input class="submit" type="submit" value="Log In">
+          <input class="submit" type="submit" value="Log In"></input>
         </form>
 
         <div class="join-block">
@@ -52,10 +52,10 @@ var SessionForm = React.createClass({
         <form onSubmit ={ this.submit } >
           <input type="hidden"
                  name="authenticity_token"
-                 value="<%= form_authenticity_token %>">
-          <input type="hidden" name="user[username]" value="guest">
-          <input type="hidden" name="user[password]" value="password">
-          <input class="demo-user submit" type="submit" value="Log In As Guest">
+                 value="<%= form_authenticity_token %>"></input>
+          <input type="hidden" name="user[username]" value="guest"></input>
+          <input type="hidden" name="user[password]" value="password"></input>
+          <input class="demo-user submit" type="submit" value="Log In As Guest"></input>
         </form>
       </div>
     );
