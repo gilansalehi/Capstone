@@ -37,6 +37,7 @@ var ApiUtil = {
     var action = "action=parse&";
     var page = "page=" + title;
     var format = "&format=json";
+    var origin = "&origin=localhost:3000";
 
     var urlString = host + action + page + format;
 

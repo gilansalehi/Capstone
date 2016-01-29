@@ -59,10 +59,10 @@ var LogInOut = React.createClass({
 
     if (user) {
       links = (
-        <a href="/session/new">Log out</a> // make this actually work???
+        <a href="#/login">Log out</a> // make this actually work???
       );
     } else {
-      links = <a href="/session/new">Log in</a>;
+      links = <a href="#/login">Log in</a>;
     }
 
     return (

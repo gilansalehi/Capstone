@@ -59,6 +59,7 @@
 	var Sidebar = __webpack_require__(234);
 	var SessionForm = __webpack_require__(235);
 	var UserForm = __webpack_require__(236);
+	var UserShow = __webpack_require__(245);
 	
 	var CurrentUserStore = __webpack_require__(241);
 	var SessionsApiUtil = __webpack_require__(243);
@@ -110,24 +111,29 @@
 	  Route,
 	  { path: '/', component: App },
 	  React.createElement(IndexRoute, { component: ArticleIndex }),
-	  React.createElement(
-	    Route,
-	    { path: 'article/:article_id', component: Article },
-	    React.createElement(Route, { path: 'login', component: SessionForm }),
-	    React.createElement(Route, { path: 'users/new', component: UserForm }),
-	    React.createElement(Route, { path: 'users/:id', component: UserShow })
-	  )
+	  React.createElement(Route, { path: 'article/:article_id', component: Article }),
+	  React.createElement(Route, { path: 'login', component: SessionForm }),
+	  React.createElement(Route, { path: 'users/new', component: UserForm }),
+	  React.createElement(Route, { path: 'users/:id', component: UserShow })
 	);
 	
-	document.addEventListener("DOMContentLoaded", function () {
-	  if (document.getElementById('root')) {
+	// var cd = function () {
+	//   if (document.getElementById('root')) {
+	//     ReactDOM.render(
+	//       <Router>{routes}</Router>,
+	//       document.getElementById('root')
+	//     );
+	//   }
+	// };
+	window.init = function () {
+	  document.addEventListener("DOMContentLoaded", function () {
 	    ReactDOM.render(React.createElement(
 	      Router,
 	      null,
 	      routes
 	    ), document.getElementById('root'));
-	  }
-	});
+	  });
+	};
 
 /***/ },
 /* 1 */
@@ -30897,6 +30903,7 @@
 	    var action = "action=parse&";
 	    var page = "page=" + title;
 	    var format = "&format=json";
+	    var origin = "&origin=localhost:3000";
 	
 	    var urlString = host + action + page + format;
 	
@@ -31264,14 +31271,14 @@
 	    if (user) {
 	      links = React.createElement(
 	        'a',
-	        { href: '/session/new' },
+	        { href: '#/login' },
 	        'Log out'
 	      ) // make this actually work???
 	      ;
 	    } else {
 	        links = React.createElement(
 	          'a',
-	          { href: '/session/new' },
+	          { href: '#/login' },
 	          'Log in'
 	        );
 	      }
@@ -31391,7 +31398,7 @@
 
 	var React = __webpack_require__(1);
 	var History = __webpack_require__(159).History;
-	// var SessionsApiUtil = require('./../../util/sessions_api_util');
+	var SessionsApiUtil = __webpack_require__(243);
 	
 	var SessionForm = React.createClass({
 	  displayName: 'SessionForm',
@@ -31411,7 +31418,7 @@
 	
 	    return React.createElement(
 	      'div',
-	      { 'class': 'auth-page group' },
+	      { className: 'auth-page group' },
 	      React.createElement(
 	        'h1',
 	        null,
@@ -31420,9 +31427,6 @@
 	      React.createElement(
 	        'form',
 	        { onSubmit: this.submit },
-	        React.createElement('input', { type: 'hidden',
-	          name: 'authenticity_token',
-	          value: '<%= form_authenticity_token %>' }),
 	        React.createElement(
 	          'label',
 	          { 'for': 'username' },
@@ -31432,8 +31436,7 @@
 	        React.createElement('input', { id: 'username',
 	          type: 'text',
 	          name: 'user[username]',
-	          placeholder: 'Enter your username',
-	          value: '' }),
+	          placeholder: 'Enter your username' }),
 	        React.createElement('br', null),
 	        React.createElement(
 	          'label',
@@ -31444,30 +31447,26 @@
 	        React.createElement('input', { id: 'password',
 	          type: 'password',
 	          name: 'user[password]',
-	          placeholder: 'Enter your password',
-	          value: '' }),
+	          placeholder: 'Enter your password' }),
 	        React.createElement('br', null),
-	        React.createElement('input', { 'class': 'submit', type: 'submit', value: 'Log In' })
+	        React.createElement('input', { className: 'submit', type: 'submit', value: 'Log In' })
 	      ),
 	      React.createElement(
 	        'div',
-	        { 'class': 'join-block' },
+	        { className: 'join-block' },
 	        'Don\'t have an account?',
 	        React.createElement(
 	          'a',
-	          { 'class': 'join-button', href: '<%= new_user_url %>' },
+	          { className: 'join-button', href: '#/users/new' },
 	          'Join Clickapedia'
 	        )
 	      ),
 	      React.createElement(
 	        'form',
 	        { onSubmit: this.submit },
-	        React.createElement('input', { type: 'hidden',
-	          name: 'authenticity_token',
-	          value: '<%= form_authenticity_token %>' }),
 	        React.createElement('input', { type: 'hidden', name: 'user[username]', value: 'guest' }),
 	        React.createElement('input', { type: 'hidden', name: 'user[password]', value: 'password' }),
-	        React.createElement('input', { 'class': 'demo-user submit', type: 'submit', value: 'Log In As Guest' })
+	        React.createElement('input', { className: 'demo-user', type: 'submit', value: 'Log In As Guest' })
 	      )
 	    );
 	  }
@@ -31495,7 +31494,7 @@
 	    e.preventDefault();
 	
 	    var credentials = $(e.currentTarget).serializeJSON();
-	    UsersApiUtil.login(credentials, function () {
+	    UsersApiUtil.createUser(credentials, function () {
 	      this.history.pushState({}, "/");
 	    }.bind(this));
 	  },
@@ -31504,7 +31503,7 @@
 	
 	    return React.createElement(
 	      'div',
-	      { 'class': 'auth-page group' },
+	      { className: 'auth-page group' },
 	      React.createElement(
 	        'h1',
 	        null,
@@ -31513,9 +31512,6 @@
 	      React.createElement(
 	        'form',
 	        { onSubmit: this.submit },
-	        React.createElement('input', { type: 'hidden',
-	          name: 'authenticity_token',
-	          value: '<%= form_authenticity_token %>' }),
 	        React.createElement(
 	          'label',
 	          { 'for': 'username' },
@@ -31525,8 +31521,7 @@
 	        React.createElement('input', { id: 'username',
 	          type: 'text',
 	          name: 'user[username]',
-	          placeholder: 'Enter your username',
-	          value: '' }),
+	          placeholder: 'Enter your username' }),
 	        React.createElement('br', null),
 	        React.createElement(
 	          'label',
@@ -31537,8 +31532,7 @@
 	        React.createElement('input', { id: 'password',
 	          type: 'password',
 	          name: 'user[password]',
-	          placeholder: 'Enter your password',
-	          value: '' }),
+	          placeholder: 'Enter your password' }),
 	        React.createElement('br', null),
 	        React.createElement(
 	          'label',
@@ -31549,8 +31543,7 @@
 	        React.createElement('input', { id: 'password2',
 	          type: 'password',
 	          name: 'user[password_confirm]',
-	          placeholder: 'Enter your password again',
-	          value: '' }),
+	          placeholder: 'Enter your password again' }),
 	        React.createElement('br', null),
 	        React.createElement(
 	          'label',
@@ -31561,14 +31554,13 @@
 	        React.createElement('input', { id: 'email',
 	          type: 'text',
 	          name: 'user[email]',
-	          placeholder: 'Enter your email address',
-	          value: '' }),
+	          placeholder: 'Enter your email address' }),
 	        React.createElement('br', null),
-	        React.createElement('input', { 'class': 'submit', type: 'submit', value: 'Create account' })
+	        React.createElement('input', { className: 'submit', type: 'submit', value: 'Create account' })
 	      ),
 	      React.createElement(
 	        'div',
-	        { 'class': 'stats' },
+	        { className: 'stats' },
 	        'Clickapedia is made by people like you.'
 	      )
 	    );
@@ -31798,7 +31790,7 @@
 	
 	var CurrentUserActions = {
 	  receiveCurrentUser: function (currentUser) {
-	    AppDispatcher.dispatcher({
+	    AppDispatcher.dispatch({
 	      actionType: CurrentUserConstants.RECEIVE_CURRENT_USER,
 	      currentUser: currentUser
 	    });
@@ -31806,6 +31798,29 @@
 	};
 	
 	module.exports = CurrentUserActions;
+
+/***/ },
+/* 245 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var UsersStore = __webpack_require__(237);
+	var UsersApiUtil = __webpack_require__(239);
+	
+	var UserShow = React.createClass({
+	  displayName: 'UserShow',
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      'User show page'
+	    );
+	  }
+	
+	});
+	
+	module.exports = UserShow;
 
 /***/ }
 /******/ ]);

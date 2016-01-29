@@ -19,7 +19,7 @@ class Api::SessionsController < ApplicationController
       render json: ["Wrong email/password combo!"], status: 401
     else
       sign_in!(@user)
-      render "api/articles"
+      render "api/articles/index"
     end
   end
 
