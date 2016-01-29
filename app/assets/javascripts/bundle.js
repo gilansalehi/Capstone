@@ -31623,6 +31623,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var UserActions = __webpack_require__(240);
+	var CurrentUserActions = __webpack_require__(244);
 	
 	var UsersApiUtil = {
 	  fetchUser: function (id) {

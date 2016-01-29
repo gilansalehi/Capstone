@@ -5,8 +5,20 @@ class Api::UsersController < ApplicationController
     render :show
   end
 
+  def create
+    @user = User.new(user_params)
+
+    if @user.save
+      sign_in!(@user)
+      render "/"
+    else
+      flash.now[:errors] = @user.errors.full_messages
+      render json: ["Error with create user"]
+    end
+  end
+
   protected
   def user_params
-    self.params.require(:user).permit(:username, :password, :password_confirm)
+    self.params.require(:user).permit(:username, :password)
   end
 end
