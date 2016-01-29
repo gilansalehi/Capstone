@@ -56,17 +56,35 @@ body {
   font-family: sans-serif;
 }
 
+.main {
+  display: block;
+  padding-top: 47px;
+}
+
+.sidebar {
+  display: block;
+  float: left;
+  position: fixed;
+  width: 180px;
+  height: 1080px;
+  background: yellow;
+}
+
 .content {
   display: block;
-  /*float: left;*/
-  width: 80%;
-  padding-top: 40px;
-  margin: auto;
+  float: left;
+  width: 100%;
+  /*padding-top: 40px;*/
   padding-left: 180px;
-  /*background: red*/
+  margin: auto;
+  background: red;
 }
 
 .article {
   margin: 20px;
   max-width: 1000px;
+}
+
+.index {
+  margin: 20px;
 }

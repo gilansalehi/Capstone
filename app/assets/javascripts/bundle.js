@@ -55,15 +55,11 @@
 	var Article = __webpack_require__(206);
 	var ArticleIndex = __webpack_require__(230);
 	var ArticleStore = __webpack_require__(207);
-	var NavBar = __webpack_require__(232);
+	var NavBar = __webpack_require__(233);
+	var Sidebar = __webpack_require__(238);
 	
-	// var App = require('./components/app.jsx');
-	// document.addEventListener("DOMContentLoaded", function () {
-	//   ReactDOM.render(
-	//     <Router>{routes}</Router>,
-	//     document.getElementById('root')
-	//   );
-	// });
+	var CurrentUserStore = __webpack_require__(234);
+	var SessionsApiUtil = __webpack_require__(236);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -74,17 +70,39 @@
 	      null,
 	      React.createElement(NavBar, null),
 	      React.createElement(
-	        'content',
-	        { className: 'content group' },
+	        'div',
+	        { className: 'main group' },
 	        React.createElement(
 	          'div',
-	          null,
+	          { className: 'sidebar' },
+	          React.createElement(Sidebar, null)
+	        ),
+	        React.createElement(
+	          'content',
+	          { className: 'content group' },
 	          this.props.children
 	        )
 	      )
 	    );
 	  }
 	});
+	
+	function _ensureLoggedIn(nextState, replace, callback) {
+	
+	  function _redirectIfNotLoggedIn() {
+	    if (!CurrentUserStore.isLoggedIn()) {
+	      replace({}, "/login");
+	    }
+	    callback();
+	  }
+	
+	  // CurrentUserStore.userHasBeenFetched() ? _redirectIfNotLoggedIn() : SessionsApiUtil.fetchCurrentUser(_redirectIfNotLoggedIn)
+	  if (CurrentUserStore.userHasBeenFetched()) {
+	    _redirectIfNotLoggedIn();
+	  } else {
+	    SessionsApiUtil.fetchCurrentUser(_redirectIfNotLoggedIn);
+	  }
+	};
 	
 	var routes = React.createElement(
 	  Route,
@@ -9360,6 +9378,7 @@
 	 */
 	var EventInterface = {
 	  type: null,
+	  target: null,
 	  // currentTarget is set when dispatching; no use in copying it here
 	  currentTarget: emptyFunction.thatReturnsNull,
 	  eventPhase: null,
@@ -9393,8 +9412,6 @@
 	  this.dispatchConfig = dispatchConfig;
 	  this.dispatchMarker = dispatchMarker;
 	  this.nativeEvent = nativeEvent;
-	  this.target = nativeEventTarget;
-	  this.currentTarget = nativeEventTarget;
 	
 	  var Interface = this.constructor.Interface;
 	  for (var propName in Interface) {
@@ -9405,7 +9422,11 @@
 	    if (normalize) {
 	      this[propName] = normalize(nativeEvent);
 	    } else {
-	      this[propName] = nativeEvent[propName];
+	      if (propName === 'target') {
+	        this.target = nativeEventTarget;
+	      } else {
+	        this[propName] = nativeEvent[propName];
+	      }
 	    }
 	  }
 	
@@ -13254,7 +13275,10 @@
 	      }
 	    });
 	
-	    nativeProps.children = content;
+	    if (content) {
+	      nativeProps.children = content;
+	    }
+	
 	    return nativeProps;
 	  }
 	
@@ -18727,7 +18751,7 @@
 	
 	'use strict';
 	
-	module.exports = '0.14.6';
+	module.exports = '0.14.7';
 
 /***/ },
 /* 147 */
@@ -30938,7 +30962,7 @@
 	
 	var Article = __webpack_require__(206);
 	var ArticleFragment = __webpack_require__(231);
-	var WikiFetcher = __webpack_require__(234);
+	var WikiFetcher = __webpack_require__(232);
 	
 	var History = __webpack_require__(159).History;
 	
@@ -31086,6 +31110,62 @@
 /* 232 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var React = __webpack_require__(1);
+	var ReactRouter = __webpack_require__(159);
+	var ArticleStore = __webpack_require__(207);
+	var ApiUtil = __webpack_require__(228);
+	var History = __webpack_require__(159).History;
+	
+	// this is the display logic for a single article.
+	
+	var WikiFetcher = React.createClass({
+	  displayName: 'WikiFetcher',
+	
+	  mixins: [History],
+	
+	  getInitialState: function () {
+	    return { value: "" };
+	  },
+	
+	  handleChange: function (e) {
+	    this.setState({ value: event.target.value });
+	  },
+	
+	  handleSubmit: function (title) {
+	    e.preventDefault();
+	    ApiUtil.fetchFromWikipedia(title);
+	  },
+	
+	  render: function () {
+	    var value = this.state.value;
+	    return React.createElement(
+	      'form',
+	      null,
+	      React.createElement(
+	        'label',
+	        null,
+	        'wikiFetcher',
+	        React.createElement('input', { className: 'wiki-fetcher',
+	          type: 'text',
+	          onChange: this.handleChange,
+	          onSubmit: this.handleSubmit,
+	          value: value })
+	      ),
+	      React.createElement(
+	        'input',
+	        { type: 'submit', onSubmit: this.handleSubmit },
+	        'Submit'
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = WikiFetcher;
+
+/***/ },
+/* 233 */
+/***/ function(module, exports, __webpack_require__) {
+
 	// this file will replace the current logic above yield in the application
 	// layout page.
 	
@@ -31134,8 +31214,7 @@
 	            React.createElement(LogInOut, null)
 	          )
 	        )
-	      ),
-	      React.createElement(Sidebar, null)
+	      )
 	    );
 	  }
 	});
@@ -31263,61 +31342,160 @@
 	module.exports = NavBar;
 
 /***/ },
-/* 233 */,
 /* 234 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(225);
+	var CurrentUserConstants = __webpack_require__(235);
+	var Store = __webpack_require__(208).Store;
+	
+	var _currentUser = {};
+	var _currentUserHasBeenFetched = false;
+	
+	var CurrentUserStore = new Store(AppDispatcher);
+	
+	CurrentUserStore.currentUser = function () {
+	  return $.extend({}, _currentUser);
+	};
+	
+	CurrentUserStore.isLoggedIn = function () {
+	  return !!_currentUser.id;
+	};
+	
+	CurrentUserStore.userHasBeenFetched = function () {
+	  return _currentUserHasBeenFetched;
+	};
+	
+	CurrentUserStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case CurrentUserConstants.RECEIVE_CURRENT_USER:
+	      _currentUserHasBeenFetched = true;
+	      _currentUser = payload.currentUser;
+	      break;
+	  }
+	};
+	
+	module.exports = CurrentUserStore;
+
+/***/ },
+/* 235 */
+/***/ function(module, exports) {
+
+	var CurrentUserConstants = {
+	  RECEIVE_CURRENT_USER: "RECEIVE_CURRENT_USER"
+	};
+	
+	module.exports = CurrentUserConstants;
+
+/***/ },
+/* 236 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var CurrentUserActions = __webpack_require__(237);
+	
+	var SessionsApiUtil = {
+	  login: function (credentials, success) {
+	    $.ajax({
+	      url: '/api/session',
+	      type: 'POST',
+	      dataType: 'json',
+	      data: credentials,
+	      success: function (currentUser) {
+	        CurrentUserActions.receiveCurrentUser(currentUser);
+	        success && success();
+	      },
+	      error: function () {
+	        console.log("Log in failed.");
+	      }
+	    });
+	  },
+	
+	  logout: function (currentUser, success) {
+	    $.ajax({
+	      url: '/api/session',
+	      type: 'DELETE',
+	      dataType: 'json',
+	      data: currentUser,
+	      success: function (currentUser) {
+	        CurrentUserActions.deleteCurrentUser(currentUser);
+	        success && success();
+	      },
+	      error: function () {
+	        console.log("Log out failed.");
+	      }
+	    });
+	  },
+	
+	  fetchCurrentUser: function (callback) {
+	    $.ajax({
+	      url: '/api/session',
+	      type: 'GET',
+	      dataType: 'json',
+	      success: function (currentUser) {
+	        console.log("fetched current user");
+	        CurrentUserActions.receiveCurrentUser(currentUser);
+	        callback && callback();
+	      }
+	    });
+	  }
+	
+	};
+	
+	module.exports = SessionsApiUtil;
+
+/***/ },
+/* 237 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(225);
+	var CurrentUserConstants = __webpack_require__(235);
+	
+	var CurrentUserActions = {
+	  receiveCurrentUser: function (currentUser) {
+	    AppDispatcher.dispatcher({
+	      actionType: CurrentUserConstants.RECEIVE_CURRENT_USER,
+	      currentUser: currentUser
+	    });
+	  }
+	};
+	
+	module.exports = CurrentUserActions;
+
+/***/ },
+/* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var ReactRouter = __webpack_require__(159);
-	var ArticleStore = __webpack_require__(207);
-	var ApiUtil = __webpack_require__(228);
+	
 	var History = __webpack_require__(159).History;
 	
-	// this is the display logic for a single article.
-	
-	var WikiFetcher = React.createClass({
-	  displayName: 'WikiFetcher',
-	
-	  mixins: [History],
-	
-	  getInitialState: function () {
-	    return { value: "" };
-	  },
-	
-	  handleChange: function (e) {
-	    this.setState({ value: event.target.value });
-	  },
-	
-	  handleSubmit: function (title) {
-	    e.preventDefault();
-	    ApiUtil.fetchFromWikipedia(title);
-	  },
+	var Sidebar = React.createClass({
+	  displayName: 'Sidebar',
 	
 	  render: function () {
-	    var value = this.state.value;
-	    return React.createElement(
-	      'form',
-	      null,
-	      React.createElement(
-	        'label',
+	    var pageHeaders = ["header 1", "header 2", "header 3", "etc"];
+	    var headerList = pageHeaders.map(function (header) {
+	      return React.createElement(
+	        'li',
 	        null,
-	        'wikiFetcher',
-	        React.createElement('input', { className: 'wiki-fetcher',
-	          type: 'text',
-	          onChange: this.handleChange,
-	          onSubmit: this.handleSubmit,
-	          value: value })
-	      ),
+	        header
+	      );
+	    });
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'sidebar group' },
 	      React.createElement(
-	        'input',
-	        { type: 'submit', onSubmit: this.handleSubmit },
-	        'Submit'
+	        'ul',
+	        { className: 'sidebar-list' },
+	        headerList
 	      )
 	    );
 	  }
 	});
 	
-	module.exports = WikiFetcher;
+	module.exports = Sidebar;
 
 /***/ }
 /******/ ]);

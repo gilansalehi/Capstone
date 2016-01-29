@@ -1,5 +1,6 @@
 var CurrentUserActions = require("./../actions/current_user_actions");
-var SessionApiUtil = {
+
+var SessionsApiUtil = {
   login: function (credentials, success) {
     $.ajax({
       url: '/api/session',

@@ -28,7 +28,6 @@ var NavBar = React.createClass({
             <li key="2"><LogInOut /></li>
           </ul>
         </div>
-        <Sidebar />
       </nav>
     );
   }

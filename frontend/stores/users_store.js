@@ -1,9 +1,9 @@
-var AppDispatcher = require('../dispatcher/app_dispatcher');
+var AppDispatcher = require('../dispatcher/dispatcher');
 var UserConstants = require('../constants/user_constants');
 var Store = require('flux/utils').Store;
 
 var _users = [];
-var CHANGE_EVENT = "change";
+// var CHANGE_EVENT = "change";
 
 var _addUser = function (newUser) {
   _users.unshift(newUser);

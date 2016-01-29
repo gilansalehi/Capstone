@@ -8,6 +8,10 @@ var UsersApiUtil = {
       dataType: 'json',
       success: function (user) {
         UserActions.receiveUser(user);
+      },
+      error: function (msg) {
+        console.log("fetch user failed");
+        console.log(msg);
       }
     });
   },
@@ -22,6 +26,10 @@ var UsersApiUtil = {
         UserActions.receiveUser(user);
         CurrentUserActions.receiveCurrentUser();
         callback && callback();
+      },
+      error: function (msg) {
+        console.log("create user failed");
+        console.log(msg);
       }
     });
   }
