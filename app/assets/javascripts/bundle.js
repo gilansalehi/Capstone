@@ -56,13 +56,13 @@
 	var ArticleIndex = __webpack_require__(230);
 	var ArticleStore = __webpack_require__(207);
 	var NavBar = __webpack_require__(233);
-	var Sidebar = __webpack_require__(234);
-	var SessionForm = __webpack_require__(235);
-	var UserForm = __webpack_require__(236);
+	var Sidebar = __webpack_require__(238);
+	var SessionForm = __webpack_require__(239);
+	var UserForm = __webpack_require__(240);
 	var UserShow = __webpack_require__(245);
 	
-	var CurrentUserStore = __webpack_require__(241);
-	var SessionsApiUtil = __webpack_require__(243);
+	var CurrentUserStore = __webpack_require__(237);
+	var SessionsApiUtil = __webpack_require__(234);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -24138,7 +24138,7 @@
 	var ArticleStore = new Store(AppDispatcher);
 	
 	var _articles = [];
-	var _latestArticle = [];
+	var _currentArticle = [];
 	
 	var resetArticles = function (articles) {
 	  _articles = articles.slice();
@@ -30893,15 +30893,19 @@
 	    var origin = "&origin=localhost:3000";
 	
 	    var urlString = host + action + page + format;
+	    var urlString2 = "https://en.wikipedia.org/wiki/" + title;
 	
 	    $.ajax({
-	      type: 'GET',
-	      url: urlString,
-	      contentType: "application/json; charset=utf-8",
-	      dataType: 'json',
-	      headers: { 'Api-User-Agent': 'Clickapedia/0.0.1 (http://clickapedia.herokuapp.com/; gilansalehi@gmail.com)' },
-	      success: function (data) {},
-	      error: function (message) {}
+	      type: 'POST',
+	      url: '/api/fetcher',
+	      dataType: "json",
+	      data: { url: urlString2 },
+	      success: function (data) {
+	        ApiActions.addArticle(data);
+	      },
+	      error: function (message) {
+	        console.log(message);
+	      }
 	    });
 	  }
 	};
@@ -31124,19 +31128,19 @@
 	  },
 	
 	  handleChange: function (e) {
-	    this.setState({ value: event.target.value });
+	    this.setState({ value: e.target.value });
 	  },
 	
-	  handleSubmit: function (title) {
+	  handleSubmit: function (e) {
 	    e.preventDefault();
-	    ApiUtil.fetchFromWikipedia(title);
+	    ApiUtil.fetchFromWikipedia(this.state.value);
 	  },
 	
 	  render: function () {
 	    var value = this.state.value;
 	    return React.createElement(
 	      'form',
-	      null,
+	      { onSubmit: this.handleSubmit },
 	      React.createElement(
 	        'label',
 	        null,
@@ -31146,7 +31150,7 @@
 	          onChange: this.handleChange,
 	          value: value })
 	      ),
-	      React.createElement('input', { type: 'submit', value: 'submit', onSubmit: this.handleSubmit })
+	      React.createElement('input', { type: 'submit', value: 'Fetch' })
 	    );
 	  }
 	});
@@ -31162,8 +31166,8 @@
 	
 	var React = __webpack_require__(1);
 	var ReactRouter = __webpack_require__(159);
-	var SessionsApiUtil = __webpack_require__(243);
-	var CurrentUserStore = __webpack_require__(241);
+	var SessionsApiUtil = __webpack_require__(234);
+	var CurrentUserStore = __webpack_require__(237);
 	
 	var History = __webpack_require__(159).History;
 	
@@ -31311,7 +31315,6 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'toggle', onClick: this.toggleShow },
-	      'BOOK',
 	      React.createElement('i', { className: 'fa fa-bars' })
 	    );
 	  }
@@ -31348,6 +31351,146 @@
 /* 234 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var CurrentUserActions = __webpack_require__(235);
+	
+	var SessionsApiUtil = {
+	  login: function (credentials, success) {
+	    $.ajax({
+	      url: '/api/session',
+	      type: 'POST',
+	      dataType: 'json',
+	      data: credentials,
+	      success: function (currentUser) {
+	        CurrentUserActions.receiveCurrentUser(currentUser);
+	        success && success();
+	        console.log("login success");
+	      },
+	      error: function (msg) {
+	        console.log("login error");
+	      }
+	    });
+	  },
+	
+	  logout: function (currentUser, success) {
+	    $.ajax({
+	      url: '/api/session',
+	      type: 'DELETE',
+	      dataType: 'json',
+	      data: currentUser,
+	      success: function (currentUser) {
+	        CurrentUserActions.deleteCurrentUser(currentUser);
+	        success && success();
+	      },
+	      error: function (msg) {
+	        debugger;
+	      }
+	    });
+	  },
+	
+	  fetchCurrentUser: function (callback) {
+	    $.ajax({
+	      url: '/api/session',
+	      type: 'GET',
+	      dataType: 'json',
+	      success: function (currentUser) {
+	        CurrentUserActions.receiveCurrentUser(currentUser);
+	        console.log(currentUser);
+	        callback && callback();
+	      }
+	    });
+	  }
+	
+	};
+	
+	window.SessionsApiUtil = SessionsApiUtil;
+	
+	module.exports = SessionsApiUtil;
+
+/***/ },
+/* 235 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(225);
+	var CurrentUserConstants = __webpack_require__(236);
+	
+	var CurrentUserActions = {
+	
+	  receiveCurrentUser: function (currentUser) {
+	    AppDispatcher.dispatch({
+	      actionType: CurrentUserConstants.RECEIVE_CURRENT_USER,
+	      currentUser: currentUser
+	    });
+	  },
+	
+	  deleteCurrentUser: function (currentUser) {
+	    AppDispatcher.dispatch({
+	      actionType: CurrentUserConstants.DELETE_CURRENT_USER,
+	      currentUser: currentUser
+	    });
+	  }
+	};
+	
+	module.exports = CurrentUserActions;
+
+/***/ },
+/* 236 */
+/***/ function(module, exports) {
+
+	var CurrentUserConstants = {
+	  RECEIVE_CURRENT_USER: "RECEIVE_CURRENT_USER",
+	  DELETE_CURRENT_USER: "DELETE_CURRENT_USER"
+	};
+	
+	module.exports = CurrentUserConstants;
+
+/***/ },
+/* 237 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(225);
+	var CurrentUserConstants = __webpack_require__(236);
+	var Store = __webpack_require__(208).Store;
+	
+	var _currentUser = {};
+	var _currentUserHasBeenFetched = false;
+	
+	var CurrentUserStore = new Store(AppDispatcher);
+	
+	CurrentUserStore.currentUser = function () {
+	  return $.extend({}, _currentUser);
+	};
+	
+	CurrentUserStore.isLoggedIn = function () {
+	  return !!_currentUser.id;
+	};
+	
+	CurrentUserStore.userHasBeenFetched = function () {
+	  return _currentUserHasBeenFetched;
+	};
+	
+	CurrentUserStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case CurrentUserConstants.RECEIVE_CURRENT_USER:
+	      _currentUserHasBeenFetched = true;
+	      _currentUser = payload.currentUser;
+	      CurrentUserStore.__emitChange();
+	      break;
+	    case CurrentUserConstants.DELETE_CURRENT_USER:
+	      _currentUserHasBeenFetched = false;
+	      _currentUser = {};
+	      CurrentUserStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	window.CurrentUserStore = CurrentUserStore;
+	
+	module.exports = CurrentUserStore;
+
+/***/ },
+/* 238 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var React = __webpack_require__(1);
 	var ReactRouter = __webpack_require__(159);
 	
@@ -31381,12 +31524,12 @@
 	module.exports = Sidebar;
 
 /***/ },
-/* 235 */
+/* 239 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var History = __webpack_require__(159).History;
-	var SessionsApiUtil = __webpack_require__(243);
+	var SessionsApiUtil = __webpack_require__(234);
 	
 	var SessionForm = React.createClass({
 	  displayName: 'SessionForm',
@@ -31464,13 +31607,13 @@
 	module.exports = SessionForm;
 
 /***/ },
-/* 236 */
+/* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var History = __webpack_require__(159).History;
-	var UserStore = __webpack_require__(237);
-	var UsersApiUtil = __webpack_require__(239);
+	var UserStore = __webpack_require__(241);
+	var UsersApiUtil = __webpack_require__(243);
 	// var SessionsApiUtil = require('./../../util/sessions_api_util');
 	
 	var UserForm = React.createClass({
@@ -31559,11 +31702,11 @@
 	module.exports = UserForm;
 
 /***/ },
-/* 237 */
+/* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(225);
-	var UserConstants = __webpack_require__(238);
+	var UserConstants = __webpack_require__(242);
 	var Store = __webpack_require__(208).Store;
 	
 	var _users = [];
@@ -31597,7 +31740,7 @@
 	module.exports = UsersStore;
 
 /***/ },
-/* 238 */
+/* 242 */
 /***/ function(module, exports) {
 
 	var UserConstants = {
@@ -31607,11 +31750,11 @@
 	module.exports = UserConstants;
 
 /***/ },
-/* 239 */
+/* 243 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var UserActions = __webpack_require__(240);
-	var CurrentUserActions = __webpack_require__(244);
+	var UserActions = __webpack_require__(244);
+	var CurrentUserActions = __webpack_require__(235);
 	
 	var UsersApiUtil = {
 	  fetchUser: function (id) {
@@ -31645,11 +31788,11 @@
 	module.exports = UsersApiUtil;
 
 /***/ },
-/* 240 */
+/* 244 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(225);
-	var UserConstants = __webpack_require__(238);
+	var UserConstants = __webpack_require__(242);
 	
 	var UserActions = {
 	  receiveUser: function (user) {
@@ -31663,152 +31806,12 @@
 	module.exports = UserActions;
 
 /***/ },
-/* 241 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var AppDispatcher = __webpack_require__(225);
-	var CurrentUserConstants = __webpack_require__(242);
-	var Store = __webpack_require__(208).Store;
-	
-	var _currentUser = {};
-	var _currentUserHasBeenFetched = false;
-	
-	var CurrentUserStore = new Store(AppDispatcher);
-	
-	CurrentUserStore.currentUser = function () {
-	  return $.extend({}, _currentUser);
-	};
-	
-	CurrentUserStore.isLoggedIn = function () {
-	  return !!_currentUser.id;
-	};
-	
-	CurrentUserStore.userHasBeenFetched = function () {
-	  return _currentUserHasBeenFetched;
-	};
-	
-	CurrentUserStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case CurrentUserConstants.RECEIVE_CURRENT_USER:
-	      _currentUserHasBeenFetched = true;
-	      _currentUser = payload.currentUser;
-	      CurrentUserStore.__emitChange();
-	      break;
-	    case CurrentUserConstants.DELETE_CURRENT_USER:
-	      _currentUserHasBeenFetched = false;
-	      _currentUser = {};
-	      CurrentUserStore.__emitChange();
-	      break;
-	  }
-	};
-	
-	window.CurrentUserStore = CurrentUserStore;
-	
-	module.exports = CurrentUserStore;
-
-/***/ },
-/* 242 */
-/***/ function(module, exports) {
-
-	var CurrentUserConstants = {
-	  RECEIVE_CURRENT_USER: "RECEIVE_CURRENT_USER",
-	  DELETE_CURRENT_USER: "DELETE_CURRENT_USER"
-	};
-	
-	module.exports = CurrentUserConstants;
-
-/***/ },
-/* 243 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var CurrentUserActions = __webpack_require__(244);
-	
-	var SessionsApiUtil = {
-	  login: function (credentials, success) {
-	    $.ajax({
-	      url: '/api/session',
-	      type: 'POST',
-	      dataType: 'json',
-	      data: credentials,
-	      success: function (currentUser) {
-	        CurrentUserActions.receiveCurrentUser(currentUser);
-	        success && success();
-	        console.log("login success");
-	      },
-	      error: function (msg) {
-	        console.log("login error");
-	      }
-	    });
-	  },
-	
-	  logout: function (currentUser, success) {
-	    $.ajax({
-	      url: '/api/session',
-	      type: 'DELETE',
-	      dataType: 'json',
-	      data: currentUser,
-	      success: function (currentUser) {
-	        CurrentUserActions.deleteCurrentUser(currentUser);
-	        success && success();
-	      },
-	      error: function (msg) {
-	        debugger;
-	      }
-	    });
-	  },
-	
-	  fetchCurrentUser: function (callback) {
-	    $.ajax({
-	      url: '/api/session',
-	      type: 'GET',
-	      dataType: 'json',
-	      success: function (currentUser) {
-	        CurrentUserActions.receiveCurrentUser(currentUser);
-	        console.log(currentUser);
-	        callback && callback();
-	      }
-	    });
-	  }
-	
-	};
-	
-	window.SessionsApiUtil = SessionsApiUtil;
-	
-	module.exports = SessionsApiUtil;
-
-/***/ },
-/* 244 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var AppDispatcher = __webpack_require__(225);
-	var CurrentUserConstants = __webpack_require__(242);
-	
-	var CurrentUserActions = {
-	
-	  receiveCurrentUser: function (currentUser) {
-	    AppDispatcher.dispatch({
-	      actionType: CurrentUserConstants.RECEIVE_CURRENT_USER,
-	      currentUser: currentUser
-	    });
-	  },
-	
-	  deleteCurrentUser: function (currentUser) {
-	    AppDispatcher.dispatch({
-	      actionType: CurrentUserConstants.DELETE_CURRENT_USER,
-	      currentUser: currentUser
-	    });
-	  }
-	};
-	
-	module.exports = CurrentUserActions;
-
-/***/ },
 /* 245 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var UsersStore = __webpack_require__(237);
-	var UsersApiUtil = __webpack_require__(239);
+	var UsersStore = __webpack_require__(241);
+	var UsersApiUtil = __webpack_require__(243);
 	
 	var UserShow = React.createClass({
 	  displayName: 'UserShow',

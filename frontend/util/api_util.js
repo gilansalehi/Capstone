@@ -35,16 +35,18 @@ var ApiUtil = {
     var origin = "&origin=localhost:3000";
 
     var urlString = host + action + page + format;
+    var urlString2 = "https://en.wikipedia.org/wiki/" + title;
 
     $.ajax({
-      type: 'GET',
-      url: urlString,
-      contentType: "application/json; charset=utf-8",
-      dataType: 'json',
-      headers: { 'Api-User-Agent': 'Clickapedia/0.0.1 (http://clickapedia.herokuapp.com/; gilansalehi@gmail.com)' },
+      type: 'POST',
+      url: '/api/fetcher',
+      dataType: "json",
+      data: { url: urlString2 },
       success: function(data) {
+        ApiActions.addArticle(data);
       },
       error: function (message) {
+        console.log(message);
       }
     });
   }

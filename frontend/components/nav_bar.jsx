@@ -103,7 +103,7 @@ var SidebarToggle = React.createClass({
     // return <object type="image/svg+xml"
     //                data="book236.svg"></object>;
     return (
-      <div className="toggle" onClick={this.toggleShow}>BOOK
+      <div className="toggle" onClick={this.toggleShow}>
         <i className="fa fa-bars"></i>
       </div>
     );

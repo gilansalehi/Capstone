@@ -14,19 +14,18 @@ var WikiFetcher = React.createClass({
   },
 
   handleChange: function (e) {
-    this.setState({ value: event.target.value });
+    this.setState({ value: e.target.value });
   },
 
-  handleSubmit: function (title) {
+  handleSubmit: function (e) {
     e.preventDefault();
-    ApiUtil.fetchFromWikipedia(title);
+    ApiUtil.fetchFromWikipedia(this.state.value);
   },
 
   render: function () {
     var value = this.state.value;
     return (
-      <form>
-
+      <form onSubmit={this.handleSubmit}>
         <label>wikiFetcher
           <input className="wiki-fetcher"
                  type="text"
@@ -34,7 +33,7 @@ var WikiFetcher = React.createClass({
                  value={value} />
         </label>
 
-        <input type="submit" value="submit" onSubmit={this.handleSubmit} />
+        <input type="submit" value="Fetch" />
       </form>
     );
   },

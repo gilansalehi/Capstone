@@ -6,7 +6,7 @@ var AppDispatcher = require("../dispatcher/dispatcher");
 var ArticleStore = new Store(AppDispatcher);
 
 var _articles = [];
-var _latestArticle = [];
+var _currentArticle = [];
 
 var resetArticles = function (articles) {
   _articles = articles.slice();
