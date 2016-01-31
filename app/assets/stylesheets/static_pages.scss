@@ -79,10 +79,22 @@
   background: #666;
 }
 
+// WIKI - FETCHER
+
 .wiki-fetcher {
   display: block;
-  background: green;
-  border: black;
+  width: 400px;
+  padding: 10px;
+  margin: auto;
+}
+
+.wiki-fetcher-input {
+  display: block;
+  padding: 7px;
+  width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  margin: 3px 0;
 }
 
 /* = LOG IN AND SIGN UP = */

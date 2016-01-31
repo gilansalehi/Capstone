@@ -25,15 +25,18 @@ var WikiFetcher = React.createClass({
   render: function () {
     var value = this.state.value;
     return (
-      <form onSubmit={this.handleSubmit}>
-        <label>wikiFetcher
-          <input className="wiki-fetcher"
+      <form onSubmit={this.handleSubmit} className="wiki-fetcher-form">
+        <label>WikiFetcher
+          <input className="wiki-fetcher-input"
                  type="text"
                  onChange={this.handleChange}
-                 value={value} />
+                 value={value}
+                 placeholder="Enter the page you want fetched"/>
         </label>
 
-        <input type="submit" value="Fetch" />
+        <input className="wiki-fetcher-button submit"
+               type="submit"
+               value="Fetch" />
       </form>
     );
   },

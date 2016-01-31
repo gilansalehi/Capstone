@@ -30990,16 +30990,8 @@
 	    ApiUtil.fetchArticles();
 	  },
 	
-	  // handleClick: function (e) {
-	  //   e.preventDefault();
-	  //   debugger
-	  //   // var id = e.currentTarget......id
-	  //   History.pushState(null, "/article/" + id, {});
-	  // },
-	
 	  __onChange: function () {
 	    var articles = ArticleStore.firstNArticles(10);
-	    // ApiUtil.fetchArticle();
 	    this.setState({ title: new Date(), articles: articles });
 	  },
 	
@@ -31031,11 +31023,15 @@
 	      'div',
 	      { className: 'index group' },
 	      React.createElement(
+	        'div',
+	        { className: 'wiki-fetcher' },
+	        React.createElement(WikiFetcher, null)
+	      ),
+	      React.createElement(
 	        'ul',
 	        { className: 'articles-list' },
 	        articles
-	      ),
-	      React.createElement(WikiFetcher, null)
+	      )
 	    );
 	  }
 	});
@@ -31140,17 +31136,20 @@
 	    var value = this.state.value;
 	    return React.createElement(
 	      'form',
-	      { onSubmit: this.handleSubmit },
+	      { onSubmit: this.handleSubmit, className: 'wiki-fetcher-form' },
 	      React.createElement(
 	        'label',
 	        null,
-	        'wikiFetcher',
-	        React.createElement('input', { className: 'wiki-fetcher',
+	        'WikiFetcher',
+	        React.createElement('input', { className: 'wiki-fetcher-input',
 	          type: 'text',
 	          onChange: this.handleChange,
-	          value: value })
+	          value: value,
+	          placeholder: 'Enter the page you want fetched' })
 	      ),
-	      React.createElement('input', { type: 'submit', value: 'Fetch' })
+	      React.createElement('input', { className: 'wiki-fetcher-button submit',
+	        type: 'submit',
+	        value: 'Fetch' })
 	    );
 	  }
 	});

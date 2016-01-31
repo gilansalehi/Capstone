@@ -12,7 +12,7 @@ class Api::FetchersController < ApplicationController
     )
 
     @page.save
-    
+
     render :show
 
     # if @page.save

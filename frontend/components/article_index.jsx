@@ -34,16 +34,8 @@ var ArticleIndex = React.createClass({
     ApiUtil.fetchArticles();
   },
 
-  // handleClick: function (e) {
-  //   e.preventDefault();
-  //   debugger
-  //   // var id = e.currentTarget......id
-  //   History.pushState(null, "/article/" + id, {});
-  // },
-
   __onChange: function () {
     var articles = ArticleStore.firstNArticles(10);
-    // ApiUtil.fetchArticle();
     this.setState({ title: new Date(), articles: articles });
   },
 
@@ -69,10 +61,12 @@ var ArticleIndex = React.createClass({
 
     return (
       <div className="index group">
+        <div className="wiki-fetcher">
+          <WikiFetcher />
+        </div>
         <ul className="articles-list">
           {articles}
         </ul>
-        <WikiFetcher />
       </div>
     );
   }

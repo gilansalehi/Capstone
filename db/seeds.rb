@@ -84,13 +84,13 @@ Besson started writing the story that became The Fifth Element when he was 16 ye
 The Fifth Element received mainly positive reviews, although it tended to polarize critics. It has been called both the best and worst summer blockbuster of all time. The film was a financial success, earning more than $263 million at the box office on a $90 million budget. At the time of its release it was the most expensive European film ever made, and it remained the highest-grossing French film at the international box office until the release of The Intouchables in 2011.",
   author_id: 1
 )
-
-article4 = Article.create!(title: "Title4", body: lor_ip(140), author_id: 1)
-article5 = Article.create!(title: "Title5", body: lor_ip(300), author_id: 1)
-article6 = Article.create!(title: "Title6", body: lor_ip(440), author_id: 1)
-article7 = Article.create!(title: "Title7", body: lor_ip(600), author_id: 1)
-article8 = Article.create!(title: "Title8", body: lor_ip(250), author_id: 1)
-article9 = Article.create!(title: "Title9", body: lor_ip(1000), author_id: 1)
-article10 = Article.create!(title: "Title10", body: lor_ip(800), author_id: 1)
-article11 = Article.create!(title: "Title11", body: lor_ip(640), author_id: 1)
-article12 = Article.create!(title: "Title12", body: lor_ip(400), author_id: 1)
+#
+# article4 = Article.create!(title: "Title4", body: lor_ip(140), author_id: 1)
+# article5 = Article.create!(title: "Title5", body: lor_ip(300), author_id: 1)
+# article6 = Article.create!(title: "Title6", body: lor_ip(440), author_id: 1)
+# article7 = Article.create!(title: "Title7", body: lor_ip(600), author_id: 1)
+# article8 = Article.create!(title: "Title8", body: lor_ip(250), author_id: 1)
+# article9 = Article.create!(title: "Title9", body: lor_ip(1000), author_id: 1)
+# article10 = Article.create!(title: "Title10", body: lor_ip(800), author_id: 1)
+# article11 = Article.create!(title: "Title11", body: lor_ip(640), author_id: 1)
+# article12 = Article.create!(title: "Title12", body: lor_ip(400), author_id: 1)
