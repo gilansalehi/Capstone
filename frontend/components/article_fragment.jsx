@@ -26,12 +26,21 @@ var ArticleFragment = React.createClass({
   // },
 
   render: function () {
+
     var title, fragment, id;
 
     if (this.state.article) {
       id = this.state.article.id;
-      title = this.state.article.title;
-      fragment = this.state.article.body.slice(0, 280) + "...";
+      if (this.state.article.title) {
+        title = this.state.article.title;
+      } else {
+        title = "Refresh to view article";
+      }
+      if (this.state.article.fragment) {
+        fragment = this.state.article.fragment.slice(0, 280) + "...";
+      } else {
+        fragment = "No preview available";
+      }
     } else {
       title = "...";
       fragment = "...";

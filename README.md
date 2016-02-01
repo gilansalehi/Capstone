@@ -1,8 +1,10 @@
 # TODO:
-// fix article rendering to include paragraph breaks
-// fix article rendering to include images
-// Implement nav bar
-// set up react router
+// fix article rendering to include header image
+// create a rescue for routing errors that says "that page does not exist, would you like to create it?"
+// remove "edit section" when scraping wikipedia
+// get index to tile properly
+// format content table, link to sidebar
+//
 
 # Clickapedia
 

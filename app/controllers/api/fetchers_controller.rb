@@ -5,15 +5,15 @@ class Api::FetchersController < ApplicationController
   def create
     doc = Nokogiri::HTML(open(params[:url]))
 
-    debugger
     #manipulate the nokogiri document to get raw html...
     title = doc.xpath("//h1//text()").to_s
     body = doc.xpath("//div[@id='bodyContent']")
-    fragment = doc.xpath("//div[@id='mw-content-text']/p//text()").to_s
+    fragment = doc.xpath("//div[@id='mw-content-text']/p//text()").to_s[0..300]
 
     @page = Article.new(
       title: title,
       body: body,
+      fragment: fragment,
       author_id: 1
     )
 

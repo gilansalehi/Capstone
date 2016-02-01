@@ -190,3 +190,111 @@ form > .submit:hover {
   background: #ff4444;
   border: 1px solid #ff4444;
 }
+
+// ARTCILES
+
+.infobox {
+  display: block;
+  float: right;
+  padding: 10px 20px 20px 20px;
+  margin: 0 20px 20px 20px;
+  border-left: 1px solid #eee;
+  background: #fff;
+}
+
+.toc {
+  display: block;
+}
+
+.tocnumber {
+  color: #ccc;
+  font-size: 50%;
+  vertical-align: middle;
+}
+
+.toctext {
+}
+
+li {
+  padding: 0 5px 0 10px;
+}
+
+a:hover {
+  // color: #3da;
+  color: #3ad;
+  // background: #9de;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
+  margin: 15px 0 5px 0;
+}
+
+h2 {
+  font-size: 24px;
+  border-bottom: 1px solid #eee;
+}
+
+h3 {
+  font-size: 20px;
+  // border-bottom: 1px solid #eee;
+}
+
+.thumbinner {
+  display: block;
+  float: right;
+  padding: 20px;
+  margin: 20px;
+  border-left: 1px solid #eee;
+}
+
+.thumbcaption {
+  font-size: 12px;
+  font-style: italic;
+  margin-top: 5px;
+}
+
+p {
+  padding: 10px;
+  // max-width: 800px;
+}
+
+.hatnote {
+  font-size: 12px;
+  font-style: italic;
+  margin-top: 5px;
+}
+
+.mw-jump, .siteSub, .metadata {
+  font-size: 12px;
+  font-style: italic;
+  margin-top: 5px;
+}
+
+.wikitable {
+  display: block;
+  margin: 10px 0;
+  vertical-align: middle;
+  // border: 1px solid #eee;
+}
+
+td {
+  padding: 5px;
+  border-bottom: 1px solid #eee;
+}
+
+th {
+  padding: 5px;
+  border-bottom: 1px solid #eee;
+  border-right: 1px solid #eee;
+}
+
+.mw-content-ltr > ul > li {
+    padding: 5px 10px;
+}
+
+.reference {
+  color: #39d;
+  font-size: 50%;
+  vertical-align: text-top;
+}
