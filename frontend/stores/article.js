@@ -43,6 +43,7 @@ ArticleStore.lastNArticles = function (n) {
   if (k < 0) { k = 0; }
   return _articles.slice(k);
 };
+
 // for testing
 window.ArticleStore = ArticleStore;
 

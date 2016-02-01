@@ -24,4 +24,14 @@ class Api::FetchersController < ApplicationController
       render json: @page.errors.full_message, status: 422
     end
   end
+
+  def header
+    img = Nokogiri::HTML(open(params[:url]))
+
+    img_url = img.xpath("//a")[33]
+    @target_url = img_url["href"]
+
+    render :image
+  end
+
 end

@@ -1,5 +1,6 @@
 var AppDispatcher = require('../dispatcher/dispatcher');
 var ArticleConstants = require('../constants/article_constants');
+var ImageConstants = require('../constants/image_constants');
 
 // var ApiActions = {
 //   receiveAll: function(articles){
@@ -22,6 +23,13 @@ var ApiActions = {
     AppDispatcher.dispatch({
       actionType: ArticleConstants.ARTICLE_RECEIVED,
       article: article,
+    });
+  },
+
+  addHeaderImage: function (url) {
+    AppDispatcher.dispatch({
+      actionType: ImageConstants.HEADER_IMAGE_RECEIVED,
+      image: url
     });
   }
 };

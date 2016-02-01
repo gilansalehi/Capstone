@@ -1,4 +1,9 @@
 # TODO:
+// class: "rg_di rg_el rg_ivg-i"
+// re-render index after a fetch.
+// DO EDITING
+// DO SEARCH
+// DO IMAGES
 // fix article rendering to include header image
 // create a rescue for routing errors that says "that page does not exist, would you like to create it?"
 // remove "edit section" when scraping wikipedia
@@ -26,9 +31,8 @@ Clickapedia allows users to:
 - [x] read an article...
 - [x] fetch an article
 - [ ] fetch a header image from google images api
-- [ ] add an article fragment property for Article fragments.
 - [ ] toggle presence of sidebar...
-- [ ] Create, read, edit, and delete articles
+- [ ] Create, read, edit articles
 - [ ] Search the database for articles related to a search term
 - [ ] Tag articles with portal information.
 - [ ] Apply complex styling to articles while editing.  WYSISYG.

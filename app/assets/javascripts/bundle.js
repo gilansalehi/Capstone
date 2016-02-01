@@ -24077,6 +24077,9 @@
 	var ReactRouter = __webpack_require__(159);
 	var ArticleStore = __webpack_require__(207);
 	var ApiUtil = __webpack_require__(228);
+	var HeaderImage = __webpack_require__(246);
+	var ImageStore = __webpack_require__(248);
+	
 	var History = __webpack_require__(159).History;
 	
 	// this is the display logic for a single article.
@@ -24088,19 +24091,26 @@
 	
 	  getInitialState: function () {
 	    return {
-	      title: "Article Title...",
+	      title: "",
 	      body: "Article Body..."
 	    };
 	  },
 	
 	  componentDidMount: function () {
-	    this.articleListener = ArticleStore.addListener(this.__onChange);
+	    this.articleListener = ArticleStore.addListener(this.__onArticleChange);
+	    this.headerListener = ImageStore.addListener(this.__onHeaderChange);
 	    ApiUtil.fetchArticle(this.props.params.article_id);
 	  },
 	
-	  __onChange: function () {
+	  __onArticleChange: function () {
 	    var article = ArticleStore.fetchArticle();
+	    ApiUtil.fetchHeaderImage(article.title);
+	    // var image = ImageStore.fetchHeader();
 	    this.setState({ title: article.title, body: article.body });
+	  },
+	
+	  __onHeaderChange: function () {
+	    this.forceUpdate();
 	  },
 	
 	  componentWillUnmount: function () {
@@ -24111,6 +24121,7 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'article' },
+	      React.createElement(HeaderImage, { title: this.state.title, image: ImageStore.fetchHeader() }),
 	      React.createElement(
 	        'h1',
 	        { className: 'title' },
@@ -24175,6 +24186,7 @@
 	  }
 	  return _articles.slice(k);
 	};
+	
 	// for testing
 	window.ArticleStore = ArticleStore;
 	
@@ -30592,7 +30604,8 @@
 
 	var ArticleConstants = {
 	  ARTICLE_RECEIVED: "ARTICLE_RECEIVED",
-	  ARTICLES_RECEIVED: "ARTICLES_RECEIVED"
+	  ARTICLES_RECEIVED: "ARTICLES_RECEIVED",
+	  HEADER_IMAGE_RECEIVED: "HEADER_IMAGE_RECEIVED"
 	};
 	
 	module.exports = ArticleConstants;
@@ -30890,20 +30903,14 @@
 	  },
 	
 	  fetchFromWikipedia: function (title) {
-	    var host = "https://en.wikipedia.org/w/api.php?";
-	    var action = "action=parse&";
-	    var page = "page=" + title;
-	    var format = "&format=json";
-	    var origin = "&origin=localhost:3000";
 	
-	    // var urlString = host + action + page + format;
-	    var urlString2 = "https://en.wikipedia.org/wiki/" + title;
+	    var urlString = "https://en.wikipedia.org/wiki/" + title;
 	
 	    $.ajax({
 	      type: 'POST',
 	      url: '/api/fetcher',
 	      dataType: "json",
-	      data: { url: urlString2 },
+	      data: { url: urlString },
 	      success: function (data) {
 	        ApiActions.addArticle(data);
 	      },
@@ -30911,8 +30918,46 @@
 	        // console.log(message);
 	      }
 	    });
+	  },
+	
+	  fetchHeaderImage: function (title) {
+	    var fixedTitle = "";
+	    for (var i = 0; i < title.length; i++) {
+	      if (title[i] === " ") {
+	        fixedTitle += "%20";
+	      } else {
+	        fixedTitle += title[i];
+	      }
+	    }
+	
+	    console.log(fixedTitle);
+	
+	    var host = "http://www.bing.com/images/search?";
+	    var page = "pq=" + fixedTitle;
+	    var thing = "&sc=8-4&sp=-1&sk=&q=" + fixedTitle;
+	    var size = "&qft=+filterui:imagesize-wallpaper";
+	    var license = "+filterui:license-L1&FORM=R5IR38";
+	
+	    // "http://www.bing.com/images/search?pq=nasa&sc=8-4&sp=-1&sk=&q=NASA&qft=+filterui:imagesize-large+filterui:license-L1&FORM=R5IR38"
+	    var urlString = host + page + thing + size + license;
+	    $.ajax({
+	      type: 'POST',
+	      url: '/api/fetcher/header',
+	      dataType: "json",
+	      data: { url: urlString },
+	      success: function (data) {
+	        ApiActions.addHeaderImage(data);
+	      },
+	      error: function (message) {
+	        debugger;
+	        console.log("Error with fetching header image");
+	      }
+	    });
 	  }
+	
 	};
+	
+	window.ApiUtil = ApiUtil;
 	
 	module.exports = ApiUtil;
 
@@ -30922,6 +30967,7 @@
 
 	var AppDispatcher = __webpack_require__(225);
 	var ArticleConstants = __webpack_require__(224);
+	var ImageConstants = __webpack_require__(247);
 	
 	// var ApiActions = {
 	//   receiveAll: function(articles){
@@ -30944,6 +30990,13 @@
 	    AppDispatcher.dispatch({
 	      actionType: ArticleConstants.ARTICLE_RECEIVED,
 	      article: article
+	    });
+	  },
+	
+	  addHeaderImage: function (url) {
+	    AppDispatcher.dispatch({
+	      actionType: ImageConstants.HEADER_IMAGE_RECEIVED,
+	      image: url
 	    });
 	  }
 	};
@@ -31837,6 +31890,91 @@
 	});
 	
 	module.exports = UserShow;
+
+/***/ },
+/* 246 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ReactRouter = __webpack_require__(159);
+	var ArticleStore = __webpack_require__(207);
+	var ApiUtil = __webpack_require__(228);
+	var History = __webpack_require__(159).History;
+	
+	var HeaderImage = React.createClass({
+	  displayName: 'HeaderImage',
+	
+	  getInitialState: function () {
+	    return { url: "http://www.angelafloydschools.com/wp-content/uploads/placeholder-car1.png" };
+	  },
+	
+	  // componentDidMount: function () {
+	  //   ArticleStore.addListener(this.__onChange);
+	  // },
+	  //
+	  // __onChange: function () {
+	  //   console.log("header __onChange");
+	  //   if (this.props.title) {
+	  //     this.setState({ url: url });
+	  //   }
+	  // },
+	
+	  componentWillReceiveProps: function (newProps) {
+	    // console.log("header didReceiveProps");
+	    // if (newProps.title) {
+	    //   ApiUtil.fetchHeaderImage(newProps.title);
+	    // }
+	    this.forceUpdate();
+	  },
+	
+	  render: function () {
+	    return React.createElement('img', { src: this.props.image, className: 'header-image' });
+	  }
+	});
+	
+	module.exports = HeaderImage;
+
+/***/ },
+/* 247 */
+/***/ function(module, exports) {
+
+	var ImageConstants = {
+	  HEADER_IMAGE_RECEIVED: "HEADER_IMAGE_RECEIVED"
+	};
+	
+	module.exports = ImageConstants;
+
+/***/ },
+/* 248 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Store = __webpack_require__(208).Store;
+	var ImageConstants = __webpack_require__(247);
+	var AppDispatcher = __webpack_require__(225);
+	
+	var ImageStore = new Store(AppDispatcher);
+	
+	var _currentHeader = "http://www.angelafloydschools.com/wp-content/uploads/placeholder-car1.png";
+	
+	var resetHeaderImage = function (image) {
+	  _currentHeader = image;
+	};
+	
+	ImageStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case ImageConstants.HEADER_IMAGE_RECEIVED:
+	      //Create this files
+	      _currentHeader = payload.image.url;
+	      ImageStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	ImageStore.fetchHeader = function () {
+	  return _currentHeader;
+	};
+	
+	module.exports = ImageStore;
 
 /***/ }
 /******/ ]);

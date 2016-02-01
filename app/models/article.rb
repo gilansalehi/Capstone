@@ -22,4 +22,11 @@ class Article < ActiveRecord::Base
       author_id: 1
     )
   end
+
+  def self.whats_new
+    @whats_new = Article.select("*").order("updated_at DESC").limit(10)
+    
+    return @whats_new
+  end
+
 end

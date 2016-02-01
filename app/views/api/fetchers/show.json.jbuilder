@@ -1,1 +1,1 @@
-json.extract!(@page, :id, :title, :body)
+json.extract!(@page, :id, :title, :body, :fragment)
