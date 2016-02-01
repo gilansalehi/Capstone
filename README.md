@@ -23,9 +23,13 @@ Clickapedia allows users to:
 - [x] Create an account
 - [x] Log in / Log out
 - [x] read an article...
+- [x] fetch an article
+- [ ] fetch a header image from google images api
+- [ ] add an article fragment property for Article fragments.
+- [ ] toggle presence of sidebar...
 - [ ] Create, read, edit, and delete articles
 - [ ] Search the database for articles related to a search term
-- [ ] Tag articles with bibliographical information.
+- [ ] Tag articles with portal information.
 - [ ] Apply complex styling to articles while editing.  WYSISYG.
 - [ ] Create a personal article as their profile page.
 

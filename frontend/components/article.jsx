@@ -33,8 +33,8 @@ var Article = React.createClass({
   render: function () {
     return (
       <div className="article">
-        <h1>{this.state.title}</h1>
-        <article>{this.state.body}</article>
+        <h1 className="title">{this.state.title}</h1>
+        <article className="body" dangerouslySetInnerHTML={{__html: this.state.body}}></article>
       </div>
     );
   }

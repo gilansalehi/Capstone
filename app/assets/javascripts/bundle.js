@@ -24113,14 +24113,10 @@
 	      { className: 'article' },
 	      React.createElement(
 	        'h1',
-	        null,
+	        { className: 'title' },
 	        this.state.title
 	      ),
-	      React.createElement(
-	        'article',
-	        null,
-	        this.state.body
-	      )
+	      React.createElement('article', { className: 'body', dangerouslySetInnerHTML: { __html: this.state.body } })
 	    );
 	  }
 	});
@@ -30892,7 +30888,7 @@
 	    var format = "&format=json";
 	    var origin = "&origin=localhost:3000";
 	
-	    var urlString = host + action + page + format;
+	    // var urlString = host + action + page + format;
 	    var urlString2 = "https://en.wikipedia.org/wiki/" + title;
 	
 	    $.ajax({
@@ -30904,7 +30900,7 @@
 	        ApiActions.addArticle(data);
 	      },
 	      error: function (message) {
-	        console.log(message);
+	        // console.log(message);
 	      }
 	    });
 	  }

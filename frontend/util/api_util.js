@@ -34,7 +34,7 @@ var ApiUtil = {
     var format = "&format=json";
     var origin = "&origin=localhost:3000";
 
-    var urlString = host + action + page + format;
+    // var urlString = host + action + page + format;
     var urlString2 = "https://en.wikipedia.org/wiki/" + title;
 
     $.ajax({
@@ -46,7 +46,7 @@ var ApiUtil = {
         ApiActions.addArticle(data);
       },
       error: function (message) {
-        console.log(message);
+        // console.log(message);
       }
     });
   }
