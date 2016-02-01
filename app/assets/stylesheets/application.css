@@ -73,15 +73,14 @@ body {
 .content {
   display: block;
   float: left;
-  width: 100%;
-  /*padding-top: 40px;*/
+  width: calc(100% - 200px);
   padding: 20px 20px 20px 200px;
-  margin: auto;
-  /*background: red;*/
 }
 
 .article {
   max-width: 1000px;
+  margin: auto;
+  background: white;
 }
 
 .index {

@@ -4,7 +4,7 @@
 // remove "edit section" when scraping wikipedia
 // get index to tile properly
 // format content table, link to sidebar
-//
+// make index display 10 most recent articles, not first 10
 
 # Clickapedia
 
