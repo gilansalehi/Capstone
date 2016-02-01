@@ -9,6 +9,7 @@ class Api::FetchersController < ApplicationController
     title = doc.xpath("//h1//text()").to_s
     body = doc.xpath("//div[@id='bodyContent']")
     fragment = doc.xpath("//div[@id='mw-content-text']/p//text()").to_s[0..300]
+    contents = doc.xpath("//div[@id='toc']")
 
     @page = Article.new(
       title: title,

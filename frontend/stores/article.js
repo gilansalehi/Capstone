@@ -37,6 +37,12 @@ ArticleStore.fetchArticle = function () {
 ArticleStore.firstNArticles = function (n) {
   return _articles.slice(0, n);
 };
+
+ArticleStore.lastNArticles = function (n) {
+  var k = _articles.length - n;
+  if (k < 0) { k = 0; }
+  return _articles.slice(k);
+};
 // for testing
 window.ArticleStore = ArticleStore;
 

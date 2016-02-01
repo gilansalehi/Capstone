@@ -298,3 +298,14 @@ th {
   font-size: 50%;
   vertical-align: text-top;
 }
+
+.gallerybox {
+  display: block;
+  float: left;
+}
+
+.gallery:after {
+  content: "";
+  display: block;
+  clear: both;
+}

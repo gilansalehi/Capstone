@@ -24167,6 +24167,14 @@
 	ArticleStore.firstNArticles = function (n) {
 	  return _articles.slice(0, n);
 	};
+	
+	ArticleStore.lastNArticles = function (n) {
+	  var k = _articles.length - n;
+	  if (k < 0) {
+	    k = 0;
+	  }
+	  return _articles.slice(k);
+	};
 	// for testing
 	window.ArticleStore = ArticleStore;
 	
@@ -30906,8 +30914,6 @@
 	  }
 	};
 	
-	window.ApiUtil = ApiUtil;
-	
 	module.exports = ApiUtil;
 
 /***/ },
@@ -30987,7 +30993,7 @@
 	  },
 	
 	  __onChange: function () {
-	    var articles = ArticleStore.firstNArticles(10);
+	    var articles = ArticleStore.lastNArticles(10);
 	    this.setState({ title: new Date(), articles: articles });
 	  },
 	

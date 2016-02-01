@@ -35,7 +35,7 @@ var ArticleIndex = React.createClass({
   },
 
   __onChange: function () {
-    var articles = ArticleStore.firstNArticles(10);
+    var articles = ArticleStore.lastNArticles(10);
     this.setState({ title: new Date(), articles: articles });
   },
 
