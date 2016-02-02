@@ -24,10 +24,14 @@ ArticleStore.__onDispatch = function (payload) {
       break;
     case ArticleConstants.ARTICLE_RECEIVED:
       if (_articles.indexOf(payload) === -1) { _articles.push(payload.article); }
+
+      _articles.sort(function(a, b) {
+        if (a.updated_at > b.updated_at) { return -1; }
+        else if (a.updated_at < b.updated_at) { return 1; }
+        else { return 0; }
+      });
+
       _currentArticle = payload;
-      ArticleStore.__emitChange();
-      break;
-    case ArticleConstants.PING:
       ArticleStore.__emitChange();
       break;
   }
