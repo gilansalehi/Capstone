@@ -89,7 +89,7 @@ body {
 }
 
 .header-image {
-  width: 100%;
+  width: calc(100% - 200px);
   height: auto;
   display: block;
   float: left;
