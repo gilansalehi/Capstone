@@ -1,6 +1,8 @@
 require 'open-uri'
 
 class Article < ActiveRecord::Base
+  include PgSearch
+  multisearchable against: [:title, :body, :author]
 
   validates :title, :body, :author_id, presence: true
   validates :title, uniqueness: true
@@ -23,9 +25,9 @@ class Article < ActiveRecord::Base
     )
   end
 
-  def self.whats_new
-    @whats_new = Article.select("*").order("updated_at DESC").limit(10)
-    
+  def self.whats_new(n)
+    @whats_new = Article.select("*").order("updated_at DESC").limit(n)
+
     return @whats_new
   end
 

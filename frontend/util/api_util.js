@@ -29,7 +29,13 @@ var ApiUtil = {
 
   fetchFromWikipedia: function (title) {
 
-    var urlString = "https://en.wikipedia.org/wiki/" + title;
+    var fixedTitle = "";
+    for (var i = 0; i < title.length; i++) {
+      if (title[i] === " ") { fixedTitle += "_"; }
+      else { fixedTitle += title[i]; }
+    }
+
+    var urlString = "https://en.wikipedia.org/wiki/" + fixedTitle;
 
     $.ajax({
       type: 'POST',
@@ -60,8 +66,9 @@ var ApiUtil = {
     var size = "&qft=+filterui:imagesize-wallpaper";
     var license = "+filterui:license-L1&FORM=R5IR38";
 
-    // "http://www.bing.com/images/search?pq=nasa&sc=8-4&sp=-1&sk=&q=NASA&qft=+filterui:imagesize-large+filterui:license-L1&FORM=R5IR38"
     var urlString = host + page + thing + size + license;
+    // var urlString = host + page + thing + size + license;
+
     $.ajax({
       type: 'POST',
       url: '/api/fetcher/header',

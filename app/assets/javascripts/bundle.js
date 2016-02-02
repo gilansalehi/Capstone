@@ -53,16 +53,17 @@
 	var History = __webpack_require__(159).History;
 	
 	var Article = __webpack_require__(206);
-	var ArticleIndex = __webpack_require__(230);
+	var ArticleIndex = __webpack_require__(235);
 	var ArticleStore = __webpack_require__(207);
-	var NavBar = __webpack_require__(233);
-	var Sidebar = __webpack_require__(238);
-	var SessionForm = __webpack_require__(239);
-	var UserForm = __webpack_require__(240);
-	var UserShow = __webpack_require__(245);
+	var NavBar = __webpack_require__(238);
+	var Sidebar = __webpack_require__(248);
+	var SessionForm = __webpack_require__(249);
+	var UserForm = __webpack_require__(250);
+	var UserShow = __webpack_require__(255);
+	var Search = __webpack_require__(243);
 	
-	var CurrentUserStore = __webpack_require__(237);
-	var SessionsApiUtil = __webpack_require__(234);
+	var CurrentUserStore = __webpack_require__(242);
+	var SessionsApiUtil = __webpack_require__(239);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -114,7 +115,8 @@
 	  React.createElement(Route, { path: 'article/:article_id', component: Article }),
 	  React.createElement(Route, { path: 'login', component: SessionForm }),
 	  React.createElement(Route, { path: 'users/new', component: UserForm }),
-	  React.createElement(Route, { path: 'users/:id', component: UserShow })
+	  React.createElement(Route, { path: 'users/:id', component: UserShow }),
+	  React.createElement(Route, { path: 'search', component: Search })
 	);
 	
 	// var cd = function () {
@@ -24076,9 +24078,9 @@
 	var React = __webpack_require__(1);
 	var ReactRouter = __webpack_require__(159);
 	var ArticleStore = __webpack_require__(207);
-	var ApiUtil = __webpack_require__(228);
-	var HeaderImage = __webpack_require__(246);
-	var ImageStore = __webpack_require__(248);
+	var ApiUtil = __webpack_require__(230);
+	var HeaderImage = __webpack_require__(233);
+	var ImageStore = __webpack_require__(234);
 	
 	var History = __webpack_require__(159).History;
 	
@@ -24139,8 +24141,8 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var Store = __webpack_require__(208).Store;
-	var ArticleConstants = __webpack_require__(224);
-	var AppDispatcher = __webpack_require__(225);
+	var ArticleConstants = __webpack_require__(226);
+	var AppDispatcher = __webpack_require__(227);
 	
 	var ArticleStore = new Store(AppDispatcher);
 	
@@ -24217,7 +24219,7 @@
 	
 	module.exports.Container = __webpack_require__(209);
 	module.exports.MapStore = __webpack_require__(213);
-	module.exports.Mixin = __webpack_require__(223);
+	module.exports.Mixin = __webpack_require__(225);
 	module.exports.ReduceStore = __webpack_require__(214);
 	module.exports.Store = __webpack_require__(215);
 
@@ -24619,7 +24621,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var FluxReduceStore = __webpack_require__(214);
-	var Immutable = __webpack_require__(222);
+	var Immutable = __webpack_require__(224);
 	
 	var invariant = __webpack_require__(211);
 	
@@ -24770,7 +24772,7 @@
 	
 	var FluxStore = __webpack_require__(215);
 	
-	var abstractMethod = __webpack_require__(221);
+	var abstractMethod = __webpack_require__(223);
 	var invariant = __webpack_require__(211);
 	
 	var FluxReduceStore = (function (_FluxStore) {
@@ -25079,8 +25081,8 @@
 	var EmitterSubscription = __webpack_require__(218);
 	var EventSubscriptionVendor = __webpack_require__(220);
 	
-	var emptyFunction = __webpack_require__(15);
-	var invariant = __webpack_require__(13);
+	var emptyFunction = __webpack_require__(222);
+	var invariant = __webpack_require__(221);
 	
 	/**
 	 * @class BaseEventEmitter
@@ -25380,7 +25382,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(13);
+	var invariant = __webpack_require__(221);
 	
 	/**
 	 * EventSubscriptionVendor stores a set of EventSubscriptions that are
@@ -25474,6 +25476,105 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
+	 * Copyright 2013-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule invariant
+	 */
+	
+	'use strict';
+	
+	/**
+	 * Use invariant() to assert state which your program assumes to be true.
+	 *
+	 * Provide sprintf-style format (only %s is supported) and arguments
+	 * to provide information about what broke and what you were
+	 * expecting.
+	 *
+	 * The invariant message will be stripped in production, but the invariant
+	 * will remain to ensure logic does not differ in production.
+	 */
+	
+	function invariant(condition, format, a, b, c, d, e, f) {
+	  if (process.env.NODE_ENV !== 'production') {
+	    if (format === undefined) {
+	      throw new Error('invariant requires an error message argument');
+	    }
+	  }
+	
+	  if (!condition) {
+	    var error;
+	    if (format === undefined) {
+	      error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
+	    } else {
+	      var args = [a, b, c, d, e, f];
+	      var argIndex = 0;
+	      error = new Error(format.replace(/%s/g, function () {
+	        return args[argIndex++];
+	      }));
+	      error.name = 'Invariant Violation';
+	    }
+	
+	    error.framesToPop = 1; // we don't care about invariant's own frame
+	    throw error;
+	  }
+	}
+	
+	module.exports = invariant;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
+
+/***/ },
+/* 222 */
+/***/ function(module, exports) {
+
+	/**
+	 * Copyright 2013-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule emptyFunction
+	 */
+	
+	"use strict";
+	
+	function makeEmptyFunction(arg) {
+	  return function () {
+	    return arg;
+	  };
+	}
+	
+	/**
+	 * This function accepts and discards inputs; it has no side effects. This is
+	 * primarily useful idiomatically for overridable function endpoints which
+	 * always need to be callable, since JS lacks a null-call idiom ala Cocoa.
+	 */
+	function emptyFunction() {}
+	
+	emptyFunction.thatReturns = makeEmptyFunction;
+	emptyFunction.thatReturnsFalse = makeEmptyFunction(false);
+	emptyFunction.thatReturnsTrue = makeEmptyFunction(true);
+	emptyFunction.thatReturnsNull = makeEmptyFunction(null);
+	emptyFunction.thatReturnsThis = function () {
+	  return this;
+	};
+	emptyFunction.thatReturnsArgument = function (arg) {
+	  return arg;
+	};
+	
+	module.exports = emptyFunction;
+
+/***/ },
+/* 223 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {/**
 	 * Copyright (c) 2014-2015, Facebook, Inc.
 	 * All rights reserved.
 	 *
@@ -25497,7 +25598,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 222 */
+/* 224 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -30484,7 +30585,7 @@
 	}));
 
 /***/ },
-/* 223 */
+/* 225 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -30607,7 +30708,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 224 */
+/* 226 */
 /***/ function(module, exports) {
 
 	var ArticleConstants = {
@@ -30619,15 +30720,15 @@
 	module.exports = ArticleConstants;
 
 /***/ },
-/* 225 */
+/* 227 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Dispatcher = __webpack_require__(226).Dispatcher;
+	var Dispatcher = __webpack_require__(228).Dispatcher;
 	
 	module.exports = new Dispatcher();
 
 /***/ },
-/* 226 */
+/* 228 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -30639,11 +30740,11 @@
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 	
-	module.exports.Dispatcher = __webpack_require__(227);
+	module.exports.Dispatcher = __webpack_require__(229);
 
 
 /***/ },
-/* 227 */
+/* 229 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -30880,10 +30981,10 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 228 */
+/* 230 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var ApiActions = __webpack_require__(229);
+	var ApiActions = __webpack_require__(231);
 	
 	var ApiUtil = {
 	  fetchArticles: function (articles) {
@@ -30912,7 +31013,16 @@
 	
 	  fetchFromWikipedia: function (title) {
 	
-	    var urlString = "https://en.wikipedia.org/wiki/" + title;
+	    var fixedTitle = "";
+	    for (var i = 0; i < title.length; i++) {
+	      if (title[i] === " ") {
+	        fixedTitle += "_";
+	      } else {
+	        fixedTitle += title[i];
+	      }
+	    }
+	
+	    var urlString = "https://en.wikipedia.org/wiki/" + fixedTitle;
 	
 	    $.ajax({
 	      type: 'POST',
@@ -30946,8 +31056,9 @@
 	    var size = "&qft=+filterui:imagesize-wallpaper";
 	    var license = "+filterui:license-L1&FORM=R5IR38";
 	
-	    // "http://www.bing.com/images/search?pq=nasa&sc=8-4&sp=-1&sk=&q=NASA&qft=+filterui:imagesize-large+filterui:license-L1&FORM=R5IR38"
 	    var urlString = host + page + thing + size + license;
+	    // var urlString = host + page + thing + size + license;
+	
 	    $.ajax({
 	      type: 'POST',
 	      url: '/api/fetcher/header',
@@ -30970,12 +31081,12 @@
 	module.exports = ApiUtil;
 
 /***/ },
-/* 229 */
+/* 231 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var AppDispatcher = __webpack_require__(225);
-	var ArticleConstants = __webpack_require__(224);
-	var ImageConstants = __webpack_require__(247);
+	var AppDispatcher = __webpack_require__(227);
+	var ArticleConstants = __webpack_require__(226);
+	var ImageConstants = __webpack_require__(232);
 	
 	// var ApiActions = {
 	//   receiveAll: function(articles){
@@ -31018,7 +31129,93 @@
 	module.exports = ApiActions;
 
 /***/ },
-/* 230 */
+/* 232 */
+/***/ function(module, exports) {
+
+	var ImageConstants = {
+	  HEADER_IMAGE_RECEIVED: "HEADER_IMAGE_RECEIVED"
+	};
+	
+	module.exports = ImageConstants;
+
+/***/ },
+/* 233 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ReactRouter = __webpack_require__(159);
+	var ArticleStore = __webpack_require__(207);
+	var ApiUtil = __webpack_require__(230);
+	var History = __webpack_require__(159).History;
+	
+	var HeaderImage = React.createClass({
+	  displayName: 'HeaderImage',
+	
+	  getInitialState: function () {
+	    return { url: "http://www.angelafloydschools.com/wp-content/uploads/placeholder-car1.png" };
+	  },
+	
+	  // componentDidMount: function () {
+	  //   ArticleStore.addListener(this.__onChange);
+	  // },
+	  //
+	  // __onChange: function () {
+	  //   console.log("header __onChange");
+	  //   if (this.props.title) {
+	  //     this.setState({ url: url });
+	  //   }
+	  // },
+	
+	  componentWillReceiveProps: function (newProps) {
+	    // console.log("header didReceiveProps");
+	    // if (newProps.title) {
+	    //   ApiUtil.fetchHeaderImage(newProps.title);
+	    // }
+	    this.forceUpdate();
+	  },
+	
+	  render: function () {
+	    console.log(this.props.image);
+	    return React.createElement('img', { src: this.props.image, className: 'header-image' });
+	  }
+	});
+	
+	module.exports = HeaderImage;
+
+/***/ },
+/* 234 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Store = __webpack_require__(208).Store;
+	var ImageConstants = __webpack_require__(232);
+	var AppDispatcher = __webpack_require__(227);
+	
+	var ImageStore = new Store(AppDispatcher);
+	
+	var _currentHeader = "http://www.angelafloydschools.com/wp-content/uploads/placeholder-car1.png";
+	
+	var resetHeaderImage = function (image) {
+	  _currentHeader = image;
+	};
+	
+	ImageStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case ImageConstants.HEADER_IMAGE_RECEIVED:
+	      //Create this files
+	      _currentHeader = payload.image.url;
+	      ImageStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	ImageStore.fetchHeader = function () {
+	  return _currentHeader;
+	};
+	
+	module.exports = ImageStore;
+
+/***/ },
+/* 235 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// This is the Homepage that displays what's new and various other things
@@ -31028,11 +31225,11 @@
 	var ReactRouter = __webpack_require__(159);
 	
 	var ArticleStore = __webpack_require__(207);
-	var ApiUtil = __webpack_require__(228);
+	var ApiUtil = __webpack_require__(230);
 	
 	var Article = __webpack_require__(206);
-	var ArticleFragment = __webpack_require__(231);
-	var WikiFetcher = __webpack_require__(232);
+	var ArticleFragment = __webpack_require__(236);
+	var WikiFetcher = __webpack_require__(237);
 	
 	var History = __webpack_require__(159).History;
 	
@@ -31107,14 +31304,14 @@
 	module.exports = ArticleIndex;
 
 /***/ },
-/* 231 */
+/* 236 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var ReactRouter = __webpack_require__(159);
 	var ArticleStore = __webpack_require__(207);
-	var ApiUtil = __webpack_require__(228);
-	var ApiActions = __webpack_require__(229);
+	var ApiUtil = __webpack_require__(230);
+	var ApiActions = __webpack_require__(231);
 	var History = __webpack_require__(159).History;
 	
 	// This file is a helper to render article teasers on the homepage.
@@ -31176,13 +31373,13 @@
 	module.exports = ArticleFragment;
 
 /***/ },
-/* 232 */
+/* 237 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var ReactRouter = __webpack_require__(159);
 	var ArticleStore = __webpack_require__(207);
-	var ApiUtil = __webpack_require__(228);
+	var ApiUtil = __webpack_require__(230);
 	var History = __webpack_require__(159).History;
 	
 	// this is the display logic for a single article.
@@ -31230,7 +31427,7 @@
 	module.exports = WikiFetcher;
 
 /***/ },
-/* 233 */
+/* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// this file will replace the current logic above yield in the application
@@ -31238,8 +31435,9 @@
 	
 	var React = __webpack_require__(1);
 	var ReactRouter = __webpack_require__(159);
-	var SessionsApiUtil = __webpack_require__(234);
-	var CurrentUserStore = __webpack_require__(237);
+	var SessionsApiUtil = __webpack_require__(239);
+	var CurrentUserStore = __webpack_require__(242);
+	var Search = __webpack_require__(243);
 	
 	var History = __webpack_require__(159).History;
 	
@@ -31288,6 +31486,11 @@
 	            'li',
 	            { key: '2' },
 	            React.createElement(LogInOut, { currentUser: currentUser })
+	          ),
+	          React.createElement(
+	            'li',
+	            { key: '3' },
+	            React.createElement(SearchToggle, null)
 	          )
 	        )
 	      )
@@ -31380,50 +31583,55 @@
 	  },
 	
 	  render: function () {
-	    // var path = ['app', 'assets', 'images', 'icons'].join("/");
-	    // var img = 'book236.svg';
-	    // return <object type="image/svg+xml"
-	    //                data="book236.svg"></object>;
 	    return React.createElement(
 	      'div',
-	      { className: 'toggle', onClick: this.toggleShow },
+	      { className: 'toggle-sidebar', onClick: this.toggleShow },
 	      React.createElement('i', { className: 'fa fa-bars' })
 	    );
 	  }
 	});
 	
-	var Sidebar = React.createClass({
-	  displayName: 'Sidebar',
+	var SearchToggle = React.createClass({
+	  displayName: 'SearchToggle',
+	
+	  toggleSearch: function () {
+	    alert("toggle Search");
+	  },
 	
 	  render: function () {
-	    var pageHeaders = ["header 1", "header 2", "header 3", "etc"];
-	    var headerList = pageHeaders.map(function (header) {
-	      return React.createElement(
-	        'li',
-	        null,
-	        header
-	      );
-	    });
-	
 	    return React.createElement(
-	      'div',
-	      { className: 'sidebar group' },
-	      React.createElement(
-	        'ul',
-	        { className: 'sidebar-list' },
-	        headerList
-	      )
+	      'a',
+	      { className: 'toggle-search', href: '#/search' },
+	      React.createElement('i', { className: 'fa fa-search' })
 	    );
 	  }
 	});
 	
+	// var Sidebar = React.createClass({
+	//
+	//   render: function () {
+	//     var pageHeaders = ["header 1", "header 2", "header 3", "etc"];
+	//     var headerList = pageHeaders.map(function (header) {
+	//       return <li>{header}</li>;
+	//     });
+	//
+	//     return(
+	//     <div className="sidebar group">
+	//       <ul className="sidebar-list">
+	//         {headerList}
+	//       </ul>
+	//     </div>
+	//     );
+	//   }
+	// });
+	
 	module.exports = NavBar;
 
 /***/ },
-/* 234 */
+/* 239 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var CurrentUserActions = __webpack_require__(235);
+	var CurrentUserActions = __webpack_require__(240);
 	
 	var SessionsApiUtil = {
 	  login: function (credentials, success) {
@@ -31479,11 +31687,11 @@
 	module.exports = SessionsApiUtil;
 
 /***/ },
-/* 235 */
+/* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var AppDispatcher = __webpack_require__(225);
-	var CurrentUserConstants = __webpack_require__(236);
+	var AppDispatcher = __webpack_require__(227);
+	var CurrentUserConstants = __webpack_require__(241);
 	
 	var CurrentUserActions = {
 	
@@ -31505,7 +31713,7 @@
 	module.exports = CurrentUserActions;
 
 /***/ },
-/* 236 */
+/* 241 */
 /***/ function(module, exports) {
 
 	var CurrentUserConstants = {
@@ -31516,11 +31724,11 @@
 	module.exports = CurrentUserConstants;
 
 /***/ },
-/* 237 */
+/* 242 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var AppDispatcher = __webpack_require__(225);
-	var CurrentUserConstants = __webpack_require__(236);
+	var AppDispatcher = __webpack_require__(227);
+	var CurrentUserConstants = __webpack_require__(241);
 	var Store = __webpack_require__(208).Store;
 	
 	var _currentUser = {};
@@ -31560,7 +31768,164 @@
 	module.exports = CurrentUserStore;
 
 /***/ },
-/* 238 */
+/* 243 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var SearchResultsStore = __webpack_require__(244);
+	var SearchApiUtil = __webpack_require__(246);
+	var ArticleFragment = __webpack_require__(236);
+	
+	var Search = React.createClass({
+	  displayName: 'Search',
+	
+	  componentDidMount: function () {
+	    this.listener = SearchResultsStore.addListener(this._onChange);
+	  },
+	
+	  getInitialState: function () {
+	    return { page: 1, query: "" };
+	  },
+	
+	  search: function (e) {
+	    var query = e.target.value;
+	    SearchApiUtil.search(query, 1);
+	
+	    this.setState({ page: 1, query: query });
+	  },
+	
+	  nextPage: function () {
+	    var nextPage = this.state.page + 1;
+	    SearchApiUtil.search(this.state.query, nextPage);
+	
+	    this.setState({ page: nextPage });
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.listener.remove();
+	  },
+	
+	  render: function () {
+	
+	    var searchResults = SearchResultsStore.all().map(function (searchResult) {
+	      return React.createElement(ArticleFragment, { article: searchResult });
+	    });
+	
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'h1',
+	        { className: 'title' },
+	        'Search'
+	      ),
+	      React.createElement('input', { type: 'text', placeholder: 'search articles', onKeyUp: this.search }),
+	      'Displaying ',
+	      SearchResultsStore.all().length,
+	      ' of ',
+	      SearchResultsStore.meta().totalCount,
+	      React.createElement(
+	        'button',
+	        { onClick: this.nextPage },
+	        'Next'
+	      ),
+	      React.createElement(
+	        'ul',
+	        { className: 'articles-index' },
+	        searchResults
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = Search;
+
+/***/ },
+/* 244 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Store = __webpack_require__(208).Store;
+	var AppDispatcher = __webpack_require__(227);
+	var SearchConstants = __webpack_require__(245);
+	
+	var SearchResultsStore = new Store(AppDispatcher);
+	
+	var _searchResults = [];
+	var _meta = {};
+	
+	SearchResultsStore.all = function () {
+	  return _searchResults.slice();
+	};
+	
+	SearchResultsStore.meta = function () {
+	  return _meta;
+	};
+	
+	SearchResultsStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case SearchConstants.RECEIVE_SEARCH_RESULTS:
+	      _searchResults = payload.searchResults;
+	      _meta = payload.meta;
+	      SearchResultsStore.__emitChange();
+	
+	  }
+	};
+	
+	module.exports = SearchResultsStore;
+
+/***/ },
+/* 245 */
+/***/ function(module, exports) {
+
+	var SearchConstants = {
+	  RECEIVE_SEARCH_RESULTS: "RECEIVE_SEARCH_RESULTS"
+	};
+	
+	module.exports = SearchConstants;
+
+/***/ },
+/* 246 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var SearchActions = __webpack_require__(247);
+	
+	var SearchApiUtil = {
+	  search: function (query, page) {
+	    $.ajax({
+	      url: '/api/search',
+	      type: 'GET',
+	      dataType: 'json',
+	      data: { query: query, page: page },
+	      success: function (data) {
+	        SearchActions.receiveResults(data);
+	      }
+	    });
+	  }
+	};
+	
+	module.exports = SearchApiUtil;
+
+/***/ },
+/* 247 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(227);
+	var SearchConstants = __webpack_require__(245);
+	
+	var SearchActions = {
+	  receiveUser: function (data) {
+	    AppDispatcher.dispatch({
+	      actionType: SearchConstants.RECEIVE_SEARCH_RESULTS,
+	      data: data
+	    });
+	  }
+	};
+	
+	module.exports = SearchActions;
+
+/***/ },
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -31596,12 +31961,12 @@
 	module.exports = Sidebar;
 
 /***/ },
-/* 239 */
+/* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var History = __webpack_require__(159).History;
-	var SessionsApiUtil = __webpack_require__(234);
+	var SessionsApiUtil = __webpack_require__(239);
 	
 	var SessionForm = React.createClass({
 	  displayName: 'SessionForm',
@@ -31679,13 +32044,13 @@
 	module.exports = SessionForm;
 
 /***/ },
-/* 240 */
+/* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var History = __webpack_require__(159).History;
-	var UserStore = __webpack_require__(241);
-	var UsersApiUtil = __webpack_require__(243);
+	var UserStore = __webpack_require__(251);
+	var UsersApiUtil = __webpack_require__(253);
 	// var SessionsApiUtil = require('./../../util/sessions_api_util');
 	
 	var UserForm = React.createClass({
@@ -31774,11 +32139,11 @@
 	module.exports = UserForm;
 
 /***/ },
-/* 241 */
+/* 251 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var AppDispatcher = __webpack_require__(225);
-	var UserConstants = __webpack_require__(242);
+	var AppDispatcher = __webpack_require__(227);
+	var UserConstants = __webpack_require__(252);
 	var Store = __webpack_require__(208).Store;
 	
 	var _users = [];
@@ -31812,7 +32177,7 @@
 	module.exports = UsersStore;
 
 /***/ },
-/* 242 */
+/* 252 */
 /***/ function(module, exports) {
 
 	var UserConstants = {
@@ -31822,11 +32187,11 @@
 	module.exports = UserConstants;
 
 /***/ },
-/* 243 */
+/* 253 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var UserActions = __webpack_require__(244);
-	var CurrentUserActions = __webpack_require__(235);
+	var UserActions = __webpack_require__(254);
+	var CurrentUserActions = __webpack_require__(240);
 	
 	var UsersApiUtil = {
 	  fetchUser: function (id) {
@@ -31860,11 +32225,11 @@
 	module.exports = UsersApiUtil;
 
 /***/ },
-/* 244 */
+/* 254 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var AppDispatcher = __webpack_require__(225);
-	var UserConstants = __webpack_require__(242);
+	var AppDispatcher = __webpack_require__(227);
+	var UserConstants = __webpack_require__(252);
 	
 	var UserActions = {
 	  receiveUser: function (user) {
@@ -31878,12 +32243,12 @@
 	module.exports = UserActions;
 
 /***/ },
-/* 245 */
+/* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var UsersStore = __webpack_require__(241);
-	var UsersApiUtil = __webpack_require__(243);
+	var UsersStore = __webpack_require__(251);
+	var UsersApiUtil = __webpack_require__(253);
 	
 	var UserShow = React.createClass({
 	  displayName: 'UserShow',
@@ -31899,91 +32264,6 @@
 	});
 	
 	module.exports = UserShow;
-
-/***/ },
-/* 246 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var ReactRouter = __webpack_require__(159);
-	var ArticleStore = __webpack_require__(207);
-	var ApiUtil = __webpack_require__(228);
-	var History = __webpack_require__(159).History;
-	
-	var HeaderImage = React.createClass({
-	  displayName: 'HeaderImage',
-	
-	  getInitialState: function () {
-	    return { url: "http://www.angelafloydschools.com/wp-content/uploads/placeholder-car1.png" };
-	  },
-	
-	  // componentDidMount: function () {
-	  //   ArticleStore.addListener(this.__onChange);
-	  // },
-	  //
-	  // __onChange: function () {
-	  //   console.log("header __onChange");
-	  //   if (this.props.title) {
-	  //     this.setState({ url: url });
-	  //   }
-	  // },
-	
-	  componentWillReceiveProps: function (newProps) {
-	    // console.log("header didReceiveProps");
-	    // if (newProps.title) {
-	    //   ApiUtil.fetchHeaderImage(newProps.title);
-	    // }
-	    this.forceUpdate();
-	  },
-	
-	  render: function () {
-	    return React.createElement('img', { src: this.props.image, className: 'header-image' });
-	  }
-	});
-	
-	module.exports = HeaderImage;
-
-/***/ },
-/* 247 */
-/***/ function(module, exports) {
-
-	var ImageConstants = {
-	  HEADER_IMAGE_RECEIVED: "HEADER_IMAGE_RECEIVED"
-	};
-	
-	module.exports = ImageConstants;
-
-/***/ },
-/* 248 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Store = __webpack_require__(208).Store;
-	var ImageConstants = __webpack_require__(247);
-	var AppDispatcher = __webpack_require__(225);
-	
-	var ImageStore = new Store(AppDispatcher);
-	
-	var _currentHeader = "http://www.angelafloydschools.com/wp-content/uploads/placeholder-car1.png";
-	
-	var resetHeaderImage = function (image) {
-	  _currentHeader = image;
-	};
-	
-	ImageStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case ImageConstants.HEADER_IMAGE_RECEIVED:
-	      //Create this files
-	      _currentHeader = payload.image.url;
-	      ImageStore.__emitChange();
-	      break;
-	  }
-	};
-	
-	ImageStore.fetchHeader = function () {
-	  return _currentHeader;
-	};
-	
-	module.exports = ImageStore;
 
 /***/ }
 /******/ ]);

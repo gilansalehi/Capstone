@@ -5,6 +5,7 @@ var React = require('react');
 var ReactRouter = require('react-router');
 var SessionsApiUtil = require('./../util/sessions_api_util.js');
 var CurrentUserStore = require('./../stores/current_user_store.js');
+var Search = require('./search');
 
 var History = require('react-router').History;
 
@@ -35,6 +36,7 @@ var NavBar = React.createClass({
           <ul className="nav-list">
             <li key="1"><CurrentUser currentUser={currentUser} /></li>
             <li key="2"><LogInOut currentUser={currentUser} /></li>
+            <li key="3"><SearchToggle /></li>
           </ul>
         </div>
       </nav>
@@ -98,34 +100,45 @@ var SidebarToggle = React.createClass({
   },
 
   render: function () {
-    // var path = ['app', 'assets', 'images', 'icons'].join("/");
-    // var img = 'book236.svg';
-    // return <object type="image/svg+xml"
-    //                data="book236.svg"></object>;
     return (
-      <div className="toggle" onClick={this.toggleShow}>
+      <div className="toggle-sidebar" onClick={this.toggleShow}>
         <i className="fa fa-bars"></i>
       </div>
     );
   }
 });
 
-var Sidebar = React.createClass({
+var SearchToggle = React.createClass({
+
+  toggleSearch: function () {
+    alert("toggle Search");
+  },
 
   render: function () {
-    var pageHeaders = ["header 1", "header 2", "header 3", "etc"];
-    var headerList = pageHeaders.map(function (header) {
-      return <li>{header}</li>;
-    });
-
-    return(
-    <div className="sidebar group">
-      <ul className="sidebar-list">
-        {headerList}
-      </ul>
-    </div>
+    return (
+      <a className="toggle-search" href="#/search">
+        <i className="fa fa-search"></i>
+      </a>
     );
   }
 });
+
+// var Sidebar = React.createClass({
+//
+//   render: function () {
+//     var pageHeaders = ["header 1", "header 2", "header 3", "etc"];
+//     var headerList = pageHeaders.map(function (header) {
+//       return <li>{header}</li>;
+//     });
+//
+//     return(
+//     <div className="sidebar group">
+//       <ul className="sidebar-list">
+//         {headerList}
+//       </ul>
+//     </div>
+//     );
+//   }
+// });
 
 module.exports = NavBar;

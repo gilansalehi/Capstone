@@ -44,11 +44,17 @@
 
 // SIDEBAR
 
-.toggle {
+.toggle-sidebar {
   display: block;
   position: relative;
   float: left;
   padding-top: 20px;
+}
+
+.toggle-search {
+  display: block;
+  position: relative;
+  float: left;
 }
 
 .sidebar {

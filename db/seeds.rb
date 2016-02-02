@@ -9,7 +9,7 @@
 guest = User.create!(username: "guest", password: "password")
 article1 = Article.create_from_url("https://en.wikipedia.org/wiki/Ocean")
 article2 = Article.create_from_url("https://en.wikipedia.org/wiki/Star_Wars")
-article3 = Article.create_from_url("https://en.wikipedia.org/wiki/Cat")
+article3 = Article.create_from_url("https://en.wikipedia.org/wiki/Luke_Skywalker")
 article4 = Article.create_from_url("https://en.wikipedia.org/wiki/App_Academy")
 article5 = Article.create_from_url("https://en.wikipedia.org/wiki/Iran")
 article6 = Article.create_from_url("https://en.wikipedia.org/wiki/Katana")

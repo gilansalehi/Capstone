@@ -14,6 +14,7 @@ var Sidebar = require('./components/sidebar.jsx');
 var SessionForm = require('./components/sessions/new.jsx');
 var UserForm = require('./components/users/new.jsx');
 var UserShow = require('./components/users/users_show.jsx');
+var Search = require('./components/search')
 
 var CurrentUserStore = require('./stores/current_user_store');
 var SessionsApiUtil = require('./util/sessions_api_util');
@@ -54,12 +55,14 @@ function _ensureLoggedIn(nextState, replace, callback) {
 };
 
 var routes = (
-  <Route path="/" component={App} >
-    <IndexRoute component={ArticleIndex} />
-    <Route path="article/:article_id" component={Article} />
+  <Route path="/" component={ App } >
+    <IndexRoute component={ ArticleIndex } />
+    <Route path="article/:article_id" component={ Article } />
+
     <Route path="login" component={ SessionForm } />
     <Route path="users/new" component={ UserForm } />
     <Route path="users/:id" component={ UserShow } />
+    <Route path="search" component={ Search } />
   </Route>
 );
 

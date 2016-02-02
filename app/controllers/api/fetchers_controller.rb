@@ -28,7 +28,7 @@ class Api::FetchersController < ApplicationController
   def header
     img = Nokogiri::HTML(open(params[:url]))
 
-    img_url = img.xpath("//a")[33]
+    img_url = img.xpath("//a")[32]
     @target_url = img_url["href"]
 
     render :image

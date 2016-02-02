@@ -1,7 +1,7 @@
 class Api::ArticlesController < ApplicationController
 
   def index
-    @articles = Article.whats_new
+    @articles = Article.whats_new(12)
     # @articles = Article.all
   end
 

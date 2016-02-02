@@ -29,6 +29,7 @@ var HeaderImage = React.createClass({
   },
 
   render: function () {
+    console.log(this.props.image);
     return <img src={this.props.image} className="header-image" />;
   }
 });
