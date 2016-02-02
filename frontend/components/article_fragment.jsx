@@ -2,6 +2,7 @@ var React = require('react');
 var ReactRouter = require('react-router');
 var ArticleStore = require('../stores/article.js');
 var ApiUtil = require('../util/api_util.js');
+var ApiActions = require('../actions/api_actions.js');
 var History = require('react-router').History;
 
 // This file is a helper to render article teasers on the homepage.
@@ -14,22 +15,17 @@ var ArticleFragment = React.createClass({
   getInitialState: function () {
     return ({
       article: this.props.article,
-      article_id: this.props.article.id,
-      article_img: "OPTIONAL"
     });
   },
 
-  // handleClick: function (e) {
-  //   e.preventDefault();
-  //   var id = this.state.article_id;
-  //   this.history.pushState(null, "/article/" + id, {});
-  // },
+  componentWillReceiveProps: function (newProps) {
+    this.setState({ article: newProps.article });
+  },
 
   render: function () {
-
     var title, fragment, id;
 
-    if (this.state.article) {
+    if (this.state) {
       id = this.state.article.id;
       if (this.state.article.title) {
         title = this.state.article.title;

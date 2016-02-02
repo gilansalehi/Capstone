@@ -31,7 +31,13 @@ var ApiActions = {
       actionType: ImageConstants.HEADER_IMAGE_RECEIVED,
       image: url
     });
-  }
+  },
+
+  // pingStore: function () {
+  //   AppDispatcher.dispatch({
+  //     actionType: ArticleConstants.PING,
+  //   });
+  // }
 };
 
 module.exports = ApiActions;

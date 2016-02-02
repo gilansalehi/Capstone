@@ -24163,9 +24163,12 @@
 	      break;
 	    case ArticleConstants.ARTICLE_RECEIVED:
 	      if (_articles.indexOf(payload) === -1) {
-	        _articles.push(payload);
+	        _articles.push(payload.article);
 	      }
 	      _currentArticle = payload;
+	      ArticleStore.__emitChange();
+	      break;
+	    case ArticleConstants.PING:
 	      ArticleStore.__emitChange();
 	      break;
 	  }
@@ -24186,9 +24189,6 @@
 	  }
 	  return _articles.slice(k);
 	};
-	
-	// for testing
-	window.ArticleStore = ArticleStore;
 	
 	module.exports = ArticleStore;
 	
@@ -30999,8 +30999,14 @@
 	      image: url
 	    });
 	  }
+	
 	};
 	
+	// pingStore: function () {
+	//   AppDispatcher.dispatch({
+	//     actionType: ArticleConstants.PING,
+	//   });
+	// }
 	module.exports = ApiActions;
 
 /***/ },
@@ -31055,7 +31061,6 @@
 	  },
 	
 	  render: function () {
-	
 	    var articles;
 	
 	    if (this.state.articles) {
@@ -31101,6 +31106,7 @@
 	var ReactRouter = __webpack_require__(159);
 	var ArticleStore = __webpack_require__(207);
 	var ApiUtil = __webpack_require__(228);
+	var ApiActions = __webpack_require__(229);
 	var History = __webpack_require__(159).History;
 	
 	// This file is a helper to render article teasers on the homepage.
@@ -31114,23 +31120,18 @@
 	
 	  getInitialState: function () {
 	    return {
-	      article: this.props.article,
-	      article_id: this.props.article.id,
-	      article_img: "OPTIONAL"
+	      article: this.props.article
 	    };
 	  },
 	
-	  // handleClick: function (e) {
-	  //   e.preventDefault();
-	  //   var id = this.state.article_id;
-	  //   this.history.pushState(null, "/article/" + id, {});
-	  // },
+	  componentWillReceiveProps: function (newProps) {
+	    this.setState({ article: newProps.article });
+	  },
 	
 	  render: function () {
-	
 	    var title, fragment, id;
 	
-	    if (this.state.article) {
+	    if (this.state) {
 	      id = this.state.article.id;
 	      if (this.state.article.title) {
 	        title = this.state.article.title;

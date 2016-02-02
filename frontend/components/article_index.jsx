@@ -44,7 +44,6 @@ var ArticleIndex = React.createClass({
   },
 
   render: function () {
-
     var articles;
 
     if (this.state.articles) {

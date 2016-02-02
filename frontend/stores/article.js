@@ -23,8 +23,11 @@ ArticleStore.__onDispatch = function (payload) {
       ArticleStore.__emitChange();
       break;
     case ArticleConstants.ARTICLE_RECEIVED:
-      if (_articles.indexOf(payload) === -1) { _articles.push(payload); }
+      if (_articles.indexOf(payload) === -1) { _articles.push(payload.article); }
       _currentArticle = payload;
+      ArticleStore.__emitChange();
+      break;
+    case ArticleConstants.PING:
       ArticleStore.__emitChange();
       break;
   }
@@ -43,9 +46,6 @@ ArticleStore.lastNArticles = function (n) {
   if (k < 0) { k = 0; }
   return _articles.slice(k);
 };
-
-// for testing
-window.ArticleStore = ArticleStore;
 
 module.exports = ArticleStore;
 
