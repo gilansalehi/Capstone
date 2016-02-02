@@ -1,7 +1,9 @@
 var React = require('react');
 var SearchResultsStore = require('../stores/search_results_store');
 var SearchApiUtil = require('../util/search_api_util');
-var ArticleFragment = require('../components/article_fragment');
+var ArticleFragment = require('./article_fragment');
+var HeaderImage = require('./header_image');
+var ImageStore = require('../stores/image_store');
 
 var Search = React.createClass({
   componentDidMount: function () {
@@ -16,10 +18,15 @@ var Search = React.createClass({
     this.forceUpdate();
   },
 
-  search: function (e) {
-    var query = e.target.value;
-    SearchApiUtil.search(query, 1);
+  setQuery: function (e) {
+    this.setState({ query: e.currentTarget.value });
+  },
 
+  search: function (e) {
+    e.preventDefault();
+    var query = this.state.query;
+
+    SearchApiUtil.search(query, 1);
     this.setState({ page: 1, query: query });
   },
 
@@ -41,13 +48,19 @@ var Search = React.createClass({
     });
 
     return (
-      <div>
-        <label> Search
-          <input type="text" placeholder="search articles" onKeyUp={ this.search } />
-          <input type="submit" className="submit" value="Search!" />
-        </label>
-        Displaying { SearchResultsStore.all().length } of { SearchResultsStore.meta().totalCount }
-        <button onClick={ this.nextPage }>Next</button>
+      <div className="search-page">
+        <form onSubmit={ this.search } className="search-form">
+          <label> Search
+            <input type="text"
+                   placeholder="search articles"
+                   onChange={ this.setQuery }
+                   value={ this.state.query } />
+            <input type="submit" className="submit" value="Search!" />
+          </label>
+        </form>
+        Displaying { SearchResultsStore.all().length } of { SearchResultsStore.meta().total_count }
+
+        <a onClick={ this.nextPage }> Next ></a>
         <ul className="articles-index">{ searchResults }</ul>
       </div>
     );

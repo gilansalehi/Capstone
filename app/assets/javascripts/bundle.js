@@ -31790,6 +31790,8 @@
 	var SearchResultsStore = __webpack_require__(244);
 	var SearchApiUtil = __webpack_require__(246);
 	var ArticleFragment = __webpack_require__(236);
+	var HeaderImage = __webpack_require__(233);
+	var ImageStore = __webpack_require__(234);
 	
 	var Search = React.createClass({
 	  displayName: 'Search',
@@ -31806,10 +31808,15 @@
 	    this.forceUpdate();
 	  },
 	
-	  search: function (e) {
-	    var query = e.target.value;
-	    SearchApiUtil.search(query, 1);
+	  setQuery: function (e) {
+	    this.setState({ query: e.currentTarget.value });
+	  },
 	
+	  search: function (e) {
+	    e.preventDefault();
+	    var query = this.state.query;
+	
+	    SearchApiUtil.search(query, 1);
 	    this.setState({ page: 1, query: query });
 	  },
 	
@@ -31832,22 +31839,29 @@
 	
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: 'search-page' },
 	      React.createElement(
-	        'label',
-	        null,
-	        ' Search',
-	        React.createElement('input', { type: 'text', placeholder: 'search articles', onKeyUp: this.search }),
-	        React.createElement('input', { type: 'submit', className: 'submit', value: 'Search!' })
+	        'form',
+	        { onSubmit: this.search, className: 'search-form' },
+	        React.createElement(
+	          'label',
+	          null,
+	          ' Search',
+	          React.createElement('input', { type: 'text',
+	            placeholder: 'search articles',
+	            onChange: this.setQuery,
+	            value: this.state.query }),
+	          React.createElement('input', { type: 'submit', className: 'submit', value: 'Search!' })
+	        )
 	      ),
 	      'Displaying ',
 	      SearchResultsStore.all().length,
 	      ' of ',
-	      SearchResultsStore.meta().totalCount,
+	      SearchResultsStore.meta().total_count,
 	      React.createElement(
-	        'button',
+	        'a',
 	        { onClick: this.nextPage },
-	        'Next'
+	        ' Next >'
 	      ),
 	      React.createElement(
 	        'ul',
