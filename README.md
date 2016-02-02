@@ -1,4 +1,5 @@
 # TODO:
+// create user doesn't automatically log user in React frontend.  Fix this.
 // DO SEARCH
 // DO EDITING
 // DO IMAGES

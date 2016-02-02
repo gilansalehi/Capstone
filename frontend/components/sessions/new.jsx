@@ -44,11 +44,17 @@ var SessionForm = React.createClass({
           <a className="join-button" href="#/users/new">Join Clickapedia</a>
         </div>
 
-        <form onSubmit ={ this.submit } >
+        <form onSubmit={ this.submit } >
           <input type="hidden" name="user[username]" value="guest"></input>
           <input type="hidden" name="user[password]" value="password"></input>
           <input className="demo-user" type="submit" value="Log In As Guest"></input>
         </form>
+
+        <div>Log in with
+          <form onSubmit={ this.logInWithFacebook } className="oauth-facebook">
+            <a href="/auth/facebook"><i className="fa fa-facebook-official fa-fw"></i></a>
+          </form>
+        </div>
       </div>
     );
   },

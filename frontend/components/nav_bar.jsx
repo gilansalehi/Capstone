@@ -18,21 +18,22 @@ var NavBar = React.createClass({
 
   componentDidMount: function () {
     CurrentUserStore.addListener(this._onChange);
+    SessionsApiUtil.fetchCurrentUser();
   },
 
   _onChange: function () {
     this.setState({ currentUser: CurrentUserStore.currentUser() });
-    console.log(this.state);
   },
 
   render: function () {
+    console.log("rendering nav bar");
     var currentUser = this.state.currentUser;
-
+    console.log("NavBar thinks currentuser is " + currentUser);
     return (
       <nav className="nav-bar group">
         <div className="nav-header group">
           <SidebarToggle />
-          <a className="nav-logo" href="/">Clickapedia</a>
+          <a className="nav-logo" href="#/">Clickapedia</a>
           <ul className="nav-list">
             <li key="1"><CurrentUser currentUser={currentUser} /></li>
             <li key="2"><LogInOut currentUser={currentUser} /></li>
@@ -49,8 +50,13 @@ var CurrentUser = React.createClass({
     var link;
     var user = this.props.currentUser;
 
-    if (user) { link = <div>{user.username}</div>; }
-    else { link = <div>no user</div>; }
+    console.log(user.id);
+    console.log(user.username);
+    if (user.username) {
+      link = <div><i className="fa fa-user"></i>{" " + user.username}</div>;
+    } else {
+      link = <div></div>;
+    }
 
     return (
       <div className="current-user">{link}</div>
@@ -65,7 +71,11 @@ var LogInOut = React.createClass({
 
   render: function () {
     var user = this.props.currentUser;
-    if (user.id) {
+
+    console.log(user.id);
+    console.log(user.username);
+
+    if (user.username) {
       links = (<a href="#/" onClick={this.handleLogout}>Log out</a>);
     } else {
       links = <a href="#/login">Log in</a>;

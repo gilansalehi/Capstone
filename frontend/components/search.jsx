@@ -12,6 +12,10 @@ var Search = React.createClass({
     return { page: 1, query: "" };
   },
 
+  _onChange: function () {
+    this.forceUpdate();
+  },
+
   search: function (e) {
     var query = e.target.value;
     SearchApiUtil.search(query, 1);
@@ -38,8 +42,10 @@ var Search = React.createClass({
 
     return (
       <div>
-        <h1 className="title">Search</h1>
-        <input type="text" placeholder="search articles" onKeyUp={ this.search } />
+        <label> Search
+          <input type="text" placeholder="search articles" onKeyUp={ this.search } />
+          <input type="submit" className="submit" value="Search!" />
+        </label>
         Displaying { SearchResultsStore.all().length } of { SearchResultsStore.meta().totalCount }
         <button onClick={ this.nextPage }>Next</button>
         <ul className="articles-index">{ searchResults }</ul>

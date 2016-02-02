@@ -11,7 +11,7 @@ var UsersApiUtil = {
         UserActions.receiveUser(user);
       },
       error: function (msg) {
-
+        //console.log(msg);
       }
     });
   },
@@ -28,7 +28,7 @@ var UsersApiUtil = {
         callback && callback();
       },
       error: function (msg) {
-
+        //console.log(msg);
       }
     });
   }

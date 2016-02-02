@@ -6,5 +6,5 @@ class Api::UtilsController < ApplicationController
       .includes(:searchable)
       .page(params[:page])
   end
-  
+
 end

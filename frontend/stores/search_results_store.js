@@ -18,7 +18,7 @@ SearchResultsStore.meta = function () {
 SearchResultsStore.__onDispatch = function (payload) {
   switch (payload.actionType) {
     case SearchConstants.RECEIVE_SEARCH_RESULTS:
-      _searchResults = payload.searchResults;
+      _searchResults = payload.data.results;
       _meta = payload.meta;
       SearchResultsStore.__emitChange();
 

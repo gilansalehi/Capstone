@@ -19,6 +19,7 @@ var SessionsApiUtil = {
   },
 
   logout: function (currentUser, success) {
+
     $.ajax({
       url: '/api/session',
       type: 'DELETE',
@@ -41,7 +42,6 @@ var SessionsApiUtil = {
       dataType: 'json',
       success: function (currentUser) {
         CurrentUserActions.receiveCurrentUser(currentUser);
-        console.log(currentUser);
         callback && callback();
       }
     });

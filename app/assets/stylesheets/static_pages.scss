@@ -126,7 +126,7 @@ form > label {
 
 }
 
-form > input {
+input {
   display: block;
   padding: 7px;
   width: 300px;
@@ -135,7 +135,7 @@ form > input {
   margin: 3px 0;
 }
 
-form > .submit {
+.submit {
   display: block;
   width: 316px;
   background: #00af89;
@@ -145,7 +145,7 @@ form > .submit {
   font-weight: bold;
 }
 
-form > .submit:hover {
+.submit:hover {
   background: #008c6d;
   border: 1px solid #008c6d;
   cursor: pointer;
@@ -196,6 +196,18 @@ form > .submit:hover {
 .demo-user:hover {
   background: #ff4444;
   border: 1px solid #ff4444;
+}
+
+.oauth-facebook {
+  font-size: 32px;
+}
+
+.fa-facebook-official {
+  display: block;
+  color: #3B5998;
+  background: white;
+  float: left;
+  margin: 0;
 }
 
 // ARTCILES

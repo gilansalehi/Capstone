@@ -91,26 +91,31 @@
 	  }
 	});
 	
-	function _ensureLoggedIn(nextState, replace, callback) {
-	
-	  function _redirectIfNotLoggedIn() {
-	    if (!CurrentUserStore.isLoggedIn()) {
-	      replace({}, "/login");
-	    }
-	    callback();
-	  }
-	
-	  // CurrentUserStore.userHasBeenFetched() ? _redirectIfNotLoggedIn() : SessionsApiUtil.fetchCurrentUser(_redirectIfNotLoggedIn)
-	  if (CurrentUserStore.userHasBeenFetched()) {
-	    _redirectIfNotLoggedIn();
-	  } else {
-	    SessionsApiUtil.fetchCurrentUser(_redirectIfNotLoggedIn);
-	  }
+	function _checkCurrentUser() {
+	  SessionsApiUtil.fetchCurrentUser();
+	  console.log("fetching current user on entry");
 	};
+	
+	// function _ensureLoggedIn(nextState, replace, callback) {
+	//
+	//   function _redirectIfNotLoggedIn() {
+	//     if (!CurrentUserStore.isLoggedIn()) {
+	//       replace({}, "/login");
+	//     }
+	//     callback();
+	//   }
+	//
+	//   // CurrentUserStore.userHasBeenFetched() ? _redirectIfNotLoggedIn() : SessionsApiUtil.fetchCurrentUser(_redirectIfNotLoggedIn)
+	//   if (CurrentUserStore.userHasBeenFetched()) {
+	//     _redirectIfNotLoggedIn();
+	//   } else {
+	//     SessionsApiUtil.fetchCurrentUser(_redirectIfNotLoggedIn);
+	//   }
+	// };
 	
 	var routes = React.createElement(
 	  Route,
-	  { path: '/', component: App },
+	  { path: '/', component: App, onEnter: _checkCurrentUser },
 	  React.createElement(IndexRoute, { component: ArticleIndex }),
 	  React.createElement(Route, { path: 'article/:article_id', component: Article }),
 	  React.createElement(Route, { path: 'login', component: SessionForm }),
@@ -31452,16 +31457,17 @@
 	
 	  componentDidMount: function () {
 	    CurrentUserStore.addListener(this._onChange);
+	    SessionsApiUtil.fetchCurrentUser();
 	  },
 	
 	  _onChange: function () {
 	    this.setState({ currentUser: CurrentUserStore.currentUser() });
-	    console.log(this.state);
 	  },
 	
 	  render: function () {
+	    console.log("rendering nav bar");
 	    var currentUser = this.state.currentUser;
-	
+	    console.log("NavBar thinks currentuser is " + currentUser);
 	    return React.createElement(
 	      'nav',
 	      { className: 'nav-bar group' },
@@ -31471,7 +31477,7 @@
 	        React.createElement(SidebarToggle, null),
 	        React.createElement(
 	          'a',
-	          { className: 'nav-logo', href: '/' },
+	          { className: 'nav-logo', href: '#/' },
 	          'Clickapedia'
 	        ),
 	        React.createElement(
@@ -31505,18 +31511,17 @@
 	    var link;
 	    var user = this.props.currentUser;
 	
-	    if (user) {
+	    console.log(user.id);
+	    console.log(user.username);
+	    if (user.username) {
 	      link = React.createElement(
 	        'div',
 	        null,
-	        user.username
+	        React.createElement('i', { className: 'fa fa-user' }),
+	        " " + user.username
 	      );
 	    } else {
-	      link = React.createElement(
-	        'div',
-	        null,
-	        'no user'
-	      );
+	      link = React.createElement('div', null);
 	    }
 	
 	    return React.createElement(
@@ -31536,7 +31541,11 @@
 	
 	  render: function () {
 	    var user = this.props.currentUser;
-	    if (user.id) {
+	
+	    console.log(user.id);
+	    console.log(user.username);
+	
+	    if (user.username) {
 	      links = React.createElement(
 	        'a',
 	        { href: '#/', onClick: this.handleLogout },
@@ -31652,6 +31661,7 @@
 	  },
 	
 	  logout: function (currentUser, success) {
+	
 	    $.ajax({
 	      url: '/api/session',
 	      type: 'DELETE',
@@ -31674,7 +31684,6 @@
 	      dataType: 'json',
 	      success: function (currentUser) {
 	        CurrentUserActions.receiveCurrentUser(currentUser);
-	        console.log(currentUser);
 	        callback && callback();
 	      }
 	    });
@@ -31731,13 +31740,17 @@
 	var CurrentUserConstants = __webpack_require__(241);
 	var Store = __webpack_require__(208).Store;
 	
-	var _currentUser = {};
+	var _currentUser = false;
 	var _currentUserHasBeenFetched = false;
 	
 	var CurrentUserStore = new Store(AppDispatcher);
 	
 	CurrentUserStore.currentUser = function () {
-	  return $.extend({}, _currentUser);
+	  if (_currentUser) {
+	    return $.extend({}, _currentUser);
+	  } else {
+	    return _currentUser;
+	  }
 	};
 	
 	CurrentUserStore.isLoggedIn = function () {
@@ -31751,13 +31764,15 @@
 	CurrentUserStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
 	    case CurrentUserConstants.RECEIVE_CURRENT_USER:
+	      console.log("current user store received current user");
+	      console.log(payload.currentUser);
 	      _currentUserHasBeenFetched = true;
 	      _currentUser = payload.currentUser;
 	      CurrentUserStore.__emitChange();
 	      break;
 	    case CurrentUserConstants.DELETE_CURRENT_USER:
 	      _currentUserHasBeenFetched = false;
-	      _currentUser = {};
+	      _currentUser = false;
 	      CurrentUserStore.__emitChange();
 	      break;
 	  }
@@ -31785,6 +31800,10 @@
 	
 	  getInitialState: function () {
 	    return { page: 1, query: "" };
+	  },
+	
+	  _onChange: function () {
+	    this.forceUpdate();
 	  },
 	
 	  search: function (e) {
@@ -31815,11 +31834,12 @@
 	      'div',
 	      null,
 	      React.createElement(
-	        'h1',
-	        { className: 'title' },
-	        'Search'
+	        'label',
+	        null,
+	        ' Search',
+	        React.createElement('input', { type: 'text', placeholder: 'search articles', onKeyUp: this.search }),
+	        React.createElement('input', { type: 'submit', className: 'submit', value: 'Search!' })
 	      ),
-	      React.createElement('input', { type: 'text', placeholder: 'search articles', onKeyUp: this.search }),
 	      'Displaying ',
 	      SearchResultsStore.all().length,
 	      ' of ',
@@ -31865,7 +31885,7 @@
 	SearchResultsStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
 	    case SearchConstants.RECEIVE_SEARCH_RESULTS:
-	      _searchResults = payload.searchResults;
+	      _searchResults = payload.data.results;
 	      _meta = payload.meta;
 	      SearchResultsStore.__emitChange();
 	
@@ -31914,10 +31934,11 @@
 	var SearchConstants = __webpack_require__(245);
 	
 	var SearchActions = {
-	  receiveUser: function (data) {
+	  receiveResults: function (data) {
 	    AppDispatcher.dispatch({
 	      actionType: SearchConstants.RECEIVE_SEARCH_RESULTS,
-	      data: data
+	      data: data,
+	      meta: { total_count: data.total_count }
 	    });
 	  }
 	};
@@ -32035,6 +32056,20 @@
 	        React.createElement('input', { type: 'hidden', name: 'user[username]', value: 'guest' }),
 	        React.createElement('input', { type: 'hidden', name: 'user[password]', value: 'password' }),
 	        React.createElement('input', { className: 'demo-user', type: 'submit', value: 'Log In As Guest' })
+	      ),
+	      React.createElement(
+	        'div',
+	        null,
+	        'Log in with',
+	        React.createElement(
+	          'form',
+	          { onSubmit: this.logInWithFacebook, className: 'oauth-facebook' },
+	          React.createElement(
+	            'a',
+	            { href: '/auth/facebook' },
+	            React.createElement('i', { className: 'fa fa-facebook-official fa-fw' })
+	          )
+	        )
 	      )
 	    );
 	  }
@@ -32202,7 +32237,9 @@
 	      success: function (user) {
 	        UserActions.receiveUser(user);
 	      },
-	      error: function (msg) {}
+	      error: function (msg) {
+	        //console.log(msg);
+	      }
 	    });
 	  },
 	
@@ -32217,7 +32254,9 @@
 	        CurrentUserActions.receiveCurrentUser(user);
 	        callback && callback();
 	      },
-	      error: function (msg) {}
+	      error: function (msg) {
+	        //console.log(msg);
+	      }
 	    });
 	  }
 	};

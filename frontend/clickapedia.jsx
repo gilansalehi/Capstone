@@ -37,25 +37,31 @@ var App = React.createClass({
   }
 });
 
-function _ensureLoggedIn(nextState, replace, callback) {
 
-  function _redirectIfNotLoggedIn() {
-    if (!CurrentUserStore.isLoggedIn()) {
-      replace({}, "/login");
-    }
-    callback();
-  }
-
-  // CurrentUserStore.userHasBeenFetched() ? _redirectIfNotLoggedIn() : SessionsApiUtil.fetchCurrentUser(_redirectIfNotLoggedIn)
-  if (CurrentUserStore.userHasBeenFetched()) {
-    _redirectIfNotLoggedIn();
-  } else {
-    SessionsApiUtil.fetchCurrentUser(_redirectIfNotLoggedIn);
-  }
+function _checkCurrentUser() {
+  SessionsApiUtil.fetchCurrentUser();
+  console.log("fetching current user on entry")
 };
 
+// function _ensureLoggedIn(nextState, replace, callback) {
+//
+//   function _redirectIfNotLoggedIn() {
+//     if (!CurrentUserStore.isLoggedIn()) {
+//       replace({}, "/login");
+//     }
+//     callback();
+//   }
+//
+//   // CurrentUserStore.userHasBeenFetched() ? _redirectIfNotLoggedIn() : SessionsApiUtil.fetchCurrentUser(_redirectIfNotLoggedIn)
+//   if (CurrentUserStore.userHasBeenFetched()) {
+//     _redirectIfNotLoggedIn();
+//   } else {
+//     SessionsApiUtil.fetchCurrentUser(_redirectIfNotLoggedIn);
+//   }
+// };
+
 var routes = (
-  <Route path="/" component={ App } >
+  <Route path="/" component={ App } onEnter={ _checkCurrentUser } >
     <IndexRoute component={ ArticleIndex } />
     <Route path="article/:article_id" component={ Article } />
 
