@@ -24085,6 +24085,7 @@
 	var ApiUtil = __webpack_require__(228);
 	var HeaderImage = __webpack_require__(231);
 	var ImageStore = __webpack_require__(232);
+	var ArticleEditor = __webpack_require__(254);
 	
 	var History = __webpack_require__(159).History;
 	
@@ -24123,15 +24124,26 @@
 	    this.articleListener.remove();
 	  },
 	
+	  saveToDatabase: function () {
+	    var body = this.state.body;
+	    var article_id = this.state.article.id;
+	    ApiUtil.saveEditedArticle(article_id, body);
+	  },
+	
 	  render: function () {
 	    return React.createElement(
 	      'div',
 	      { className: 'article' },
 	      React.createElement(HeaderImage, { title: this.state.title, image: ImageStore.fetchHeader() }),
 	      React.createElement(
-	        'h1',
-	        { className: 'title' },
-	        this.state.title
+	        'div',
+	        { className: 'title-block group' },
+	        React.createElement(
+	          'h1',
+	          { className: 'title' },
+	          this.state.title
+	        ),
+	        React.createElement(ArticleEditor, null)
 	      ),
 	      React.createElement('article', { className: 'body',
 	        contentEditable: 'false',
@@ -30983,6 +30995,24 @@
 	        console.log("Error with fetching header image");
 	      }
 	    });
+	  },
+	
+	  saveEditedArticle: function (article_id, body) {
+	    console.log("saving changes to article...");
+	    $.ajax({
+	      type: 'PATCH',
+	      url: "/api/articles/" + article_id,
+	      dataType: "json",
+	      data: { article: { body: body } },
+	      success: function (article) {
+	        debugger;
+	        console.log("updated successfully");
+	        ApiActions.addArticle(article);
+	      },
+	      error: function (msg) {
+	        debugger;
+	      }
+	    });
 	  }
 	
 	};
@@ -31888,15 +31918,9 @@
 	    this.forceUpdate();
 	  },
 	
-	  scrolls: function (obj) {
-	    return obj.scrollWidth > 180;
-	  },
-	
 	  handleMouseOver: function (i) {
 	    var $el = $(this.refs["scrollable" + i]);
-	    var sw = $el.scrollWidth;
-	    console.log(sw);
-	    // debugger
+	    console.log(i);
 	  },
 	
 	  render: function () {
@@ -32262,6 +32286,70 @@
 	});
 	
 	module.exports = UserShow;
+
+/***/ },
+/* 254 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ReactRouter = __webpack_require__(159);
+	var ArticleStore = __webpack_require__(207);
+	var ApiUtil = __webpack_require__(228);
+	var HeaderImage = __webpack_require__(231);
+	var ImageStore = __webpack_require__(232);
+	var Article = __webpack_require__(206);
+	
+	var History = __webpack_require__(159).History;
+	
+	// this is the display logic for a single article.
+	
+	var ArticleEditor = React.createClass({
+	  displayName: 'ArticleEditor',
+	
+	  mixins: [History],
+	
+	  getInitialState: function () {
+	    return {
+	      mode: "reading"
+	    };
+	  },
+	
+	  toggleState: function () {
+	    if (this.state.mode === "reading") {
+	      this.setState({ mode: "editing" });
+	      $(".body").attr("contentEditable", "true");
+	    } else {
+	      this.setState({ mode: "reading" });
+	      $(".body").attr("contentEditable", "false");
+	      var ca = ArticleStore.fetchArticle();
+	      var body = $(".body").html();
+	
+	      ApiUtil.saveEditedArticle(ca.id, body);
+	    }
+	  },
+	
+	  handleClick: function () {
+	    this.toggleState();
+	  },
+	
+	  render: function () {
+	    var icon;
+	
+	    if (this.state.mode === "reading") {
+	      icon = React.createElement('i', { className: 'fa fa-pencil' });
+	    } else {
+	      icon = React.createElement('i', { className: 'fa fa-floppy-o' });
+	    }
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'article-editor', onClick: this.handleClick },
+	      icon
+	    );
+	  }
+	});
+	
+	module.exports = ArticleEditor;
 
 /***/ }
 /******/ ]);

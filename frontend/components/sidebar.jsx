@@ -14,15 +14,9 @@ var Sidebar = React.createClass({
     this.forceUpdate();
   },
 
-  scrolls: function (obj) {
-    return obj.scrollWidth > 180;
-  },
-
   handleMouseOver: function (i) {
     var $el = $(this.refs["scrollable" + i]);
-    var sw = $el.scrollWidth;
-    console.log(sw);
-    // debugger
+    console.log(i);
   },
 
   render: function () {
@@ -41,7 +35,7 @@ var Sidebar = React.createClass({
 
       return (
         <div className="sidebar-list-item"
-              key={i}
+             key={i}
              dangerouslySetInnerHTML={{__html: tab}}
              ref={"scrollable" + i}
              onMouseOver={this.handleMouseOver.bind(this, i)}>

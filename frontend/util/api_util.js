@@ -82,6 +82,24 @@ var ApiUtil = {
         console.log("Error with fetching header image");
       }
     });
+  },
+
+  saveEditedArticle: function (article_id, body) {
+    console.log("saving changes to article...");
+    $.ajax({
+      type: 'PATCH',
+      url: "/api/articles/" + article_id,
+      dataType: "json",
+      data: { article: { body: body } },
+      success: function (article) {
+        debugger
+          console.log("updated successfully");
+          ApiActions.addArticle(article);
+      },
+      error: function (msg) {
+        debugger
+      }
+    });
   }
 
 };

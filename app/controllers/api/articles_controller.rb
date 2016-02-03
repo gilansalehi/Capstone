@@ -26,7 +26,7 @@ class Api::ArticlesController < ApplicationController
   def update
     @article = Article.find_by_id(params[:id])
 
-    if @article.update
+    if @article.update(article_params)
       render :show
     else
       render json: @article.errors.full_messages, status: 422
@@ -35,7 +35,7 @@ class Api::ArticlesController < ApplicationController
 
   private
   def article_params
-    params.require(:article).permit(:title, :body, :author_id)
+    params.require(:article).permit(:id, :title, :body, :author_id)
   end
 
 end

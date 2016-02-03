@@ -4,6 +4,7 @@ var ArticleStore = require('../stores/article.js');
 var ApiUtil = require('../util/api_util.js');
 var HeaderImage = require('./header_image.jsx');
 var ImageStore = require('../stores/image_store');
+var ArticleEditor = require('./article_editor');
 
 var History = require('react-router').History;
 
@@ -40,11 +41,19 @@ var Article = React.createClass({
     this.articleListener.remove();
   },
 
+  saveToDatabase: function () {
+    var body = this.state.body;
+    var article_id = this.state.article.id;
+    ApiUtil.saveEditedArticle(article_id, body);
+  },
+
   render: function () {
     return (
       <div className="article">
         <HeaderImage title={this.state.title} image={ImageStore.fetchHeader()}/>
-        <h1 className="title">{this.state.title}</h1>
+        <div className="title-block group">
+          <h1 className="title">{this.state.title}</h1><ArticleEditor />
+        </div>
         <article className="body"
                  contentEditable="false"
                  dangerouslySetInnerHTML={{__html: this.state.body}}>

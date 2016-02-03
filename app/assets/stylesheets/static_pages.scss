@@ -224,6 +224,17 @@ input {
 
 // ARTCILES
 
+.article-editor {
+  display: block;
+  float: left;
+  font-size: 32px;
+  margin: 12px 0 0 30px;
+}
+
+.article-editor:hover {
+  color: #3ad
+}
+
 .infobox {
   display: block;
   float: right;
@@ -254,6 +265,17 @@ a:hover {
   // color: #3da;
   color: #3ad;
   // background: #9de;
+}
+
+.title-block {
+  margin-bottom: 5px;
+  border-bottom: 1px solid #aaa;
+}
+
+.title {
+  display: block;
+  float: left;
+  border-bottom: none;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -355,11 +377,3 @@ th {
   width: 300px;
   margin: auto;
 }
-// .wiki-fetcher-input {
-//   display: block;
-//   padding: 7px;
-//   width: 300px;
-//   border: 1px solid #ccc;
-//   border-radius: 2px;
-//   margin: 3px 0;
-// }
