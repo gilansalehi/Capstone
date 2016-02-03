@@ -9,11 +9,12 @@ class Api::FetchersController < ApplicationController
     title = doc.xpath("//h1//text()").to_s
     body = doc.xpath("//div[@id='bodyContent']")
     fragment = doc.xpath("//div[@id='mw-content-text']/p//text()").to_s[0..300]
+    contents = doc.xpath("//div[@id='toc']//li//a").map{ |link| link.to_s }
     # contents = doc.xpath("//div[@id='toc']//li").map{ |node| node.inner_html }
-    contents = doc.xpath("//div[@id='toc']//li").inner_html.split("\n")
     # test1 = doc.xpath("//div[@id='toc']//li/a").map{ |node| node.text }
     # test2 = doc.xpath("//div[@id='toc']//li/a").map{ |link| link["href"] }
 
+    debugger
 
     @page = Article.new(
       title: title,

@@ -62,16 +62,6 @@ body {
   width: 100%;
 }
 
-.sidebar {
-  display: block;
-  float: left;
-  position: fixed;
-  width: 180px;
-  height: 1080px;
-  z-index: 99;
-  /*background: yellow;*/
-}
-
 .content {
   display: block;
   float: left;

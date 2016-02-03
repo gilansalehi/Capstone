@@ -58,33 +58,45 @@
 }
 
 .sidebar {
-  display: block;
-  float: left;
+  position: fixed;
+  width: 180px;
   height: 100vh;
-  max-width: 180px;
-  // position: fixed;
-  background: #999;
+  z-index: 99;
   color: white;
+  background: #999;
 }
 
-.sidebar-list {
-  display: block;
-  // position: absolute;
-  width: 180px;
+.sidebar-list-item {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 14px;
+  border-bottom: 1px solid #ddd;
+  padding: 5px;
 }
 
 .hiding {
   left: -150px;
 }
 
-.sidebar-list > li {
+.sidebar-list-item a {
+  // display: block;
+  // float: left;
+  // text-align: right;
+  margin-left: 0;
+  transition: margin-left 2s;
   padding: 5px;
-  border-bottom: 1px solid #ddd;
 }
 
-.sidebar-list > li:hover {
+.sidebar-list-item:hover a {
+  // float:right;
+  margin-left: -75%;
+}
+
+.sidebar-list-item:hover {
   background: #666;
 }
+
 
 // WIKI - FETCHER
 

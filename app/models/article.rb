@@ -12,15 +12,16 @@ class Article < ActiveRecord::Base
   def self.create_from_url(url)
     doc = Nokogiri::HTML(open(url))
 
-    #manipulate the nokogiri document to get raw html...
     title = doc.xpath("//h1//text()").to_s
     body = doc.xpath("//div[@id='bodyContent']")
     fragment = doc.xpath("//div[@id='mw-content-text']/p//text()").to_s[0..300]
+    contents = doc.xpath("//div[@id='toc']//li//a").map{ |link| link.to_s }
 
     @page = Article.create!(
       title: title,
       body: body,
       fragment: fragment,
+      table_of_contents: contents,
       author_id: 1
     )
   end

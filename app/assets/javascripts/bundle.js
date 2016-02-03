@@ -31882,15 +31882,26 @@
 	    ArticleStore.addListener(this._onChange);
 	  },
 	
-	  _onChange: function () {},
+	  _onChange: function () {
+	    this.forceUpdate();
+	  },
+	
+	  scrolls: function (obj) {
+	    return obj.scrollWidth > 180;
+	  },
+	
+	  handleMouseOver: function (i) {
+	    var $el = $(this.refs["scrollable" + i]);
+	    var sw = $el.scrollWidth;
+	    console.log(sw);
+	    // debugger
+	  },
 	
 	  render: function () {
 	    var tabs;
 	
-	    debugger;
-	
 	    if (ArticleStore.fetchArticle()) {
-	      tabs = ArticleStore.fetchArticle().table_of_contents;
+	      tabs = JSON.parse(ArticleStore.fetchArticle().table_of_contents);
 	    } else {
 	      tabs = [React.createElement(
 	        'a',
@@ -31902,15 +31913,15 @@
 	        'Search'
 	      )];
 	    }
-	    debugger;
 	
-	    var tabList = tabs.map(function (tab) {
-	      return React.createElement(
-	        'li',
-	        { key: tab },
-	        tab
-	      );
-	    });
+	    var tabList = tabs.map(function (tab, i) {
+	
+	      return React.createElement('div', { className: 'sidebar-list-item',
+	        key: i,
+	        dangerouslySetInnerHTML: { __html: tab },
+	        ref: "scrollable" + i,
+	        onMouseOver: this.handleMouseOver.bind(this, i) });
+	    }.bind(this));
 	
 	    return React.createElement(
 	      'div',

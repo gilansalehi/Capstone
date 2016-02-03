@@ -11,25 +11,42 @@ var Sidebar = React.createClass({
   },
 
   _onChange: function () {
+    this.forceUpdate();
+  },
+
+  scrolls: function (obj) {
+    return obj.scrollWidth > 180;
+  },
+
+  handleMouseOver: function (i) {
+    var $el = $(this.refs["scrollable" + i]);
+    var sw = $el.scrollWidth;
+    console.log(sw);
+    // debugger
   },
 
   render: function () {
     var tabs;
 
-    debugger
-
     if (ArticleStore.fetchArticle()) {
-      tabs = ArticleStore.fetchArticle().table_of_contents;
+      tabs = JSON.parse(ArticleStore.fetchArticle().table_of_contents);
     } else {
-      tabs = [ <a href="#/">Main Page</a>,
-               <a href="#/search">Search</a>
+      tabs = [ <a href='#/'>Main Page</a>,
+               <a href='#/search'>Search</a>
              ];
     }
-    debugger
 
-    var tabList = tabs.map(function (tab) {
-      return <li key={tab}>{tab}</li>;
-    });
+    var tabList = tabs.map(function (tab, i) {
+
+      return (
+        <div className="sidebar-list-item"
+              key={i}
+             dangerouslySetInnerHTML={{__html: tab}}
+             ref={"scrollable" + i}
+             onMouseOver={this.handleMouseOver.bind(this, i)}>
+        </div>
+      );
+    }.bind(this));
 
     return(
     <div className="sidebar group">
