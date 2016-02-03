@@ -21,18 +21,24 @@ var Sidebar = React.createClass({
 
   render: function () {
     var tabs;
-    console.log(this.props.path);
+    // console.log(this.props.path);
+
+    // if (this.props.path.pathname === "/") {
+    // tabs = [ "<a href='#/'>Main Page</a>",
+    //          "<a href='#/search'>Search</a>"
+    //        ];
+    // } else
 
     if (ArticleStore.fetchArticle()) {
       tabs = JSON.parse(ArticleStore.fetchArticle().table_of_contents);
     } else {
-      tabs = [ <a href='#/'>Main Page</a>,
-               <a href='#/search'>Search</a>
-             ];
+      tabs = [
+        <a href='#/'>Main Page</a>,
+        <a href='#/search'>Search</a>
+      ];
     }
-
+    
     var tabList = tabs.map(function (tab, i) {
-
       return (
         <div className="sidebar-list-item"
              key={i}

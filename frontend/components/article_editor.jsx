@@ -5,6 +5,7 @@ var ApiUtil = require('../util/api_util.js');
 var HeaderImage = require('./header_image.jsx');
 var ImageStore = require('../stores/image_store');
 var Article = require('./article');
+var CurrentUserStore = require('../stores/current_user_store');
 
 var History = require('react-router').History;
 
@@ -28,13 +29,17 @@ var ArticleEditor = React.createClass({
       $(".body").attr("contentEditable", "false");
       var ca = ArticleStore.fetchArticle();
       var body = $(".body").html();
-
-      ApiUtil.saveEditedArticle(ca.id, body);
+      var author = CurrentUserStore.currentUser();
+      ApiUtil.saveEditedArticle(ca.id, body, author.id);
     }
   },
 
   handleClick: function () {
-    this.toggleState();
+    if (CurrentUserStore.currentUser()) {
+      this.toggleState();
+    } else {
+      alert("Please log in.");
+    }
   },
 
   render: function () {

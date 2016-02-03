@@ -1,13 +1,9 @@
 # TODO:
-// DO EDITING
-// have button that will give every element the contenteditable="true" tag.
-// when that button is clicked, it changes to a save icon so changes can be saved to the database.
-
 // how to route to articles by title rather than id?
 // fetching article should list current user as author (or "0")
 // DO IMAGES
 // fix article rendering to include header image
-// create a rescue for routing errors that says "that page does not exist, would you like to create it?"
+// RESCUE ROUTING ERRORS that says "that page does not exist, would you like to create it?"
 // remove "edit section" when scraping wikipedia
 // get index to tile properly
 // format content table, link to sidebar

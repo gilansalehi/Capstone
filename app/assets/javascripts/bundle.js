@@ -31925,7 +31925,13 @@
 	
 	  render: function () {
 	    var tabs;
-	    console.log(this.props.path);
+	    // console.log(this.props.path);
+	
+	    // if (this.props.path.pathname === "/") {
+	    // tabs = [ "<a href='#/'>Main Page</a>",
+	    //          "<a href='#/search'>Search</a>"
+	    //        ];
+	    // } else
 	
 	    if (ArticleStore.fetchArticle()) {
 	      tabs = JSON.parse(ArticleStore.fetchArticle().table_of_contents);
@@ -31942,7 +31948,6 @@
 	    }
 	
 	    var tabList = tabs.map(function (tab, i) {
-	
 	      return React.createElement('div', { className: 'sidebar-list-item',
 	        key: i,
 	        dangerouslySetInnerHTML: { __html: tab },
@@ -32298,6 +32303,7 @@
 	var HeaderImage = __webpack_require__(231);
 	var ImageStore = __webpack_require__(232);
 	var Article = __webpack_require__(206);
+	var CurrentUserStore = __webpack_require__(240);
 	
 	var History = __webpack_require__(159).History;
 	
@@ -32323,13 +32329,17 @@
 	      $(".body").attr("contentEditable", "false");
 	      var ca = ArticleStore.fetchArticle();
 	      var body = $(".body").html();
-	
-	      ApiUtil.saveEditedArticle(ca.id, body);
+	      var author = CurrentUserStore.currentUser();
+	      ApiUtil.saveEditedArticle(ca.id, body, author.id);
 	    }
 	  },
 	
 	  handleClick: function () {
-	    this.toggleState();
+	    if (CurrentUserStore.currentUser()) {
+	      this.toggleState();
+	    } else {
+	      alert("Please log in.");
+	    }
 	  },
 	
 	  render: function () {
