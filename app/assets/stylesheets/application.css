@@ -68,6 +68,7 @@ body {
   position: fixed;
   width: 180px;
   height: 1080px;
+  z-index: 99;
   /*background: yellow;*/
 }
 

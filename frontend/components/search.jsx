@@ -58,9 +58,13 @@ var Search = React.createClass({
             <input type="submit" className="submit" value="Search!" />
           </label>
         </form>
-        Displaying { SearchResultsStore.all().length } of { SearchResultsStore.meta().total_count }
 
-        <a onClick={ this.nextPage }> Next ></a>
+        <div className="search-info">
+          <a onClick={ this.previousPage }><i className="fa fa-chevron-left"></i>&nbsp;</a>
+          Displaying { SearchResultsStore.all().length } of { SearchResultsStore.meta().total_count || 0 }
+          <a onClick={ this.nextPage }>&nbsp;<i className="fa fa-chevron-right"></i></a>
+        </div>
+
         <ul className="articles-index">{ searchResults }</ul>
       </div>
     );

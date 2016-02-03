@@ -26,8 +26,6 @@ CurrentUserStore.userHasBeenFetched = function () {
 CurrentUserStore.__onDispatch = function (payload) {
   switch (payload.actionType) {
     case CurrentUserConstants.RECEIVE_CURRENT_USER:
-      console.log("current user store received current user");
-      console.log(payload.currentUser);
       _currentUserHasBeenFetched = true;
       _currentUser = payload.currentUser;
       CurrentUserStore.__emitChange();

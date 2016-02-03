@@ -26,9 +26,8 @@ var NavBar = React.createClass({
   },
 
   render: function () {
-    console.log("rendering nav bar");
     var currentUser = this.state.currentUser;
-    console.log("NavBar thinks currentuser is " + currentUser);
+
     return (
       <nav className="nav-bar group">
         <div className="nav-header group">
@@ -50,8 +49,6 @@ var CurrentUser = React.createClass({
     var link;
     var user = this.props.currentUser;
 
-    console.log(user.id);
-    console.log(user.username);
     if (user.username) {
       link = <div><i className="fa fa-user"></i>{" " + user.username}</div>;
     } else {
@@ -71,9 +68,6 @@ var LogInOut = React.createClass({
 
   render: function () {
     var user = this.props.currentUser;
-
-    console.log(user.id);
-    console.log(user.username);
 
     if (user.username) {
       links = (<a href="#/" onClick={this.handleLogout}>Log out</a>);

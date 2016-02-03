@@ -53,17 +53,17 @@
 	var History = __webpack_require__(159).History;
 	
 	var Article = __webpack_require__(206);
-	var ArticleIndex = __webpack_require__(235);
+	var ArticleIndex = __webpack_require__(233);
 	var ArticleStore = __webpack_require__(207);
-	var NavBar = __webpack_require__(238);
-	var Sidebar = __webpack_require__(248);
-	var SessionForm = __webpack_require__(249);
-	var UserForm = __webpack_require__(250);
-	var UserShow = __webpack_require__(255);
-	var Search = __webpack_require__(243);
+	var NavBar = __webpack_require__(236);
+	var Sidebar = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./components/sidebar.jsx\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var SessionForm = __webpack_require__(247);
+	var UserForm = __webpack_require__(248);
+	var UserShow = __webpack_require__(253);
+	var Search = __webpack_require__(241);
 	
-	var CurrentUserStore = __webpack_require__(242);
-	var SessionsApiUtil = __webpack_require__(239);
+	var CurrentUserStore = __webpack_require__(240);
+	var SessionsApiUtil = __webpack_require__(237);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -93,7 +93,6 @@
 	
 	function _checkCurrentUser() {
 	  SessionsApiUtil.fetchCurrentUser();
-	  console.log("fetching current user on entry");
 	};
 	
 	// function _ensureLoggedIn(nextState, replace, callback) {
@@ -115,8 +114,8 @@
 	
 	var routes = React.createElement(
 	  Route,
-	  { path: '/', component: App, onEnter: _checkCurrentUser },
-	  React.createElement(IndexRoute, { component: ArticleIndex }),
+	  { path: '/', component: App },
+	  React.createElement(IndexRoute, { component: ArticleIndex, onEnter: _checkCurrentUser }),
 	  React.createElement(Route, { path: 'article/:article_id', component: Article }),
 	  React.createElement(Route, { path: 'login', component: SessionForm }),
 	  React.createElement(Route, { path: 'users/new', component: UserForm }),
@@ -24083,9 +24082,9 @@
 	var React = __webpack_require__(1);
 	var ReactRouter = __webpack_require__(159);
 	var ArticleStore = __webpack_require__(207);
-	var ApiUtil = __webpack_require__(230);
-	var HeaderImage = __webpack_require__(233);
-	var ImageStore = __webpack_require__(234);
+	var ApiUtil = __webpack_require__(228);
+	var HeaderImage = __webpack_require__(231);
+	var ImageStore = __webpack_require__(232);
 	
 	var History = __webpack_require__(159).History;
 	
@@ -24146,8 +24145,8 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var Store = __webpack_require__(208).Store;
-	var ArticleConstants = __webpack_require__(226);
-	var AppDispatcher = __webpack_require__(227);
+	var ArticleConstants = __webpack_require__(224);
+	var AppDispatcher = __webpack_require__(225);
 	
 	var ArticleStore = new Store(AppDispatcher);
 	
@@ -24224,7 +24223,7 @@
 	
 	module.exports.Container = __webpack_require__(209);
 	module.exports.MapStore = __webpack_require__(213);
-	module.exports.Mixin = __webpack_require__(225);
+	module.exports.Mixin = __webpack_require__(223);
 	module.exports.ReduceStore = __webpack_require__(214);
 	module.exports.Store = __webpack_require__(215);
 
@@ -24626,7 +24625,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var FluxReduceStore = __webpack_require__(214);
-	var Immutable = __webpack_require__(224);
+	var Immutable = __webpack_require__(222);
 	
 	var invariant = __webpack_require__(211);
 	
@@ -24777,7 +24776,7 @@
 	
 	var FluxStore = __webpack_require__(215);
 	
-	var abstractMethod = __webpack_require__(223);
+	var abstractMethod = __webpack_require__(221);
 	var invariant = __webpack_require__(211);
 	
 	var FluxReduceStore = (function (_FluxStore) {
@@ -25086,8 +25085,8 @@
 	var EmitterSubscription = __webpack_require__(218);
 	var EventSubscriptionVendor = __webpack_require__(220);
 	
-	var emptyFunction = __webpack_require__(222);
-	var invariant = __webpack_require__(221);
+	var emptyFunction = __webpack_require__(15);
+	var invariant = __webpack_require__(13);
 	
 	/**
 	 * @class BaseEventEmitter
@@ -25387,7 +25386,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(221);
+	var invariant = __webpack_require__(13);
 	
 	/**
 	 * EventSubscriptionVendor stores a set of EventSubscriptions that are
@@ -25481,105 +25480,6 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
-	 * Copyright 2013-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule invariant
-	 */
-	
-	'use strict';
-	
-	/**
-	 * Use invariant() to assert state which your program assumes to be true.
-	 *
-	 * Provide sprintf-style format (only %s is supported) and arguments
-	 * to provide information about what broke and what you were
-	 * expecting.
-	 *
-	 * The invariant message will be stripped in production, but the invariant
-	 * will remain to ensure logic does not differ in production.
-	 */
-	
-	function invariant(condition, format, a, b, c, d, e, f) {
-	  if (process.env.NODE_ENV !== 'production') {
-	    if (format === undefined) {
-	      throw new Error('invariant requires an error message argument');
-	    }
-	  }
-	
-	  if (!condition) {
-	    var error;
-	    if (format === undefined) {
-	      error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
-	    } else {
-	      var args = [a, b, c, d, e, f];
-	      var argIndex = 0;
-	      error = new Error(format.replace(/%s/g, function () {
-	        return args[argIndex++];
-	      }));
-	      error.name = 'Invariant Violation';
-	    }
-	
-	    error.framesToPop = 1; // we don't care about invariant's own frame
-	    throw error;
-	  }
-	}
-	
-	module.exports = invariant;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
-
-/***/ },
-/* 222 */
-/***/ function(module, exports) {
-
-	/**
-	 * Copyright 2013-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule emptyFunction
-	 */
-	
-	"use strict";
-	
-	function makeEmptyFunction(arg) {
-	  return function () {
-	    return arg;
-	  };
-	}
-	
-	/**
-	 * This function accepts and discards inputs; it has no side effects. This is
-	 * primarily useful idiomatically for overridable function endpoints which
-	 * always need to be callable, since JS lacks a null-call idiom ala Cocoa.
-	 */
-	function emptyFunction() {}
-	
-	emptyFunction.thatReturns = makeEmptyFunction;
-	emptyFunction.thatReturnsFalse = makeEmptyFunction(false);
-	emptyFunction.thatReturnsTrue = makeEmptyFunction(true);
-	emptyFunction.thatReturnsNull = makeEmptyFunction(null);
-	emptyFunction.thatReturnsThis = function () {
-	  return this;
-	};
-	emptyFunction.thatReturnsArgument = function (arg) {
-	  return arg;
-	};
-	
-	module.exports = emptyFunction;
-
-/***/ },
-/* 223 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(process) {/**
 	 * Copyright (c) 2014-2015, Facebook, Inc.
 	 * All rights reserved.
 	 *
@@ -25603,7 +25503,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 224 */
+/* 222 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -30590,7 +30490,7 @@
 	}));
 
 /***/ },
-/* 225 */
+/* 223 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -30713,7 +30613,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 226 */
+/* 224 */
 /***/ function(module, exports) {
 
 	var ArticleConstants = {
@@ -30725,15 +30625,15 @@
 	module.exports = ArticleConstants;
 
 /***/ },
-/* 227 */
+/* 225 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Dispatcher = __webpack_require__(228).Dispatcher;
+	var Dispatcher = __webpack_require__(226).Dispatcher;
 	
 	module.exports = new Dispatcher();
 
 /***/ },
-/* 228 */
+/* 226 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -30745,11 +30645,11 @@
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 	
-	module.exports.Dispatcher = __webpack_require__(229);
+	module.exports.Dispatcher = __webpack_require__(227);
 
 
 /***/ },
-/* 229 */
+/* 227 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -30986,10 +30886,10 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 230 */
+/* 228 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var ApiActions = __webpack_require__(231);
+	var ApiActions = __webpack_require__(229);
 	
 	var ApiUtil = {
 	  fetchArticles: function (articles) {
@@ -31086,12 +30986,12 @@
 	module.exports = ApiUtil;
 
 /***/ },
-/* 231 */
+/* 229 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var AppDispatcher = __webpack_require__(227);
-	var ArticleConstants = __webpack_require__(226);
-	var ImageConstants = __webpack_require__(232);
+	var AppDispatcher = __webpack_require__(225);
+	var ArticleConstants = __webpack_require__(224);
+	var ImageConstants = __webpack_require__(230);
 	
 	// var ApiActions = {
 	//   receiveAll: function(articles){
@@ -31134,7 +31034,7 @@
 	module.exports = ApiActions;
 
 /***/ },
-/* 232 */
+/* 230 */
 /***/ function(module, exports) {
 
 	var ImageConstants = {
@@ -31144,13 +31044,13 @@
 	module.exports = ImageConstants;
 
 /***/ },
-/* 233 */
+/* 231 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var ReactRouter = __webpack_require__(159);
 	var ArticleStore = __webpack_require__(207);
-	var ApiUtil = __webpack_require__(230);
+	var ApiUtil = __webpack_require__(228);
 	var History = __webpack_require__(159).History;
 	
 	var HeaderImage = React.createClass({
@@ -31180,7 +31080,6 @@
 	  },
 	
 	  render: function () {
-	    console.log(this.props.image);
 	    return React.createElement('img', { src: this.props.image, className: 'header-image' });
 	  }
 	});
@@ -31188,12 +31087,12 @@
 	module.exports = HeaderImage;
 
 /***/ },
-/* 234 */
+/* 232 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Store = __webpack_require__(208).Store;
-	var ImageConstants = __webpack_require__(232);
-	var AppDispatcher = __webpack_require__(227);
+	var ImageConstants = __webpack_require__(230);
+	var AppDispatcher = __webpack_require__(225);
 	
 	var ImageStore = new Store(AppDispatcher);
 	
@@ -31220,7 +31119,7 @@
 	module.exports = ImageStore;
 
 /***/ },
-/* 235 */
+/* 233 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// This is the Homepage that displays what's new and various other things
@@ -31230,11 +31129,11 @@
 	var ReactRouter = __webpack_require__(159);
 	
 	var ArticleStore = __webpack_require__(207);
-	var ApiUtil = __webpack_require__(230);
+	var ApiUtil = __webpack_require__(228);
 	
 	var Article = __webpack_require__(206);
-	var ArticleFragment = __webpack_require__(236);
-	var WikiFetcher = __webpack_require__(237);
+	var ArticleFragment = __webpack_require__(234);
+	var WikiFetcher = __webpack_require__(235);
 	
 	var History = __webpack_require__(159).History;
 	
@@ -31309,14 +31208,14 @@
 	module.exports = ArticleIndex;
 
 /***/ },
-/* 236 */
+/* 234 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var ReactRouter = __webpack_require__(159);
 	var ArticleStore = __webpack_require__(207);
-	var ApiUtil = __webpack_require__(230);
-	var ApiActions = __webpack_require__(231);
+	var ApiUtil = __webpack_require__(228);
+	var ApiActions = __webpack_require__(229);
 	var History = __webpack_require__(159).History;
 	
 	// This file is a helper to render article teasers on the homepage.
@@ -31378,13 +31277,13 @@
 	module.exports = ArticleFragment;
 
 /***/ },
-/* 237 */
+/* 235 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var ReactRouter = __webpack_require__(159);
 	var ArticleStore = __webpack_require__(207);
-	var ApiUtil = __webpack_require__(230);
+	var ApiUtil = __webpack_require__(228);
 	var History = __webpack_require__(159).History;
 	
 	// this is the display logic for a single article.
@@ -31432,7 +31331,7 @@
 	module.exports = WikiFetcher;
 
 /***/ },
-/* 238 */
+/* 236 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// this file will replace the current logic above yield in the application
@@ -31440,9 +31339,9 @@
 	
 	var React = __webpack_require__(1);
 	var ReactRouter = __webpack_require__(159);
-	var SessionsApiUtil = __webpack_require__(239);
-	var CurrentUserStore = __webpack_require__(242);
-	var Search = __webpack_require__(243);
+	var SessionsApiUtil = __webpack_require__(237);
+	var CurrentUserStore = __webpack_require__(240);
+	var Search = __webpack_require__(241);
 	
 	var History = __webpack_require__(159).History;
 	
@@ -31465,9 +31364,8 @@
 	  },
 	
 	  render: function () {
-	    console.log("rendering nav bar");
 	    var currentUser = this.state.currentUser;
-	    console.log("NavBar thinks currentuser is " + currentUser);
+	
 	    return React.createElement(
 	      'nav',
 	      { className: 'nav-bar group' },
@@ -31511,8 +31409,6 @@
 	    var link;
 	    var user = this.props.currentUser;
 	
-	    console.log(user.id);
-	    console.log(user.username);
 	    if (user.username) {
 	      link = React.createElement(
 	        'div',
@@ -31541,9 +31437,6 @@
 	
 	  render: function () {
 	    var user = this.props.currentUser;
-	
-	    console.log(user.id);
-	    console.log(user.username);
 	
 	    if (user.username) {
 	      links = React.createElement(
@@ -31637,10 +31530,10 @@
 	module.exports = NavBar;
 
 /***/ },
-/* 239 */
+/* 237 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var CurrentUserActions = __webpack_require__(240);
+	var CurrentUserActions = __webpack_require__(238);
 	
 	var SessionsApiUtil = {
 	  login: function (credentials, success) {
@@ -31696,11 +31589,11 @@
 	module.exports = SessionsApiUtil;
 
 /***/ },
-/* 240 */
+/* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var AppDispatcher = __webpack_require__(227);
-	var CurrentUserConstants = __webpack_require__(241);
+	var AppDispatcher = __webpack_require__(225);
+	var CurrentUserConstants = __webpack_require__(239);
 	
 	var CurrentUserActions = {
 	
@@ -31722,7 +31615,7 @@
 	module.exports = CurrentUserActions;
 
 /***/ },
-/* 241 */
+/* 239 */
 /***/ function(module, exports) {
 
 	var CurrentUserConstants = {
@@ -31733,11 +31626,11 @@
 	module.exports = CurrentUserConstants;
 
 /***/ },
-/* 242 */
+/* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var AppDispatcher = __webpack_require__(227);
-	var CurrentUserConstants = __webpack_require__(241);
+	var AppDispatcher = __webpack_require__(225);
+	var CurrentUserConstants = __webpack_require__(239);
 	var Store = __webpack_require__(208).Store;
 	
 	var _currentUser = false;
@@ -31764,8 +31657,6 @@
 	CurrentUserStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
 	    case CurrentUserConstants.RECEIVE_CURRENT_USER:
-	      console.log("current user store received current user");
-	      console.log(payload.currentUser);
 	      _currentUserHasBeenFetched = true;
 	      _currentUser = payload.currentUser;
 	      CurrentUserStore.__emitChange();
@@ -31783,15 +31674,15 @@
 	module.exports = CurrentUserStore;
 
 /***/ },
-/* 243 */
+/* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var SearchResultsStore = __webpack_require__(244);
-	var SearchApiUtil = __webpack_require__(246);
-	var ArticleFragment = __webpack_require__(236);
-	var HeaderImage = __webpack_require__(233);
-	var ImageStore = __webpack_require__(234);
+	var SearchResultsStore = __webpack_require__(242);
+	var SearchApiUtil = __webpack_require__(244);
+	var ArticleFragment = __webpack_require__(234);
+	var HeaderImage = __webpack_require__(231);
+	var ImageStore = __webpack_require__(232);
 	
 	var Search = React.createClass({
 	  displayName: 'Search',
@@ -31854,14 +31745,25 @@
 	          React.createElement('input', { type: 'submit', className: 'submit', value: 'Search!' })
 	        )
 	      ),
-	      'Displaying ',
-	      SearchResultsStore.all().length,
-	      ' of ',
-	      SearchResultsStore.meta().total_count,
 	      React.createElement(
-	        'a',
-	        { onClick: this.nextPage },
-	        ' Next >'
+	        'div',
+	        { className: 'search-info' },
+	        React.createElement(
+	          'a',
+	          { onClick: this.previousPage },
+	          React.createElement('i', { className: 'fa fa-chevron-left' }),
+	          ' '
+	        ),
+	        'Displaying ',
+	        SearchResultsStore.all().length,
+	        ' of ',
+	        SearchResultsStore.meta().total_count || 0,
+	        React.createElement(
+	          'a',
+	          { onClick: this.nextPage },
+	          ' ',
+	          React.createElement('i', { className: 'fa fa-chevron-right' })
+	        )
 	      ),
 	      React.createElement(
 	        'ul',
@@ -31876,12 +31778,12 @@
 	module.exports = Search;
 
 /***/ },
-/* 244 */
+/* 242 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Store = __webpack_require__(208).Store;
-	var AppDispatcher = __webpack_require__(227);
-	var SearchConstants = __webpack_require__(245);
+	var AppDispatcher = __webpack_require__(225);
+	var SearchConstants = __webpack_require__(243);
 	
 	var SearchResultsStore = new Store(AppDispatcher);
 	
@@ -31909,7 +31811,7 @@
 	module.exports = SearchResultsStore;
 
 /***/ },
-/* 245 */
+/* 243 */
 /***/ function(module, exports) {
 
 	var SearchConstants = {
@@ -31919,10 +31821,10 @@
 	module.exports = SearchConstants;
 
 /***/ },
-/* 246 */
+/* 244 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var SearchActions = __webpack_require__(247);
+	var SearchActions = __webpack_require__(245);
 	
 	var SearchApiUtil = {
 	  search: function (query, page) {
@@ -31941,11 +31843,11 @@
 	module.exports = SearchApiUtil;
 
 /***/ },
-/* 247 */
+/* 245 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var AppDispatcher = __webpack_require__(227);
-	var SearchConstants = __webpack_require__(245);
+	var AppDispatcher = __webpack_require__(225);
+	var SearchConstants = __webpack_require__(243);
 	
 	var SearchActions = {
 	  receiveResults: function (data) {
@@ -31960,48 +31862,13 @@
 	module.exports = SearchActions;
 
 /***/ },
-/* 248 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var ReactRouter = __webpack_require__(159);
-	
-	var History = __webpack_require__(159).History;
-	
-	var Sidebar = React.createClass({
-	  displayName: 'Sidebar',
-	
-	  render: function () {
-	    var pageHeaders = ["header 1", "header 2", "header 3", "etc"];
-	    var headerList = pageHeaders.map(function (header) {
-	      return React.createElement(
-	        'li',
-	        { key: header },
-	        header
-	      );
-	    });
-	
-	    return React.createElement(
-	      'div',
-	      { className: 'sidebar group' },
-	      React.createElement(
-	        'ul',
-	        { className: 'sidebar-list' },
-	        headerList
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = Sidebar;
-
-/***/ },
-/* 249 */
+/* 246 */,
+/* 247 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var History = __webpack_require__(159).History;
-	var SessionsApiUtil = __webpack_require__(239);
+	var SessionsApiUtil = __webpack_require__(237);
 	
 	var SessionForm = React.createClass({
 	  displayName: 'SessionForm',
@@ -32093,13 +31960,13 @@
 	module.exports = SessionForm;
 
 /***/ },
-/* 250 */
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var History = __webpack_require__(159).History;
-	var UserStore = __webpack_require__(251);
-	var UsersApiUtil = __webpack_require__(253);
+	var UserStore = __webpack_require__(249);
+	var UsersApiUtil = __webpack_require__(251);
 	// var SessionsApiUtil = require('./../../util/sessions_api_util');
 	
 	var UserForm = React.createClass({
@@ -32188,11 +32055,11 @@
 	module.exports = UserForm;
 
 /***/ },
-/* 251 */
+/* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var AppDispatcher = __webpack_require__(227);
-	var UserConstants = __webpack_require__(252);
+	var AppDispatcher = __webpack_require__(225);
+	var UserConstants = __webpack_require__(250);
 	var Store = __webpack_require__(208).Store;
 	
 	var _users = [];
@@ -32226,7 +32093,7 @@
 	module.exports = UsersStore;
 
 /***/ },
-/* 252 */
+/* 250 */
 /***/ function(module, exports) {
 
 	var UserConstants = {
@@ -32236,11 +32103,11 @@
 	module.exports = UserConstants;
 
 /***/ },
-/* 253 */
+/* 251 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var UserActions = __webpack_require__(254);
-	var CurrentUserActions = __webpack_require__(240);
+	var UserActions = __webpack_require__(252);
+	var CurrentUserActions = __webpack_require__(238);
 	
 	var UsersApiUtil = {
 	  fetchUser: function (id) {
@@ -32278,11 +32145,11 @@
 	module.exports = UsersApiUtil;
 
 /***/ },
-/* 254 */
+/* 252 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var AppDispatcher = __webpack_require__(227);
-	var UserConstants = __webpack_require__(252);
+	var AppDispatcher = __webpack_require__(225);
+	var UserConstants = __webpack_require__(250);
 	
 	var UserActions = {
 	  receiveUser: function (user) {
@@ -32296,12 +32163,12 @@
 	module.exports = UserActions;
 
 /***/ },
-/* 255 */
+/* 253 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var UsersStore = __webpack_require__(251);
-	var UsersApiUtil = __webpack_require__(253);
+	var UsersStore = __webpack_require__(249);
+	var UsersApiUtil = __webpack_require__(251);
 	
 	var UserShow = React.createClass({
 	  displayName: 'UserShow',

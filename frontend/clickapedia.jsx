@@ -40,7 +40,6 @@ var App = React.createClass({
 
 function _checkCurrentUser() {
   SessionsApiUtil.fetchCurrentUser();
-  console.log("fetching current user on entry")
 };
 
 // function _ensureLoggedIn(nextState, replace, callback) {
@@ -61,8 +60,8 @@ function _checkCurrentUser() {
 // };
 
 var routes = (
-  <Route path="/" component={ App } onEnter={ _checkCurrentUser } >
-    <IndexRoute component={ ArticleIndex } />
+  <Route path="/" component={ App } >
+    <IndexRoute component={ ArticleIndex } onEnter={ _checkCurrentUser } />
     <Route path="article/:article_id" component={ Article } />
 
     <Route path="login" component={ SessionForm } />

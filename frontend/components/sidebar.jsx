@@ -1,9 +1,19 @@
 var React = require('react');
 var ReactRouter = require('react-router');
+var ArticleStore = require('./stores/article');
 
 var History = require('react-router').History;
 
 var Sidebar = React.createClass({
+
+  componentDidMount: function () {
+    ArticleStore.addListenter(this._onChange);
+  },
+
+  _onChange: function () {
+    this.setState({ headers: ArticleStore._currentArticle().contents })
+    debugger
+  }
 
   render: function () {
     var pageHeaders = ["header 1", "header 2", "header 3", "etc"];
