@@ -15,6 +15,7 @@ class Api::FetchersController < ApplicationController
       title: title,
       body: body,
       fragment: fragment,
+      table_of_contents: contents,
       author_id: 1
     )
 

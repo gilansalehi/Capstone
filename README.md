@@ -1,6 +1,5 @@
 # TODO:
-// create user doesn't automatically log user in React frontend.  Fix this.
-// DO SEARCH
+// fetching article should list current user as author (or "0")
 // DO EDITING
 // DO IMAGES
 // fix article rendering to include header image
@@ -8,6 +7,32 @@
 // remove "edit section" when scraping wikipedia
 // get index to tile properly
 // format content table, link to sidebar
+
+Main page
+Contents
+Featured content
+Current events
+Random article
+Donate to Wikipedia
+Wikipedia store
+Interaction
+Help
+About Wikipedia
+Community portal
+Recent changes
+Contact page
+Tools
+What links here
+Related changes
+Upload file
+Special pages
+Permanent link
+Page information
+Wikidata item
+Print/export
+Create a book
+Download as PDF
+Printable version
 
 # Clickapedia
 

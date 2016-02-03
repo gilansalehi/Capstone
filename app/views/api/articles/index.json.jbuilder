@@ -1,3 +1,3 @@
 json.array!(@articles) do |article|
-  json.extract!(article, :id, :title, :body, :fragment, :author_id, :updated_at)
+  json.extract!(article, :id, :title, :body, :fragment, :author_id, :table_of_contents, :updated_at)
 end

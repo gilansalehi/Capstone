@@ -56,7 +56,7 @@
 	var ArticleIndex = __webpack_require__(233);
 	var ArticleStore = __webpack_require__(207);
 	var NavBar = __webpack_require__(236);
-	var Sidebar = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./components/sidebar.jsx\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var Sidebar = __webpack_require__(246);
 	var SessionForm = __webpack_require__(247);
 	var UserForm = __webpack_require__(248);
 	var UserShow = __webpack_require__(253);
@@ -24204,6 +24204,10 @@
 	  return _articles.slice(k);
 	};
 	
+	ArticleStore.currentArticle = function () {
+	  return _currentArticle;
+	};
+	
 	module.exports = ArticleStore;
 	
 	// Masonry
@@ -31862,7 +31866,67 @@
 	module.exports = SearchActions;
 
 /***/ },
-/* 246 */,
+/* 246 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ReactRouter = __webpack_require__(159);
+	var ArticleStore = __webpack_require__(207);
+	
+	var History = __webpack_require__(159).History;
+	
+	var Sidebar = React.createClass({
+	  displayName: 'Sidebar',
+	
+	  componentDidMount: function () {
+	    ArticleStore.addListener(this._onChange);
+	  },
+	
+	  _onChange: function () {},
+	
+	  render: function () {
+	    var tabs;
+	
+	    debugger;
+	
+	    if (ArticleStore.fetchArticle()) {
+	      tabs = ArticleStore.fetchArticle().table_of_contents;
+	    } else {
+	      tabs = [React.createElement(
+	        'a',
+	        { href: '#/' },
+	        'Main Page'
+	      ), React.createElement(
+	        'a',
+	        { href: '#/search' },
+	        'Search'
+	      )];
+	    }
+	    debugger;
+	
+	    var tabList = tabs.map(function (tab) {
+	      return React.createElement(
+	        'li',
+	        { key: tab },
+	        tab
+	      );
+	    });
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'sidebar group' },
+	      React.createElement(
+	        'ul',
+	        { className: 'sidebar-list' },
+	        tabList
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = Sidebar;
+
+/***/ },
 /* 247 */
 /***/ function(module, exports, __webpack_require__) {
 

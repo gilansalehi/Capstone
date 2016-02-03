@@ -1,30 +1,40 @@
 var React = require('react');
 var ReactRouter = require('react-router');
-var ArticleStore = require('./stores/article');
+var ArticleStore = require('../stores/article');
 
 var History = require('react-router').History;
 
 var Sidebar = React.createClass({
 
   componentDidMount: function () {
-    ArticleStore.addListenter(this._onChange);
+    ArticleStore.addListener(this._onChange);
   },
 
   _onChange: function () {
-    this.setState({ headers: ArticleStore._currentArticle().contents })
-    debugger
-  }
+  },
 
   render: function () {
-    var pageHeaders = ["header 1", "header 2", "header 3", "etc"];
-    var headerList = pageHeaders.map(function (header) {
-      return <li key={header}>{header}</li>;
+    var tabs;
+
+    debugger
+
+    if (ArticleStore.fetchArticle()) {
+      tabs = ArticleStore.fetchArticle().table_of_contents;
+    } else {
+      tabs = [ <a href="#/">Main Page</a>,
+               <a href="#/search">Search</a>
+             ];
+    }
+    debugger
+
+    var tabList = tabs.map(function (tab) {
+      return <li key={tab}>{tab}</li>;
     });
 
     return(
     <div className="sidebar group">
       <ul className="sidebar-list">
-        {headerList}
+        {tabList}
       </ul>
     </div>
     );

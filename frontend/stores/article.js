@@ -51,6 +51,10 @@ ArticleStore.lastNArticles = function (n) {
   return _articles.slice(k);
 };
 
+ArticleStore.currentArticle = function () {
+  return _currentArticle;
+};
+
 module.exports = ArticleStore;
 
 
