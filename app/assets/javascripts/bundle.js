@@ -79,7 +79,7 @@
 	        React.createElement(
 	          'div',
 	          { className: 'sidebar' },
-	          React.createElement(Sidebar, null)
+	          React.createElement(Sidebar, { path: this.props.location })
 	        ),
 	        React.createElement(
 	          'content',
@@ -24133,7 +24133,9 @@
 	        { className: 'title' },
 	        this.state.title
 	      ),
-	      React.createElement('article', { className: 'body', dangerouslySetInnerHTML: { __html: this.state.body } })
+	      React.createElement('article', { className: 'body',
+	        contentEditable: 'false',
+	        dangerouslySetInnerHTML: { __html: this.state.body } })
 	    );
 	  }
 	});
@@ -31899,6 +31901,7 @@
 	
 	  render: function () {
 	    var tabs;
+	    console.log(this.props.path);
 	
 	    if (ArticleStore.fetchArticle()) {
 	      tabs = JSON.parse(ArticleStore.fetchArticle().table_of_contents);

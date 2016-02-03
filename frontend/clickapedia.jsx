@@ -26,7 +26,7 @@ var App = React.createClass({
         <NavBar />
         <div className="main group">
           <div className="sidebar">
-            <Sidebar />
+            <Sidebar path={this.props.location} />
           </div>
           <content className="content group">
             {this.props.children}

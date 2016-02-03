@@ -27,6 +27,7 @@ var Sidebar = React.createClass({
 
   render: function () {
     var tabs;
+    console.log(this.props.path);
 
     if (ArticleStore.fetchArticle()) {
       tabs = JSON.parse(ArticleStore.fetchArticle().table_of_contents);

@@ -45,7 +45,10 @@ var Article = React.createClass({
       <div className="article">
         <HeaderImage title={this.state.title} image={ImageStore.fetchHeader()}/>
         <h1 className="title">{this.state.title}</h1>
-        <article className="body" dangerouslySetInnerHTML={{__html: this.state.body}}></article>
+        <article className="body"
+                 contentEditable="false"
+                 dangerouslySetInnerHTML={{__html: this.state.body}}>
+        </article>
       </div>
     );
   }
