@@ -24086,6 +24086,7 @@
 	var HeaderImage = __webpack_require__(233);
 	var ImageStore = __webpack_require__(234);
 	var ArticleEditor = __webpack_require__(235);
+	var UploadButton = __webpack_require__(257);
 	
 	var History = __webpack_require__(159).History;
 	
@@ -24143,7 +24144,8 @@
 	          { className: 'title' },
 	          this.state.title
 	        ),
-	        React.createElement(ArticleEditor, null)
+	        React.createElement(ArticleEditor, null),
+	        React.createElement(UploadButton, null)
 	      ),
 	      React.createElement('article', { className: 'body',
 	        contentEditable: 'false',
@@ -31312,7 +31314,7 @@
 	
 	    return React.createElement(
 	      'div',
-	      { className: 'article-editor', onClick: this.handleClick },
+	      { className: 'article-editor text', onClick: this.handleClick },
 	      icon
 	    );
 	  }
@@ -32457,6 +32459,116 @@
 	});
 	
 	module.exports = UserShow;
+
+/***/ },
+/* 257 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ApiUtil = __webpack_require__(230);
+	
+	var UploadButton = React.createClass({
+	  displayName: 'UploadButton',
+	
+	  renderModal: function () {
+	    $("#modal").addClass("is-active");
+	  },
+	
+	  handleClick: function () {
+	    if (CurrentUserStore.currentUser()) {
+	      this.renderModal();
+	    } else {
+	      alert("Please log in.");
+	    }
+	  },
+	
+	  render: function () {
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'article-editor image' },
+	      React.createElement('i', { className: 'fa fa-file-image-o', onClick: this.handleClick }),
+	      React.createElement(UploadForm, null)
+	    );
+	  }
+	});
+	
+	var UploadForm = React.createClass({
+	  displayName: 'UploadForm',
+	
+	  getInitialState: function () {
+	    return { title: "", imageFile: null, imageUrl: "", article_id: this.props.article_id };
+	  },
+	
+	  changeTitle: function (e) {
+	    this.setState({ title: e.currentTarget.value });
+	  },
+	
+	  changeFile: function (e) {
+	    var reader = new FileReader();
+	    var file = e.currentTarget.files[0];
+	
+	    reader.onloadend = function () {
+	      this.setState({ imageFile: file, imageUrl: reader.result });
+	    }.bind(this);
+	
+	    if (file) {
+	      reader.readAsDataURL(file); // will trigger a load end event when it completes, and invoke reader.onloadend
+	    } else {
+	        this.setState({ imageFile: null, imageUrl: "" });
+	      }
+	  },
+	
+	  handleSubmit: function (e) {
+	    e.preventDefault();
+	
+	    var formData = new FormData();
+	    debugger;
+	    // formData.append("post[title]", this.state.title);
+	    formData.append("article[image]", this.state.imageFile);
+	    //
+	    // ApiUtil.saveEditedArticle(formData, this.resetForm);
+	  },
+	
+	  resetForm: function () {
+	    this.setState({ title: "", imageFile: null, imageUrl: "" });
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { id: 'modal', className: 'modal' },
+	      React.createElement(
+	        'h2',
+	        null,
+	        'Upload Image'
+	      ),
+	      React.createElement(
+	        'form',
+	        { onSubmit: this.handleSubmit },
+	        React.createElement(
+	          'label',
+	          null,
+	          'Title',
+	          React.createElement('input', { type: 'text', onChange: this.changeTitle, value: this.state.title })
+	        ),
+	        React.createElement(
+	          'label',
+	          null,
+	          React.createElement('input', { type: 'file', onChange: this.changeFile })
+	        ),
+	        React.createElement('img', { className: 'preview-image', src: this.state.imageUrl }),
+	        React.createElement(
+	          'button',
+	          null,
+	          'Submit'
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = UploadButton;
 
 /***/ }
 /******/ ]);

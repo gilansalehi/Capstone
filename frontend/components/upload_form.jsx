@@ -1,10 +1,35 @@
 var React = require('react');
-var ApiUtil = require('../../util/api_util.js');
+var ApiUtil = require('../util/api_util.js');
+
+var UploadButton = React.createClass({
+
+  renderModal: function () {
+    $("#modal").addClass("is-active");
+  },
+
+  handleClick: function () {
+    if (CurrentUserStore.currentUser()) {
+      this.renderModal();
+    } else {
+      alert("Please log in.");
+    }
+  },
+
+  render: function () {
+
+    return (
+      <div className="article-editor image">
+        <i className="fa fa-file-image-o" onClick={this.handleClick}></i>
+        <UploadForm />
+      </div>
+    );
+  }
+});
 
 var UploadForm = React.createClass({
 
   getInitialState: function() {
-    return { title: "", imageFile: null, imageUrl: ""};
+    return { title: "", imageFile: null, imageUrl: "", article_id: this.props.article_id };
   },
 
   changeTitle: function(e) {
@@ -30,11 +55,11 @@ var UploadForm = React.createClass({
     e.preventDefault();
 
     var formData = new FormData();
-
+    debugger
     // formData.append("post[title]", this.state.title);
-    // formData.append("post[image]", this.state.imageFile);
+    formData.append("article[image]", this.state.imageFile);
     //
-    // ApiUtil.createPost(formData, this.resetForm);
+    // ApiUtil.saveEditedArticle(formData, this.resetForm);
   },
 
   resetForm: function() {
@@ -43,8 +68,8 @@ var UploadForm = React.createClass({
 
   render: function() {
     return (
-      <div>
-        <h2>New Post</h2>
+      <div id="modal" className="modal">
+        <h2>Upload Image</h2>
 
         <form onSubmit={this.handleSubmit}>
 
@@ -65,4 +90,4 @@ var UploadForm = React.createClass({
   }
 });
 
-module.exports = PostForm;
+module.exports = UploadButton;

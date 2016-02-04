@@ -1,4 +1,6 @@
 # TODO:
+// Render image upload modal form.  Adjust header image fetcher accordingly.
+// fix sidebar css.
 // how to route to articles by title rather than id?
 // fetching article should list current user as author (or "0")
 // DO IMAGES

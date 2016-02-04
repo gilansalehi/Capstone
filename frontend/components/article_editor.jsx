@@ -52,7 +52,7 @@ var ArticleEditor = React.createClass({
     }
 
     return (
-      <div className="article-editor" onClick={this.handleClick}>{icon}</div>
+      <div className="article-editor text" onClick={this.handleClick}>{icon}</div>
     );
   }
 });

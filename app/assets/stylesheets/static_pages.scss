@@ -64,6 +64,8 @@
   z-index: 99;
   color: white;
   background: #999;
+  direction: rtl;
+  overflow: auto;
 }
 
 .sidebar-list-item {
@@ -72,6 +74,7 @@
   text-overflow: ellipsis;
   font-size: 14px;
   border-bottom: 1px solid #ddd;
+  direction: ltr;
   padding: 5px;
 }
 
@@ -90,7 +93,7 @@
 
 .sidebar-list-item:hover a {
   // float:right;
-  margin-left: -100%;
+  margin-left: -75%;
 }
 
 .sidebar-list-item:hover {
@@ -376,4 +379,24 @@ th {
   display: block;
   width: 300px;
   margin: auto;
+}
+
+// UPLOAD MODAL
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 300px;
+  padding: 20px;
+  margin-left: -160px;
+  transform: translateY(-50%);
+  background: white;
+  border: 1px solid #ccc;
+  z-index: 99;
+}
+
+.modal.is-active {
+  display: block;
 }

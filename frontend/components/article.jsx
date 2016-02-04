@@ -5,6 +5,7 @@ var ApiUtil = require('../util/api_util.js');
 var HeaderImage = require('./header_image.jsx');
 var ImageStore = require('../stores/image_store');
 var ArticleEditor = require('./article_editor');
+var UploadButton = require('./upload_form');
 
 var History = require('react-router').History;
 
@@ -52,7 +53,7 @@ var Article = React.createClass({
       <div className="article">
         <HeaderImage title={this.state.title} image={ImageStore.fetchHeader()}/>
         <div className="title-block group">
-          <h1 className="title">{this.state.title}</h1><ArticleEditor />
+          <h1 className="title">{this.state.title}</h1><ArticleEditor /><UploadButton />
         </div>
         <article className="body"
                  contentEditable="false"
