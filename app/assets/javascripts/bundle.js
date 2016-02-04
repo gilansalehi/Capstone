@@ -32640,12 +32640,6 @@
 	
 	var History = __webpack_require__(159).History;
 	
-	// this is the display logic for the main page.
-	// The main page should render an Article Fragment for the 20 most recent
-	// articles in the database.  Style the Article Fragments to be divs with fixed
-	// widths and heights, float them to the left with a margin of 20px, making them
-	// main page index a cool tilework of articles.
-	
 	var Rescue = React.createClass({
 	  displayName: 'Rescue',
 	
