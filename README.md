@@ -1,6 +1,6 @@
 # TODO:
-// Render image upload modal form.  Adjust header image fetcher accordingly.
 // fix sidebar css.
+// fix application.yml for o-auth
 // how to route to articles by title rather than id?
 // fetching article should list current user as author (or "0")
 // DO IMAGES

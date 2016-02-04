@@ -386,10 +386,11 @@ th {
 .modal {
   display: none;
   position: fixed;
+  font-size: 16px;
   top: 50%;
   left: 50%;
-  width: 300px;
-  padding: 20px;
+  width: 320px;
+  padding: 10px;
   margin-left: -160px;
   transform: translateY(-50%);
   background: white;
@@ -399,4 +400,49 @@ th {
 
 .modal.is-active {
   display: block;
+}
+
+.modal-header {
+  display:block;
+  margin: auto;
+  text-align: center;
+}
+
+.submit-button {
+  display: block;
+  width: 316px;
+  background: #00af89;
+  text-align: center;
+  color: white;
+  border: 1px solid #00af89;
+  font-weight: bold;
+}
+
+.submit-button:hover {
+  background: #008c6d;
+  border: 1px solid #008c6d;
+  cursor: pointer;
+}
+
+.cancel-button {
+  display: block;
+  background: #ff6666;
+  border: 1px solid #ff6666;
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  border-radius: 2px;
+  padding: 7px;
+}
+
+.cancel-button:hover {
+  background: #ff4444;
+  border: 1px solid #ff4444;
+}
+
+.preview-image {
+  display: block;
+  margin: auto;
+  width: 310px;
+  height: auto;
 }

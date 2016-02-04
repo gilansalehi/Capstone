@@ -5,6 +5,10 @@ class ApplicationController < ActionController::Base
 
   helper_method :current_user, :signed_in?
 
+  def rescue
+    redirect_to root_url + "#/rescue"
+  end
+
   private
 
   def current_user
@@ -29,5 +33,4 @@ class ApplicationController < ActionController::Base
   def require_signed_in!
     redirect to new_session_url unless signed_in?
   end
-
 end

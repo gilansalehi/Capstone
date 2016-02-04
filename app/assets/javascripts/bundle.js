@@ -61,6 +61,7 @@
 	var UserForm = __webpack_require__(251);
 	var UserShow = __webpack_require__(256);
 	var Search = __webpack_require__(244);
+	var Rescue = __webpack_require__(258);
 	
 	var CurrentUserStore = __webpack_require__(236);
 	var SessionsApiUtil = __webpack_require__(242);
@@ -120,7 +121,8 @@
 	  React.createElement(Route, { path: 'login', component: SessionForm }),
 	  React.createElement(Route, { path: 'users/new', component: UserForm }),
 	  React.createElement(Route, { path: 'users/:id', component: UserShow }),
-	  React.createElement(Route, { path: 'search', component: Search })
+	  React.createElement(Route, { path: 'search', component: Search }),
+	  React.createElement(Route, { path: 'rescue', component: Rescue })
 	);
 	
 	// var cd = function () {
@@ -24100,7 +24102,8 @@
 	  getInitialState: function () {
 	    return {
 	      title: "",
-	      body: "Article Body..."
+	      body: "Article Body...",
+	      image: "http://www.angelafloydschools.com/wp-content/uploads/placeholder-car1.png"
 	    };
 	  },
 	
@@ -24112,7 +24115,12 @@
 	
 	  __onArticleChange: function () {
 	    var article = ArticleStore.fetchArticle();
-	    ApiUtil.fetchHeaderImage(article.title);
+	
+	    if (article.image_url) {
+	      this.setState({ image: article.image_url });
+	    } else {
+	      ApiUtil.fetchHeaderImage(article.title);
+	    }
 	    // var image = ImageStore.fetchHeader();
 	    this.setState({ title: article.title, body: article.body });
 	  },
@@ -24135,7 +24143,7 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'article' },
-	      React.createElement(HeaderImage, { title: this.state.title, image: ImageStore.fetchHeader() }),
+	      React.createElement(HeaderImage, { title: this.state.title, image: this.state.image }),
 	      React.createElement(
 	        'div',
 	        { className: 'title-block group' },
@@ -31055,9 +31063,13 @@
 	        ApiActions.addArticle(data);
 	      },
 	      error: function (message) {
-	        // console.log(message);
+	        console.log("No such article found on Wikipedia.");
 	      }
 	    });
+	  },
+	
+	  setHeaderImage: function (image) {
+	    ApiActions.addHeaderImage(image);
 	  },
 	
 	  fetchHeaderImage: function (title) {
@@ -31069,8 +31081,6 @@
 	        fixedTitle += title[i];
 	      }
 	    }
-	
-	    console.log(fixedTitle);
 	
 	    var host = "http://www.bing.com/images/search?";
 	    var page = "pq=" + fixedTitle;
@@ -31096,17 +31106,18 @@
 	    });
 	  },
 	
-	  saveEditedArticle: function (article_id, body) {
-	    console.log("saving changes to article...");
+	  saveEditedArticle: function (id, formData, callback) {
+	
 	    $.ajax({
 	      type: 'PATCH',
-	      url: "/api/articles/" + article_id,
+	      url: "/api/articles/" + id,
 	      dataType: "json",
-	      data: { article: { body: body } },
+	      data: formData,
+	      processData: false,
+	      contentType: false,
 	      success: function (article) {
-	        debugger;
-	        console.log("updated successfully");
 	        ApiActions.addArticle(article);
+	        callback && callback();
 	      },
 	      error: function (msg) {
 	        debugger;
@@ -31195,22 +31206,7 @@
 	    return { url: "http://www.angelafloydschools.com/wp-content/uploads/placeholder-car1.png" };
 	  },
 	
-	  // componentDidMount: function () {
-	  //   ArticleStore.addListener(this.__onChange);
-	  // },
-	  //
-	  // __onChange: function () {
-	  //   console.log("header __onChange");
-	  //   if (this.props.title) {
-	  //     this.setState({ url: url });
-	  //   }
-	  // },
-	
 	  componentWillReceiveProps: function (newProps) {
-	    // console.log("header didReceiveProps");
-	    // if (newProps.title) {
-	    //   ApiUtil.fetchHeaderImage(newProps.title);
-	    // }
 	    this.forceUpdate();
 	  },
 	
@@ -31291,7 +31287,11 @@
 	      var ca = ArticleStore.fetchArticle();
 	      var body = $(".body").html();
 	      var author = CurrentUserStore.currentUser();
-	      ApiUtil.saveEditedArticle(ca.id, body, author.id);
+	      var formData = new FormData();
+	      formData.append("article[body]", body);
+	      formData.append("article[author_id]", author.id);
+	
+	      ApiUtil.saveEditedArticle(ca.id, formData);
 	    }
 	  },
 	
@@ -31424,7 +31424,7 @@
 	  },
 	
 	  __onChange: function () {
-	    var articles = ArticleStore.lastNArticles(11);
+	    var articles = ArticleStore.lastNArticles(12);
 	    this.setState({ title: new Date(), articles: articles });
 	  },
 	
@@ -32088,23 +32088,27 @@
 	
 	  handleMouseOver: function (i) {
 	    var $el = $(this.refs["scrollable" + i]);
-	    console.log(i);
 	  },
 	
 	  render: function () {
 	    var tabs;
-	    // console.log(this.props.path);
+	    var tabsList;
 	
-	    // if (this.props.path.pathname === "/") {
-	    // tabs = [ "<a href='#/'>Main Page</a>",
-	    //          "<a href='#/search'>Search</a>"
-	    //        ];
-	    // } else
+	    if (this.props.path.pathname.slice(0, 9) === "/article/") {
+	      if (ArticleStore.fetchArticle()) {
+	        tabsList = JSON.parse(ArticleStore.fetchArticle().table_of_contents);
 	
-	    if (ArticleStore.fetchArticle()) {
-	      tabs = JSON.parse(ArticleStore.fetchArticle().table_of_contents);
+	        tabs = tabsList.map(function (tab, i) {
+	          return React.createElement('div', { className: 'sidebar-list-item',
+	            key: i,
+	            dangerouslySetInnerHTML: { __html: tab },
+	            ref: "scrollable" + i,
+	            onMouseOver: this.handleMouseOver.bind(this, i) });
+	        }.bind(this));
+	      }
 	    } else {
-	      tabs = [React.createElement(
+	
+	      tabsList = [React.createElement(
 	        'a',
 	        { href: '#/' },
 	        'Main Page'
@@ -32113,15 +32117,15 @@
 	        { href: '#/search' },
 	        'Search'
 	      )];
-	    }
 	
-	    var tabList = tabs.map(function (tab, i) {
-	      return React.createElement('div', { className: 'sidebar-list-item',
-	        key: i,
-	        dangerouslySetInnerHTML: { __html: tab },
-	        ref: "scrollable" + i,
-	        onMouseOver: this.handleMouseOver.bind(this, i) });
-	    }.bind(this));
+	      tabs = tabsList.map(function (tab, i) {
+	        return React.createElement(
+	          'div',
+	          { className: 'sidebar-list-item', key: i },
+	          tab
+	        );
+	      });
+	    }
 	
 	    return React.createElement(
 	      'div',
@@ -32129,11 +32133,37 @@
 	      React.createElement(
 	        'ul',
 	        { className: 'sidebar-list' },
-	        tabList
+	        tabs
 	      )
 	    );
 	  }
 	});
+	
+	// var SidebarItem = React.createClass({
+	//   componentDidMount: function () {
+	//     $(".scroll_on_hover").mouseover(function() {
+	//       $(this).removeClass("ellipsis");
+	//       var maxscroll = $(this).width();
+	//       var speed = maxscroll * 15;
+	//       $(this).animate({
+	//           scrollLeft: maxscroll
+	//       }, speed, "linear");
+	//     });
+	//
+	//     $(".scroll_on_hover").mouseout(function() {
+	//       $(this).stop();
+	//       $(this).addClass("ellipsis");
+	//       $(this).animate({
+	//           scrollLeft: 0
+	//       }, 'slow');
+	//     });
+	//   },
+	//
+	//   render: function () {
+	//
+	//   }
+	//
+	// });
 	
 	module.exports = Sidebar;
 
@@ -32466,6 +32496,7 @@
 
 	var React = __webpack_require__(1);
 	var ApiUtil = __webpack_require__(230);
+	var ArticleStore = __webpack_require__(207);
 	
 	var UploadButton = React.createClass({
 	  displayName: 'UploadButton',
@@ -32486,8 +32517,12 @@
 	
 	    return React.createElement(
 	      'div',
-	      { className: 'article-editor image' },
-	      React.createElement('i', { className: 'fa fa-file-image-o', onClick: this.handleClick }),
+	      { className: 'image-upload-icon-and-modal' },
+	      React.createElement(
+	        'div',
+	        { className: 'article-editor image' },
+	        React.createElement('i', { className: 'fa fa-file-image-o', onClick: this.handleClick })
+	      ),
 	      React.createElement(UploadForm, null)
 	    );
 	  }
@@ -32500,8 +32535,8 @@
 	    return { title: "", imageFile: null, imageUrl: "", article_id: this.props.article_id };
 	  },
 	
-	  changeTitle: function (e) {
-	    this.setState({ title: e.currentTarget.value });
+	  changeUrl: function (e) {
+	    this.setState({ url: e.currentTarget.value });
 	  },
 	
 	  changeFile: function (e) {
@@ -32522,16 +32557,24 @@
 	  handleSubmit: function (e) {
 	    e.preventDefault();
 	
-	    var formData = new FormData();
-	    debugger;
-	    // formData.append("post[title]", this.state.title);
-	    formData.append("article[image]", this.state.imageFile);
-	    //
-	    // ApiUtil.saveEditedArticle(formData, this.resetForm);
+	    var ca = ArticleStore.fetchArticle();
+	    var formData = new FormData(); // HOW DO I PASS THE ARTICLE ID AS AN ATTR?
+	
+	    if (this.state.url) {
+	      formData.append("article[image]", this.state.url);
+	    } else {
+	      formData.append("article[image]", this.state.imageFile);
+	    }
+	    ApiUtil.saveEditedArticle(ca.id, formData, this.resetForm);
+	    this.closeModal();
 	  },
 	
 	  resetForm: function () {
 	    this.setState({ title: "", imageFile: null, imageUrl: "" });
+	  },
+	
+	  closeModal: function () {
+	    $("#modal").removeClass("is-active");
 	  },
 	
 	  render: function () {
@@ -32539,36 +32582,90 @@
 	      'div',
 	      { id: 'modal', className: 'modal' },
 	      React.createElement(
-	        'h2',
-	        null,
-	        'Upload Image'
-	      ),
-	      React.createElement(
 	        'form',
 	        { onSubmit: this.handleSubmit },
 	        React.createElement(
 	          'label',
-	          null,
-	          'Title',
-	          React.createElement('input', { type: 'text', onChange: this.changeTitle, value: this.state.title })
+	          { className: 'modal-header' },
+	          'Upload Image'
 	        ),
+	        React.createElement('br', null),
+	        React.createElement('img', { className: 'preview-image', src: this.state.imageUrl }),
+	        React.createElement('br', null),
 	        React.createElement(
 	          'label',
-	          null,
-	          React.createElement('input', { type: 'file', onChange: this.changeFile })
+	          { 'for': 'img-url-input' },
+	          'by url'
 	        ),
-	        React.createElement('img', { className: 'preview-image', src: this.state.imageUrl }),
+	        React.createElement('br', null),
+	        React.createElement('input', { id: 'img-url-input',
+	          type: 'text',
+	          onChange: this.changeUrl,
+	          value: this.state.url,
+	          placeholder: 'Enter the url of your image (optional)' }),
+	        React.createElement('br', null),
 	        React.createElement(
-	          'button',
-	          null,
-	          'Submit'
-	        )
+	          'label',
+	          { 'for': 'img-file-input' },
+	          'by file'
+	        ),
+	        React.createElement('br', null),
+	        React.createElement('input', { id: 'img-file-input', type: 'file', onChange: this.changeFile }),
+	        React.createElement('br', null),
+	        React.createElement('input', { className: 'submit-button', type: 'submit', value: 'Submit' }),
+	        React.createElement('input', { className: 'cancel-button', value: 'Cancel', onClick: this.closeModal })
 	      )
 	    );
 	  }
 	});
 	
 	module.exports = UploadButton;
+
+/***/ },
+/* 258 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// This is the Homepage that displays what's new and various other things
+	// users might find interesting.
+	
+	var React = __webpack_require__(1);
+	var ReactRouter = __webpack_require__(159);
+	
+	var ArticleStore = __webpack_require__(207);
+	var ApiUtil = __webpack_require__(230);
+	
+	var Article = __webpack_require__(206);
+	var ArticleFragment = __webpack_require__(239);
+	var WikiFetcher = __webpack_require__(240);
+	
+	var History = __webpack_require__(159).History;
+	
+	// this is the display logic for the main page.
+	// The main page should render an Article Fragment for the 20 most recent
+	// articles in the database.  Style the Article Fragments to be divs with fixed
+	// widths and heights, float them to the left with a margin of 20px, making them
+	// main page index a cool tilework of articles.
+	
+	var Rescue = React.createClass({
+	  displayName: 'Rescue',
+	
+	  mixins: [History],
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'rescue' },
+	      React.createElement(
+	        'p',
+	        null,
+	        'The article you are looking for is not in the database. Help us out by creating it!'
+	      ),
+	      React.createElement(WikiFetcher, null)
+	    );
+	  }
+	});
+	
+	module.exports = Rescue;
 
 /***/ }
 /******/ ]);

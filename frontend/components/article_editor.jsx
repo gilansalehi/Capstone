@@ -30,7 +30,11 @@ var ArticleEditor = React.createClass({
       var ca = ArticleStore.fetchArticle();
       var body = $(".body").html();
       var author = CurrentUserStore.currentUser();
-      ApiUtil.saveEditedArticle(ca.id, body, author.id);
+      var formData = new FormData();
+      formData.append("article[body]", body);
+      formData.append("article[author_id]", author.id);
+      
+      ApiUtil.saveEditedArticle(ca.id, formData);
     }
   },
 

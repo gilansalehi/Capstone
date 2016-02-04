@@ -15,4 +15,5 @@ Rails.application.routes.draw do
     get "search", to: "utils#search"
   end
 
+  get "*path", to: "application#rescue"
 end

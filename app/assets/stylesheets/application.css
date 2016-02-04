@@ -88,6 +88,7 @@ body {
   left: 180px;
   top: 0;
   z-index: -1;
+  -webkit-mask-image: -webkit-gradient(linear, left 85%, left bottom, from(rgba(0,0,0,1)), to(rgba(255,255,255,0)));
 }
 
 .search-page {

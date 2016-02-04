@@ -1,5 +1,6 @@
 var React = require('react');
 var ApiUtil = require('../util/api_util.js');
+var ArticleStore = require('../stores/article');
 
 var UploadButton = React.createClass({
 
@@ -18,10 +19,12 @@ var UploadButton = React.createClass({
   render: function () {
 
     return (
-      <div className="article-editor image">
-        <i className="fa fa-file-image-o" onClick={this.handleClick}></i>
+      <div className="image-upload-icon-and-modal">
+        <div className="article-editor image">
+          <i className="fa fa-file-image-o" onClick={this.handleClick}></i>
+        </div>
         <UploadForm />
-      </div>
+    </div>
     );
   }
 });
@@ -32,8 +35,8 @@ var UploadForm = React.createClass({
     return { title: "", imageFile: null, imageUrl: "", article_id: this.props.article_id };
   },
 
-  changeTitle: function(e) {
-    this.setState({ title: e.currentTarget.value });
+  changeUrl: function(e) {
+    this.setState({ url: e.currentTarget.value });
   },
 
   changeFile: function(e) {
@@ -54,35 +57,48 @@ var UploadForm = React.createClass({
   handleSubmit: function(e) {
     e.preventDefault();
 
-    var formData = new FormData();
-    debugger
-    // formData.append("post[title]", this.state.title);
-    formData.append("article[image]", this.state.imageFile);
-    //
-    // ApiUtil.saveEditedArticle(formData, this.resetForm);
+    var ca = ArticleStore.fetchArticle();
+    var formData = new FormData(); // HOW DO I PASS THE ARTICLE ID AS AN ATTR?
+
+    if (this.state.url) {
+      formData.append("article[image]", this.state.url);
+    } else {
+      formData.append("article[image]", this.state.imageFile);
+    }
+    ApiUtil.saveEditedArticle(ca.id, formData, this.resetForm);
+    this.closeModal();
   },
 
   resetForm: function() {
     this.setState({title: "", imageFile: null, imageUrl: ""});
   },
 
+  closeModal: function () {
+    $("#modal").removeClass("is-active");
+  },
+
   render: function() {
     return (
       <div id="modal" className="modal">
-        <h2>Upload Image</h2>
-
         <form onSubmit={this.handleSubmit}>
+          <label className="modal-header">Upload Image</label><br></br>
 
-          <label>Title
-            <input type="text" onChange={this.changeTitle} value={this.state.title} />
-          </label>
+          <img className="preview-image" src={this.state.imageUrl}/><br></br>
 
-          <label>
-            <input type="file" onChange={this.changeFile} />
-          </label>
+          <label for="img-url-input">by url</label><br></br>
+          <input id="img-url-input"
+                   type="text"
+                   onChange={this.changeUrl}
+                   value={this.state.url}
+                   placeholder="Enter the url of your image (optional)"/>
+          <br></br>
 
-          <img className="preview-image" src={this.state.imageUrl}/>
-          <button>Submit</button>
+          <label for="img-file-input">by file</label><br></br>
+          <input id="img-file-input" type="file" onChange={this.changeFile} />
+          <br></br>
+
+          <input className="submit-button" type="submit" value="Submit" />
+          <input className="cancel-button" value="Cancel" onClick={this.closeModal} />
         </form>
 
       </div>

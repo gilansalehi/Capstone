@@ -18,6 +18,7 @@ var Article = React.createClass({
     return ({
       title: "",
       body: "Article Body...",
+      image: "http://www.angelafloydschools.com/wp-content/uploads/placeholder-car1.png"
     });
   },
 
@@ -29,7 +30,12 @@ var Article = React.createClass({
 
   __onArticleChange: function () {
     var article = ArticleStore.fetchArticle();
-    ApiUtil.fetchHeaderImage(article.title);
+
+    if (article.image_url) {
+      this.setState({ image: article.image_url });
+    } else {
+      ApiUtil.fetchHeaderImage(article.title);
+    }
     // var image = ImageStore.fetchHeader();
     this.setState({ title: article.title, body: article.body });
   },
@@ -51,7 +57,7 @@ var Article = React.createClass({
   render: function () {
     return (
       <div className="article">
-        <HeaderImage title={this.state.title} image={ImageStore.fetchHeader()}/>
+        <HeaderImage title={this.state.title} image={this.state.image}/>
         <div className="title-block group">
           <h1 className="title">{this.state.title}</h1><ArticleEditor /><UploadButton />
         </div>

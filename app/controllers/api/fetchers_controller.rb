@@ -38,4 +38,9 @@ class Api::FetchersController < ApplicationController
     render :image
   end
 
+  def rescue
+    debugger
+
+  end
+
 end

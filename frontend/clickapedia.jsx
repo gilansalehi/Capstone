@@ -14,7 +14,8 @@ var Sidebar = require('./components/sidebar.jsx');
 var SessionForm = require('./components/sessions/new.jsx');
 var UserForm = require('./components/users/new.jsx');
 var UserShow = require('./components/users/users_show.jsx');
-var Search = require('./components/search')
+var Search = require('./components/search');
+var Rescue = require('./components/rescue');
 
 var CurrentUserStore = require('./stores/current_user_store');
 var SessionsApiUtil = require('./util/sessions_api_util');
@@ -68,6 +69,7 @@ var routes = (
     <Route path="users/new" component={ UserForm } />
     <Route path="users/:id" component={ UserShow } />
     <Route path="search" component={ Search } />
+    <Route path="rescue" component={ Rescue } />
   </Route>
 );
 

@@ -9,22 +9,7 @@ var HeaderImage = React.createClass({
     return { url: "http://www.angelafloydschools.com/wp-content/uploads/placeholder-car1.png" };
   },
 
-  // componentDidMount: function () {
-  //   ArticleStore.addListener(this.__onChange);
-  // },
-  //
-  // __onChange: function () {
-  //   console.log("header __onChange");
-  //   if (this.props.title) {
-  //     this.setState({ url: url });
-  //   }
-  // },
-
   componentWillReceiveProps: function (newProps) {
-    // console.log("header didReceiveProps");
-    // if (newProps.title) {
-    //   ApiUtil.fetchHeaderImage(newProps.title);
-    // }
     this.forceUpdate();
   },
 

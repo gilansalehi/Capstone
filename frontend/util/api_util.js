@@ -46,9 +46,13 @@ var ApiUtil = {
         ApiActions.addArticle(data);
       },
       error: function (message) {
-        // console.log(message);
+        console.log("No such article found on Wikipedia.");
       }
     });
+  },
+
+  setHeaderImage: function (image) {
+    ApiActions.addHeaderImage(image);
   },
 
   fetchHeaderImage: function (title) {
@@ -57,8 +61,6 @@ var ApiUtil = {
       if (title[i] === " ") { fixedTitle += "%20"; }
       else { fixedTitle += title[i]; }
     }
-
-    console.log(fixedTitle);
 
     var host = "http://www.bing.com/images/search?";
     var page = "pq=" + fixedTitle;
@@ -84,17 +86,18 @@ var ApiUtil = {
     });
   },
 
-  saveEditedArticle: function (article_id, body) {
-    console.log("saving changes to article...");
+  saveEditedArticle: function (id, formData, callback) {
+
     $.ajax({
       type: 'PATCH',
-      url: "/api/articles/" + article_id,
+      url: "/api/articles/" + id,
       dataType: "json",
-      data: { article: { body: body } },
+      data: formData,
+      processData: false,
+      contentType: false,
       success: function (article) {
-        debugger
-          console.log("updated successfully");
-          ApiActions.addArticle(article);
+        ApiActions.addArticle(article);
+        callback && callback();
       },
       error: function (msg) {
         debugger
