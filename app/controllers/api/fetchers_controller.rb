@@ -14,8 +14,6 @@ class Api::FetchersController < ApplicationController
     # test1 = doc.xpath("//div[@id='toc']//li/a").map{ |node| node.text }
     # test2 = doc.xpath("//div[@id='toc']//li/a").map{ |link| link["href"] }
 
-    debugger
-
     @page = Article.new(
       title: title,
       body: body,

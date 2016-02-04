@@ -4,6 +4,9 @@ class Article < ActiveRecord::Base
   include PgSearch
   multisearchable against: [:title, :body, :author]
 
+  has_attached_file :image, default_url: "placeholder.jpg"
+  validates_attachment_content_type :image, content_type: /\Aimage\/.*\Z/
+
   validates :title, :body, :author_id, presence: true
   validates :title, uniqueness: true
 

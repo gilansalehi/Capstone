@@ -182,3 +182,15 @@ to show them off for everyone.
       vandalizing the articles of high-level contributors.
 - [ ] STAR WARS STYLE: Using CSS wizardry, create a view mode that will tilt
       transform, and scroll the article to look like the Star Wars opening crawl.
+
+A. set things up locally.
+1. Gemfile
+2. model
+3. rails g paperclip modelname attachmentname
+4. migrate
+
+u = User.new(userfields... header_image: File.open(path to file.))
+
+B. then do AWS set up
+S3 2 bucket US standard dev bucket and production bucket
+IAM

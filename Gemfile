@@ -28,7 +28,10 @@ gem 'nokogiri'
 gem 'pg_search'
 gem 'kaminari'
 gem 'omniauth-facebook'
+gem 'paperclip'
 gem 'figaro'
+gem 'aws-sdk', '~> 1.6'
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 group :production do
