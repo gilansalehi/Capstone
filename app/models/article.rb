@@ -35,4 +35,12 @@ class Article < ActiveRecord::Base
     return @whats_new
   end
 
+  def self.create_blank_article(title)
+    @article = Article.create!(
+      title: title,
+      body: "",
+      author_id: current_user.id
+    )
+  end
+
 end
