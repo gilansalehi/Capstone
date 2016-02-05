@@ -1,5 +1,6 @@
 # TODO:
 // fix sidebar css.
+// amend article fragments so the index doesn't pull the WHOLE article.
 // fix application.yml for o-auth
 // remove "edit section" when scraping wikipedia
 // get index to tile properly
