@@ -32647,7 +32647,7 @@
 	  mixins: [History],
 	
 	  render: function () {
-	    debugger;
+	
 	    return React.createElement(
 	      'div',
 	      { className: 'rescue' },
@@ -32656,7 +32656,11 @@
 	        null,
 	        'The article you are looking for is not in the database. Help us out by creating it!'
 	      ),
-	      React.createElement(WikiFetcher, null)
+	      React.createElement(
+	        'div',
+	        { className: 'wiki-fetcher' },
+	        React.createElement(WikiFetcher, null)
+	      )
 	    );
 	  }
 	});
