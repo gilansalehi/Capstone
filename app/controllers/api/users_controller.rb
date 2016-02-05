@@ -8,9 +8,10 @@ class Api::UsersController < ApplicationController
       render "api/articles/show"
     else
       @article = Article.create!(
-        title: @user.username,
+        title: @user.username + " (user)",
         body: "Tell us about yourself!",
-        author_id: @user.id
+        author_id: @user.id,
+        table_of_contents: [""]
       )
       render "api/articles/show"
     end

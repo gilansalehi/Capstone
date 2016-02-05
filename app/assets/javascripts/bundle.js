@@ -31122,8 +31122,13 @@
 	      type: 'GET',
 	      url: '/api/users/' + id,
 	      dataType: 'json',
-	      success: function () {},
-	      error: function () {}
+	      success: function (article) {
+	        debugger;
+	        ApiActions.addArticle(article);
+	      },
+	      error: function (msg) {
+	        debugger;
+	      }
 	    });
 	  }
 	
@@ -31802,7 +31807,7 @@
 	  displayName: 'CurrentUser',
 	
 	  goToUserPage: function () {
-	    ApiUtil.asdf;
+	    ApiUtil.goToUserPage(this.props.currentUser.id);
 	  },
 	
 	  render: function () {

@@ -126,11 +126,12 @@ var ApiUtil = {
       type: 'GET',
       url: '/api/users/' + id,
       dataType: 'json',
-      success: function () {
-
+      success: function (article) {
+        debugger
+        ApiActions.addArticle(article);
       },
-      error: function () {
-
+      error: function (msg) {
+        debugger
       }
     });
   }

@@ -46,7 +46,7 @@ var NavBar = React.createClass({
 
 var CurrentUser = React.createClass({
   goToUserPage: function () {
-    ApiUtil.asdf
+    ApiUtil.goToUserPage(this.props.currentUser.id);
   },
 
   render: function () {
