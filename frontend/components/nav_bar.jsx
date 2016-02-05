@@ -45,14 +45,23 @@ var NavBar = React.createClass({
 });
 
 var CurrentUser = React.createClass({
+  goToUserPage: function () {
+    ApiUtil.asdf
+  },
+
   render: function () {
     var link;
     var user = this.props.currentUser;
 
     if (user.username) {
-      link = <div><i className="fa fa-user"></i>{" " + user.username}</div>;
+      link = <div>
+        <a onClick={this.goToUserPage}>
+          <i className="fa fa-user"></i>
+          {" " + user.username}
+        </a>
+      </div>;
     } else {
-      link = <div></div>;
+      link = <div><a href="#/login">Log in</a></div>;
     }
 
     return (
@@ -72,7 +81,7 @@ var LogInOut = React.createClass({
     if (user.username) {
       links = (<a href="#/" onClick={this.handleLogout}>Log out</a>);
     } else {
-      links = <a href="#/login">Log in</a>;
+      links = <a href="#/users/new">Sign up</a>;
     }
 
     return (

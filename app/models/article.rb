@@ -12,6 +12,11 @@ class Article < ActiveRecord::Base
 
   belongs_to :author, class_name: "User"
 
+  def self.find_by_title(title)
+    article = Article.find_by(title: title)
+    return article
+  end
+
   def self.create_from_url(url)
     doc = Nokogiri::HTML(open(url))
 

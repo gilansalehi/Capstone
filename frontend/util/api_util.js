@@ -80,8 +80,23 @@ var ApiUtil = {
         ApiActions.addHeaderImage(data);
       },
       error: function (message) {
-        debugger
         console.log("Error with fetching header image");
+      }
+    });
+  },
+
+  createNewArticle: function (attrs) {
+
+    $.ajax({
+      type: 'POST',
+      url: '/api/articles',
+      dataType: 'json',
+      data: { article: attrs },
+      success: function (article) {
+        ApiActions.addArticle(article);
+      },
+      error: function (msg) {
+        console.log("error with saving edited article");
       }
     });
   },
@@ -90,7 +105,7 @@ var ApiUtil = {
 
     $.ajax({
       type: 'PATCH',
-      url: "/api/articles/" + id,
+      url: '/api/articles/' + id,
       dataType: "json",
       data: formData,
       processData: false,
@@ -100,7 +115,22 @@ var ApiUtil = {
         callback && callback();
       },
       error: function (msg) {
-        debugger
+        console.log("error with saving edited article");
+      }
+    });
+  },
+
+  goToUserPage: function (id) {
+
+    $.ajax({
+      type: 'GET',
+      url: '/api/users/' + id,
+      dataType: 'json',
+      success: function () {
+
+      },
+      error: function () {
+
       }
     });
   }

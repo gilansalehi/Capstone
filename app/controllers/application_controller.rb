@@ -6,7 +6,17 @@ class ApplicationController < ActionController::Base
   helper_method :current_user, :signed_in?
 
   def rescue
-    redirect_to root_url + "#/rescue"
+    @path = params[:path]
+
+    title = @path[5..-1]
+    clean_title = title.gsub("_", " ")
+    @article = Article.find_by_title(clean_title)
+
+    if @article
+      redirect_to root_url + "#/article/" + @article.id.to_s
+    else
+      redirect_to root_url + "#/rescue"
+    end
   end
 
   private

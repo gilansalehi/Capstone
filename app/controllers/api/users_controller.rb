@@ -2,7 +2,18 @@ class Api::UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
-    render :show
+    @article = Article.find_by_title(@user.username)
+    # render :show
+    if @article
+      render "api/articles/show"
+    else
+      @article = Article.create!(
+        title: @user.username,
+        body: "Tell us about yourself!",
+        author_id: @user.id
+      )
+      render "api/articles/show"
+    end
   end
 
   def create

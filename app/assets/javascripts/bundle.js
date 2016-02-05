@@ -96,23 +96,6 @@
 	  SessionsApiUtil.fetchCurrentUser();
 	};
 	
-	// function _ensureLoggedIn(nextState, replace, callback) {
-	//
-	//   function _redirectIfNotLoggedIn() {
-	//     if (!CurrentUserStore.isLoggedIn()) {
-	//       replace({}, "/login");
-	//     }
-	//     callback();
-	//   }
-	//
-	//   // CurrentUserStore.userHasBeenFetched() ? _redirectIfNotLoggedIn() : SessionsApiUtil.fetchCurrentUser(_redirectIfNotLoggedIn)
-	//   if (CurrentUserStore.userHasBeenFetched()) {
-	//     _redirectIfNotLoggedIn();
-	//   } else {
-	//     SessionsApiUtil.fetchCurrentUser(_redirectIfNotLoggedIn);
-	//   }
-	// };
-	
 	var routes = React.createElement(
 	  Route,
 	  { path: '/', component: App },
@@ -120,19 +103,12 @@
 	  React.createElement(Route, { path: 'article/:article_id', component: Article }),
 	  React.createElement(Route, { path: 'login', component: SessionForm }),
 	  React.createElement(Route, { path: 'users/new', component: UserForm }),
-	  React.createElement(Route, { path: 'users/:id', component: UserShow }),
+	  React.createElement(Route, { path: 'users/:id', component: Article }),
 	  React.createElement(Route, { path: 'search', component: Search }),
+	  React.createElement(Route, { path: 'wiki/:title', component: Article }),
 	  React.createElement(Route, { path: 'rescue', component: Rescue })
 	);
 	
-	// var cd = function () {
-	//   if (document.getElementById('root')) {
-	//     ReactDOM.render(
-	//       <Router>{routes}</Router>,
-	//       document.getElementById('root')
-	//     );
-	//   }
-	// };
 	window.init = function () {
 	  document.addEventListener("DOMContentLoaded", function () {
 	    ReactDOM.render(React.createElement(
@@ -31100,8 +31076,23 @@
 	        ApiActions.addHeaderImage(data);
 	      },
 	      error: function (message) {
-	        debugger;
 	        console.log("Error with fetching header image");
+	      }
+	    });
+	  },
+	
+	  createNewArticle: function (attrs) {
+	
+	    $.ajax({
+	      type: 'POST',
+	      url: '/api/articles',
+	      dataType: 'json',
+	      data: { article: attrs },
+	      success: function (article) {
+	        ApiActions.addArticle(article);
+	      },
+	      error: function (msg) {
+	        console.log("error with saving edited article");
 	      }
 	    });
 	  },
@@ -31110,7 +31101,7 @@
 	
 	    $.ajax({
 	      type: 'PATCH',
-	      url: "/api/articles/" + id,
+	      url: '/api/articles/' + id,
 	      dataType: "json",
 	      data: formData,
 	      processData: false,
@@ -31120,8 +31111,19 @@
 	        callback && callback();
 	      },
 	      error: function (msg) {
-	        debugger;
+	        console.log("error with saving edited article");
 	      }
+	    });
+	  },
+	
+	  goToUserPage: function (id) {
+	
+	    $.ajax({
+	      type: 'GET',
+	      url: '/api/users/' + id,
+	      dataType: 'json',
+	      success: function () {},
+	      error: function () {}
 	    });
 	  }
 	
@@ -31799,6 +31801,10 @@
 	var CurrentUser = React.createClass({
 	  displayName: 'CurrentUser',
 	
+	  goToUserPage: function () {
+	    ApiUtil.asdf;
+	  },
+	
 	  render: function () {
 	    var link;
 	    var user = this.props.currentUser;
@@ -31807,11 +31813,23 @@
 	      link = React.createElement(
 	        'div',
 	        null,
-	        React.createElement('i', { className: 'fa fa-user' }),
-	        " " + user.username
+	        React.createElement(
+	          'a',
+	          { onClick: this.goToUserPage },
+	          React.createElement('i', { className: 'fa fa-user' }),
+	          " " + user.username
+	        )
 	      );
 	    } else {
-	      link = React.createElement('div', null);
+	      link = React.createElement(
+	        'div',
+	        null,
+	        React.createElement(
+	          'a',
+	          { href: '#/login' },
+	          'Log in'
+	        )
+	      );
 	    }
 	
 	    return React.createElement(
@@ -31841,8 +31859,8 @@
 	    } else {
 	      links = React.createElement(
 	        'a',
-	        { href: '#/login' },
-	        'Log in'
+	        { href: '#/users/new' },
+	        'Sign up'
 	      );
 	    }
 	
@@ -32582,6 +32600,7 @@
 	var React = __webpack_require__(1);
 	var UsersStore = __webpack_require__(253);
 	var UsersApiUtil = __webpack_require__(255);
+	var Article = __webpack_require__(206);
 	
 	var UserShow = React.createClass({
 	  displayName: 'UserShow',
@@ -32589,8 +32608,8 @@
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      null,
-	      'User show page'
+	      { className: 'article' },
+	      'hi'
 	    );
 	  }
 	

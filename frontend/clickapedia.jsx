@@ -38,27 +38,10 @@ var App = React.createClass({
   }
 });
 
-
 function _checkCurrentUser() {
   SessionsApiUtil.fetchCurrentUser();
 };
 
-// function _ensureLoggedIn(nextState, replace, callback) {
-//
-//   function _redirectIfNotLoggedIn() {
-//     if (!CurrentUserStore.isLoggedIn()) {
-//       replace({}, "/login");
-//     }
-//     callback();
-//   }
-//
-//   // CurrentUserStore.userHasBeenFetched() ? _redirectIfNotLoggedIn() : SessionsApiUtil.fetchCurrentUser(_redirectIfNotLoggedIn)
-//   if (CurrentUserStore.userHasBeenFetched()) {
-//     _redirectIfNotLoggedIn();
-//   } else {
-//     SessionsApiUtil.fetchCurrentUser(_redirectIfNotLoggedIn);
-//   }
-// };
 
 var routes = (
   <Route path="/" component={ App } >
@@ -67,20 +50,13 @@ var routes = (
 
     <Route path="login" component={ SessionForm } />
     <Route path="users/new" component={ UserForm } />
-    <Route path="users/:id" component={ UserShow } />
+    <Route path="users/:id" component={ Article } />
     <Route path="search" component={ Search } />
+    <Route path="wiki/:title" component={ Article } />
     <Route path="rescue" component={ Rescue } />
   </Route>
 );
 
-// var cd = function () {
-//   if (document.getElementById('root')) {
-//     ReactDOM.render(
-//       <Router>{routes}</Router>,
-//       document.getElementById('root')
-//     );
-//   }
-// };
 window.init = function () {
   document.addEventListener("DOMContentLoaded", function () {
     ReactDOM.render(
