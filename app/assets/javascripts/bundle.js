@@ -53,18 +53,18 @@
 	var History = __webpack_require__(159).History;
 	
 	var Article = __webpack_require__(206);
-	var ArticleIndex = __webpack_require__(238);
+	var ArticleIndex = __webpack_require__(239);
 	var ArticleStore = __webpack_require__(207);
-	var NavBar = __webpack_require__(241);
-	var Sidebar = __webpack_require__(249);
-	var SessionForm = __webpack_require__(250);
-	var UserForm = __webpack_require__(251);
-	var UserShow = __webpack_require__(256);
-	var Search = __webpack_require__(244);
+	var NavBar = __webpack_require__(242);
+	var Sidebar = __webpack_require__(250);
+	var SessionForm = __webpack_require__(251);
+	var UserForm = __webpack_require__(252);
+	var UserShow = __webpack_require__(257);
+	var Search = __webpack_require__(245);
 	var Rescue = __webpack_require__(258);
 	
 	var CurrentUserStore = __webpack_require__(236);
-	var SessionsApiUtil = __webpack_require__(242);
+	var SessionsApiUtil = __webpack_require__(243);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -24088,7 +24088,7 @@
 	var HeaderImage = __webpack_require__(233);
 	var ImageStore = __webpack_require__(234);
 	var ArticleEditor = __webpack_require__(235);
-	var UploadButton = __webpack_require__(257);
+	var UploadButton = __webpack_require__(238);
 	
 	var History = __webpack_require__(159).History;
 	
@@ -31385,1115 +31385,6 @@
 /* 238 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// This is the Homepage that displays what's new and various other things
-	// users might find interesting.
-	
-	var React = __webpack_require__(1);
-	var ReactRouter = __webpack_require__(159);
-	
-	var ArticleStore = __webpack_require__(207);
-	var ApiUtil = __webpack_require__(230);
-	
-	var Article = __webpack_require__(206);
-	var ArticleFragment = __webpack_require__(239);
-	var WikiFetcher = __webpack_require__(240);
-	
-	var History = __webpack_require__(159).History;
-	
-	// this is the display logic for the main page.
-	// The main page should render an Article Fragment for the 20 most recent
-	// articles in the database.  Style the Article Fragments to be divs with fixed
-	// widths and heights, float them to the left with a margin of 20px, making them
-	// main page index a cool tilework of articles.
-	
-	var ArticleIndex = React.createClass({
-	  displayName: 'ArticleIndex',
-	
-	  mixins: [History],
-	
-	  getInitialState: function () {
-	    return {
-	      title: new Date(),
-	      articles: [{ title: "temp", body: "temp" }]
-	    };
-	  },
-	
-	  componentDidMount: function () {
-	    this.articleListener = ArticleStore.addListener(this.__onChange);
-	    ApiUtil.fetchArticles();
-	  },
-	
-	  __onChange: function () {
-	    var articles = ArticleStore.lastNArticles(12);
-	    this.setState({ title: new Date(), articles: articles });
-	  },
-	
-	  componentWillUnmount: function () {
-	    this.articleListener.remove();
-	  },
-	
-	  render: function () {
-	    var articles;
-	
-	    if (this.state.articles) {
-	      articles = this.state.articles.map(function (article) {
-	        return React.createElement(
-	          'li',
-	          { key: article.id },
-	          React.createElement(ArticleFragment, { article: article })
-	        );
-	      });
-	    } else {
-	      articles = React.createElement(
-	        'div',
-	        null,
-	        'No articles to render'
-	      );
-	    }
-	
-	    return React.createElement(
-	      'div',
-	      { className: 'index group' },
-	      React.createElement(
-	        'div',
-	        { className: 'wiki-fetcher' },
-	        React.createElement(WikiFetcher, null)
-	      ),
-	      React.createElement(
-	        'ul',
-	        { className: 'articles-list' },
-	        articles
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = ArticleIndex;
-
-/***/ },
-/* 239 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var ReactRouter = __webpack_require__(159);
-	var ArticleStore = __webpack_require__(207);
-	var ApiUtil = __webpack_require__(230);
-	var ApiActions = __webpack_require__(231);
-	var History = __webpack_require__(159).History;
-	
-	// This file is a helper to render article teasers on the homepage.
-	// and perhaps at the end of other articles to show off related articles...
-	// MAKE SURE TO PASS AN ARTICLE AS A PROP TO THE FRAGMENT
-	
-	var ArticleFragment = React.createClass({
-	  displayName: 'ArticleFragment',
-	
-	  mixins: [History],
-	
-	  getInitialState: function () {
-	    return {
-	      article: this.props.article
-	    };
-	  },
-	
-	  componentWillReceiveProps: function (newProps) {
-	    this.setState({ article: newProps.article });
-	  },
-	
-	  render: function () {
-	    var title, fragment, id;
-	
-	    if (this.state) {
-	      id = this.state.article.id;
-	      if (this.state.article.title) {
-	        title = this.state.article.title;
-	      } else {
-	        title = "Refresh to view article";
-	      }
-	      if (this.state.article.fragment) {
-	        fragment = this.state.article.fragment.slice(0, 280) + "...";
-	      } else {
-	        fragment = "No preview available";
-	      }
-	    } else {
-	      title = "...";
-	      fragment = "...";
-	    }
-	
-	    return React.createElement(
-	      'a',
-	      { href: "#/article/" + id, className: 'article-fragment' },
-	      React.createElement(
-	        'h2',
-	        { className: 'frag-title' },
-	        title
-	      ),
-	      React.createElement(
-	        'article',
-	        { className: 'frag-text' },
-	        fragment
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = ArticleFragment;
-
-/***/ },
-/* 240 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var ReactRouter = __webpack_require__(159);
-	var ArticleStore = __webpack_require__(207);
-	var ApiUtil = __webpack_require__(230);
-	var History = __webpack_require__(159).History;
-	
-	// this is the display logic for a single article.
-	
-	var WikiFetcher = React.createClass({
-	  displayName: 'WikiFetcher',
-	
-	  mixins: [History],
-	
-	  getInitialState: function () {
-	    return { value: "" };
-	  },
-	
-	  handleChange: function (e) {
-	    this.setState({ value: e.target.value });
-	  },
-	
-	  handleSubmit: function (e) {
-	    e.preventDefault();
-	    ApiUtil.fetchFromWikipedia(this.state.value);
-	  },
-	
-	  render: function () {
-	    var value = this.state.value;
-	    return React.createElement(
-	      'form',
-	      { onSubmit: this.handleSubmit, className: 'wiki-fetcher-form' },
-	      React.createElement(
-	        'label',
-	        null,
-	        'WikiFetcher',
-	        React.createElement('input', { className: 'wiki-fetcher-input',
-	          type: 'text',
-	          onChange: this.handleChange,
-	          value: value,
-	          placeholder: 'Enter the page you want fetched' })
-	      ),
-	      React.createElement('input', { className: 'wiki-fetcher-button submit',
-	        type: 'submit',
-	        value: 'Fetch' })
-	    );
-	  }
-	});
-	
-	module.exports = WikiFetcher;
-
-/***/ },
-/* 241 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// this file will replace the current logic above yield in the application
-	// layout page.
-	
-	var React = __webpack_require__(1);
-	var ReactRouter = __webpack_require__(159);
-	var SessionsApiUtil = __webpack_require__(242);
-	var CurrentUserStore = __webpack_require__(236);
-	var Search = __webpack_require__(244);
-	
-	var History = __webpack_require__(159).History;
-	
-	var NavBar = React.createClass({
-	  displayName: 'NavBar',
-	
-	  mixins: [History],
-	
-	  getInitialState: function () {
-	    return { currentUser: CurrentUserStore.currentUser() };
-	  },
-	
-	  componentDidMount: function () {
-	    CurrentUserStore.addListener(this._onChange);
-	    SessionsApiUtil.fetchCurrentUser();
-	  },
-	
-	  _onChange: function () {
-	    this.setState({ currentUser: CurrentUserStore.currentUser() });
-	  },
-	
-	  render: function () {
-	    var currentUser = this.state.currentUser;
-	
-	    return React.createElement(
-	      'nav',
-	      { className: 'nav-bar group' },
-	      React.createElement(
-	        'div',
-	        { className: 'nav-header group' },
-	        React.createElement(SidebarToggle, null),
-	        React.createElement(
-	          'a',
-	          { className: 'nav-logo', href: '#/' },
-	          'Clickapedia'
-	        ),
-	        React.createElement(
-	          'ul',
-	          { className: 'nav-list' },
-	          React.createElement(
-	            'li',
-	            { key: '1' },
-	            React.createElement(CurrentUser, { currentUser: currentUser })
-	          ),
-	          React.createElement(
-	            'li',
-	            { key: '2' },
-	            React.createElement(LogInOut, { currentUser: currentUser })
-	          ),
-	          React.createElement(
-	            'li',
-	            { key: '3' },
-	            React.createElement(SearchToggle, null)
-	          )
-	        )
-	      )
-	    );
-	  }
-	});
-	
-	var CurrentUser = React.createClass({
-	  displayName: 'CurrentUser',
-	
-	  render: function () {
-	    var link;
-	    var user = this.props.currentUser;
-	
-	    if (user.username) {
-	      link = React.createElement(
-	        'div',
-	        null,
-	        React.createElement('i', { className: 'fa fa-user' }),
-	        " " + user.username
-	      );
-	    } else {
-	      link = React.createElement('div', null);
-	    }
-	
-	    return React.createElement(
-	      'div',
-	      { className: 'current-user' },
-	      link
-	    );
-	  }
-	});
-	
-	var LogInOut = React.createClass({
-	  displayName: 'LogInOut',
-	
-	  handleLogout: function () {
-	    SessionsApiUtil.logout();
-	  },
-	
-	  render: function () {
-	    var user = this.props.currentUser;
-	
-	    if (user.username) {
-	      links = React.createElement(
-	        'a',
-	        { href: '#/', onClick: this.handleLogout },
-	        'Log out'
-	      );
-	    } else {
-	      links = React.createElement(
-	        'a',
-	        { href: '#/login' },
-	        'Log in'
-	      );
-	    }
-	
-	    return React.createElement(
-	      'div',
-	      null,
-	      links
-	    );
-	  }
-	});
-	
-	var SidebarToggle = React.createClass({
-	  displayName: 'SidebarToggle',
-	
-	  getInitialState: function () {
-	    return { mode: "showing" };
-	  },
-	
-	  toggleShow: function () {
-	    if (this.state.mode === "hiding") {
-	      this.show();
-	    } else {
-	      this.hide();
-	    }
-	    alert(this.state.mode);
-	  },
-	
-	  hide: function () {
-	    this.setState({ mode: "hiding" });
-	  },
-	
-	  show: function () {
-	    this.setState({ mode: "showing" });
-	  },
-	
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      { className: 'toggle-sidebar', onClick: this.toggleShow },
-	      React.createElement('i', { className: 'fa fa-bars' })
-	    );
-	  }
-	});
-	
-	var SearchToggle = React.createClass({
-	  displayName: 'SearchToggle',
-	
-	  toggleSearch: function () {
-	    alert("toggle Search");
-	  },
-	
-	  render: function () {
-	    return React.createElement(
-	      'a',
-	      { className: 'toggle-search', href: '#/search' },
-	      React.createElement('i', { className: 'fa fa-search' })
-	    );
-	  }
-	});
-	
-	// var Sidebar = React.createClass({
-	//
-	//   render: function () {
-	//     var pageHeaders = ["header 1", "header 2", "header 3", "etc"];
-	//     var headerList = pageHeaders.map(function (header) {
-	//       return <li>{header}</li>;
-	//     });
-	//
-	//     return(
-	//     <div className="sidebar group">
-	//       <ul className="sidebar-list">
-	//         {headerList}
-	//       </ul>
-	//     </div>
-	//     );
-	//   }
-	// });
-	
-	module.exports = NavBar;
-
-/***/ },
-/* 242 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var CurrentUserActions = __webpack_require__(243);
-	
-	var SessionsApiUtil = {
-	  login: function (credentials, success) {
-	    $.ajax({
-	      url: '/api/session',
-	      type: 'POST',
-	      dataType: 'json',
-	      data: credentials,
-	      success: function (currentUser) {
-	        CurrentUserActions.receiveCurrentUser(currentUser);
-	        success && success();
-	        console.log("login success");
-	      },
-	      error: function (msg) {
-	        console.log("login error");
-	      }
-	    });
-	  },
-	
-	  logout: function (currentUser, success) {
-	
-	    $.ajax({
-	      url: '/api/session',
-	      type: 'DELETE',
-	      dataType: 'json',
-	      data: currentUser,
-	      success: function (currentUser) {
-	        CurrentUserActions.deleteCurrentUser(currentUser);
-	        success && success();
-	      },
-	      error: function (msg) {
-	        debugger;
-	      }
-	    });
-	  },
-	
-	  fetchCurrentUser: function (callback) {
-	    $.ajax({
-	      url: '/api/session',
-	      type: 'GET',
-	      dataType: 'json',
-	      success: function (currentUser) {
-	        CurrentUserActions.receiveCurrentUser(currentUser);
-	        callback && callback();
-	      }
-	    });
-	  }
-	
-	};
-	
-	window.SessionsApiUtil = SessionsApiUtil;
-	
-	module.exports = SessionsApiUtil;
-
-/***/ },
-/* 243 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var AppDispatcher = __webpack_require__(227);
-	var CurrentUserConstants = __webpack_require__(237);
-	
-	var CurrentUserActions = {
-	
-	  receiveCurrentUser: function (currentUser) {
-	    AppDispatcher.dispatch({
-	      actionType: CurrentUserConstants.RECEIVE_CURRENT_USER,
-	      currentUser: currentUser
-	    });
-	  },
-	
-	  deleteCurrentUser: function (currentUser) {
-	    AppDispatcher.dispatch({
-	      actionType: CurrentUserConstants.DELETE_CURRENT_USER,
-	      currentUser: currentUser
-	    });
-	  }
-	};
-	
-	module.exports = CurrentUserActions;
-
-/***/ },
-/* 244 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var SearchResultsStore = __webpack_require__(245);
-	var SearchApiUtil = __webpack_require__(247);
-	var ArticleFragment = __webpack_require__(239);
-	var HeaderImage = __webpack_require__(233);
-	var ImageStore = __webpack_require__(234);
-	
-	var Search = React.createClass({
-	  displayName: 'Search',
-	
-	  componentDidMount: function () {
-	    this.listener = SearchResultsStore.addListener(this._onChange);
-	  },
-	
-	  getInitialState: function () {
-	    return { page: 1, query: "" };
-	  },
-	
-	  _onChange: function () {
-	    this.forceUpdate();
-	  },
-	
-	  setQuery: function (e) {
-	    this.setState({ query: e.currentTarget.value });
-	  },
-	
-	  search: function (e) {
-	    e.preventDefault();
-	    var query = this.state.query;
-	
-	    SearchApiUtil.search(query, 1);
-	    this.setState({ page: 1, query: query });
-	  },
-	
-	  nextPage: function () {
-	    var nextPage = this.state.page + 1;
-	    SearchApiUtil.search(this.state.query, nextPage);
-	
-	    this.setState({ page: nextPage });
-	  },
-	
-	  componentWillUnmount: function () {
-	    this.listener.remove();
-	  },
-	
-	  render: function () {
-	
-	    var searchResults = SearchResultsStore.all().map(function (searchResult) {
-	      return React.createElement(ArticleFragment, { article: searchResult });
-	    });
-	
-	    return React.createElement(
-	      'div',
-	      { className: 'search-page' },
-	      React.createElement(
-	        'form',
-	        { onSubmit: this.search, className: 'search-form' },
-	        React.createElement(
-	          'label',
-	          null,
-	          ' Search',
-	          React.createElement('input', { type: 'text',
-	            placeholder: 'search articles',
-	            onChange: this.setQuery,
-	            value: this.state.query }),
-	          React.createElement('input', { type: 'submit', className: 'submit', value: 'Search!' })
-	        )
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'search-info' },
-	        React.createElement(
-	          'a',
-	          { onClick: this.previousPage },
-	          React.createElement('i', { className: 'fa fa-chevron-left' }),
-	          ' '
-	        ),
-	        'Displaying ',
-	        SearchResultsStore.all().length,
-	        ' of ',
-	        SearchResultsStore.meta().total_count || 0,
-	        React.createElement(
-	          'a',
-	          { onClick: this.nextPage },
-	          ' ',
-	          React.createElement('i', { className: 'fa fa-chevron-right' })
-	        )
-	      ),
-	      React.createElement(
-	        'ul',
-	        { className: 'articles-index' },
-	        searchResults
-	      )
-	    );
-	  }
-	
-	});
-	
-	module.exports = Search;
-
-/***/ },
-/* 245 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Store = __webpack_require__(208).Store;
-	var AppDispatcher = __webpack_require__(227);
-	var SearchConstants = __webpack_require__(246);
-	
-	var SearchResultsStore = new Store(AppDispatcher);
-	
-	var _searchResults = [];
-	var _meta = {};
-	
-	SearchResultsStore.all = function () {
-	  return _searchResults.slice();
-	};
-	
-	SearchResultsStore.meta = function () {
-	  return _meta;
-	};
-	
-	SearchResultsStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case SearchConstants.RECEIVE_SEARCH_RESULTS:
-	      _searchResults = payload.data.results;
-	      _meta = payload.meta;
-	      SearchResultsStore.__emitChange();
-	
-	  }
-	};
-	
-	module.exports = SearchResultsStore;
-
-/***/ },
-/* 246 */
-/***/ function(module, exports) {
-
-	var SearchConstants = {
-	  RECEIVE_SEARCH_RESULTS: "RECEIVE_SEARCH_RESULTS"
-	};
-	
-	module.exports = SearchConstants;
-
-/***/ },
-/* 247 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var SearchActions = __webpack_require__(248);
-	
-	var SearchApiUtil = {
-	  search: function (query, page) {
-	    $.ajax({
-	      url: '/api/search',
-	      type: 'GET',
-	      dataType: 'json',
-	      data: { query: query, page: page },
-	      success: function (data) {
-	        SearchActions.receiveResults(data);
-	      }
-	    });
-	  }
-	};
-	
-	module.exports = SearchApiUtil;
-
-/***/ },
-/* 248 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var AppDispatcher = __webpack_require__(227);
-	var SearchConstants = __webpack_require__(246);
-	
-	var SearchActions = {
-	  receiveResults: function (data) {
-	    AppDispatcher.dispatch({
-	      actionType: SearchConstants.RECEIVE_SEARCH_RESULTS,
-	      data: data,
-	      meta: { total_count: data.total_count }
-	    });
-	  }
-	};
-	
-	module.exports = SearchActions;
-
-/***/ },
-/* 249 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var ReactRouter = __webpack_require__(159);
-	var ArticleStore = __webpack_require__(207);
-	
-	var History = __webpack_require__(159).History;
-	
-	var Sidebar = React.createClass({
-	  displayName: 'Sidebar',
-	
-	  componentDidMount: function () {
-	    ArticleStore.addListener(this._onChange);
-	  },
-	
-	  _onChange: function () {
-	    this.forceUpdate();
-	  },
-	
-	  handleMouseOver: function (i) {
-	    var $el = $(this.refs["scrollable" + i]);
-	  },
-	
-	  render: function () {
-	    var tabs;
-	    var tabsList;
-	
-	    if (this.props.path.pathname.slice(0, 9) === "/article/") {
-	      if (ArticleStore.fetchArticle()) {
-	        tabsList = JSON.parse(ArticleStore.fetchArticle().table_of_contents);
-	
-	        tabs = tabsList.map(function (tab, i) {
-	          return React.createElement('div', { className: 'sidebar-list-item',
-	            key: i,
-	            dangerouslySetInnerHTML: { __html: tab },
-	            ref: "scrollable" + i,
-	            onMouseOver: this.handleMouseOver.bind(this, i) });
-	        }.bind(this));
-	      }
-	    } else {
-	
-	      tabsList = [React.createElement(
-	        'a',
-	        { href: '#/' },
-	        'Main Page'
-	      ), React.createElement(
-	        'a',
-	        { href: '#/search' },
-	        'Search'
-	      )];
-	
-	      tabs = tabsList.map(function (tab, i) {
-	        return React.createElement(
-	          'div',
-	          { className: 'sidebar-list-item', key: i },
-	          tab
-	        );
-	      });
-	    }
-	
-	    return React.createElement(
-	      'div',
-	      { className: 'sidebar group' },
-	      React.createElement(
-	        'ul',
-	        { className: 'sidebar-list' },
-	        tabs
-	      )
-	    );
-	  }
-	});
-	
-	// var SidebarItem = React.createClass({
-	//   componentDidMount: function () {
-	//     $(".scroll_on_hover").mouseover(function() {
-	//       $(this).removeClass("ellipsis");
-	//       var maxscroll = $(this).width();
-	//       var speed = maxscroll * 15;
-	//       $(this).animate({
-	//           scrollLeft: maxscroll
-	//       }, speed, "linear");
-	//     });
-	//
-	//     $(".scroll_on_hover").mouseout(function() {
-	//       $(this).stop();
-	//       $(this).addClass("ellipsis");
-	//       $(this).animate({
-	//           scrollLeft: 0
-	//       }, 'slow');
-	//     });
-	//   },
-	//
-	//   render: function () {
-	//
-	//   }
-	//
-	// });
-	
-	module.exports = Sidebar;
-
-/***/ },
-/* 250 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var History = __webpack_require__(159).History;
-	var SessionsApiUtil = __webpack_require__(242);
-	
-	var SessionForm = React.createClass({
-	  displayName: 'SessionForm',
-	
-	  mixins: [History],
-	
-	  submit: function (e) {
-	    e.preventDefault();
-	    var credentials = $(e.currentTarget).serializeJSON();
-	
-	    SessionsApiUtil.login(credentials, function () {
-	      this.history.pushState({}, "/");
-	    }.bind(this));
-	  },
-	
-	  render: function () {
-	
-	    return React.createElement(
-	      'div',
-	      { className: 'auth-page group' },
-	      React.createElement(
-	        'h1',
-	        null,
-	        'Log in'
-	      ),
-	      React.createElement(
-	        'form',
-	        { onSubmit: this.submit },
-	        React.createElement(
-	          'label',
-	          { 'for': 'username' },
-	          'Username'
-	        ),
-	        React.createElement('br', null),
-	        React.createElement('input', { id: 'username',
-	          type: 'text',
-	          name: 'user[username]',
-	          placeholder: 'Enter your username' }),
-	        React.createElement('br', null),
-	        React.createElement(
-	          'label',
-	          { 'for': 'password' },
-	          'Password'
-	        ),
-	        React.createElement('br', null),
-	        React.createElement('input', { id: 'password',
-	          type: 'password',
-	          name: 'user[password]',
-	          placeholder: 'Enter your password' }),
-	        React.createElement('br', null),
-	        React.createElement('input', { className: 'submit', type: 'submit', value: 'Log In' })
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'join-block' },
-	        'Don\'t have an account?',
-	        React.createElement(
-	          'a',
-	          { className: 'join-button', href: '#/users/new' },
-	          'Join Clickapedia'
-	        )
-	      ),
-	      React.createElement(
-	        'form',
-	        { onSubmit: this.submit },
-	        React.createElement('input', { type: 'hidden', name: 'user[username]', value: 'guest' }),
-	        React.createElement('input', { type: 'hidden', name: 'user[password]', value: 'password' }),
-	        React.createElement('input', { className: 'demo-user', type: 'submit', value: 'Log In As Guest' })
-	      ),
-	      React.createElement(
-	        'div',
-	        null,
-	        'Log in with',
-	        React.createElement(
-	          'form',
-	          { onSubmit: this.logInWithFacebook, className: 'oauth-facebook' },
-	          React.createElement(
-	            'a',
-	            { href: '/auth/facebook' },
-	            React.createElement('i', { className: 'fa fa-facebook-official fa-fw' })
-	          )
-	        )
-	      )
-	    );
-	  }
-	
-	});
-	
-	module.exports = SessionForm;
-
-/***/ },
-/* 251 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var History = __webpack_require__(159).History;
-	var UserStore = __webpack_require__(252);
-	var UsersApiUtil = __webpack_require__(254);
-	// var SessionsApiUtil = require('./../../util/sessions_api_util');
-	
-	var UserForm = React.createClass({
-	  displayName: 'UserForm',
-	
-	  mixins: [History],
-	
-	  submit: function (e) {
-	    e.preventDefault();
-	
-	    var credentials = $(e.currentTarget).serializeJSON();
-	    UsersApiUtil.createUser(credentials, function () {
-	      this.history.pushState({}, "/");
-	    }.bind(this));
-	  },
-	
-	  render: function () {
-	
-	    return React.createElement(
-	      'div',
-	      { className: 'auth-page group' },
-	      React.createElement(
-	        'h1',
-	        null,
-	        'Create account'
-	      ),
-	      React.createElement(
-	        'form',
-	        { onSubmit: this.submit },
-	        React.createElement(
-	          'label',
-	          { 'for': 'username' },
-	          'Username'
-	        ),
-	        React.createElement('br', null),
-	        React.createElement('input', { id: 'username',
-	          type: 'text',
-	          name: 'user[username]',
-	          placeholder: 'Enter your username' }),
-	        React.createElement('br', null),
-	        React.createElement(
-	          'label',
-	          { 'for': 'password' },
-	          'Password'
-	        ),
-	        React.createElement('br', null),
-	        React.createElement('input', { id: 'password',
-	          type: 'password',
-	          name: 'user[password]',
-	          placeholder: 'Enter your password' }),
-	        React.createElement('br', null),
-	        React.createElement(
-	          'label',
-	          { 'for': 'password2' },
-	          'Confirm password'
-	        ),
-	        React.createElement('br', null),
-	        React.createElement('input', { id: 'password2',
-	          type: 'password',
-	          name: 'user[password_confirm]',
-	          placeholder: 'Enter your password again' }),
-	        React.createElement('br', null),
-	        React.createElement(
-	          'label',
-	          { 'for': 'email' },
-	          'Email address (optional)'
-	        ),
-	        React.createElement('br', null),
-	        React.createElement('input', { id: 'email',
-	          type: 'text',
-	          name: 'user[email]',
-	          placeholder: 'Enter your email address' }),
-	        React.createElement('br', null),
-	        React.createElement('input', { className: 'submit', type: 'submit', value: 'Create account' })
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'stats' },
-	        'Clickapedia is made by people like you.'
-	      )
-	    );
-	  }
-	
-	});
-	
-	module.exports = UserForm;
-
-/***/ },
-/* 252 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var AppDispatcher = __webpack_require__(227);
-	var UserConstants = __webpack_require__(253);
-	var Store = __webpack_require__(208).Store;
-	
-	var _users = [];
-	// var CHANGE_EVENT = "change";
-	
-	var _addUser = function (newUser) {
-	  _users.unshift(newUser);
-	};
-	
-	var UsersStore = new Store(AppDispatcher);
-	
-	UsersStore.__onDispatch = function (payload) {
-	  switch (payload.actionType) {
-	    case UserConstants.RECEIVE_USER:
-	      _addUser(payload.user);
-	      UsersStore.__emitChange();
-	      break;
-	  }
-	};
-	
-	// UsersStore.findUserById = function (id) {
-	//   for (var i = 0; i < _users.length; i++) {
-	//     if (_users[i].id === id) {
-	//       return _users[i];
-	//     }
-	//   }
-	//
-	//   return;
-	// };
-	
-	module.exports = UsersStore;
-
-/***/ },
-/* 253 */
-/***/ function(module, exports) {
-
-	var UserConstants = {
-	  RECEIVE_USER: "RECEIVE_USER"
-	};
-	
-	module.exports = UserConstants;
-
-/***/ },
-/* 254 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var UserActions = __webpack_require__(255);
-	var CurrentUserActions = __webpack_require__(243);
-	
-	var UsersApiUtil = {
-	  fetchUser: function (id) {
-	    $.ajax({
-	      url: '/api/users/' + id,
-	      type: 'GET',
-	      dataType: 'json',
-	      success: function (user) {
-	        UserActions.receiveUser(user);
-	      },
-	      error: function (msg) {
-	        //console.log(msg);
-	      }
-	    });
-	  },
-	
-	  createUser: function (attrs, callback) {
-	    $.ajax({
-	      url: '/api/users',
-	      method: 'POST',
-	      dataType: 'json',
-	      data: attrs,
-	      success: function (user) {
-	        UserActions.receiveUser(user);
-	        CurrentUserActions.receiveCurrentUser(user);
-	        callback && callback();
-	      },
-	      error: function (msg) {
-	        //console.log(msg);
-	      }
-	    });
-	  }
-	};
-	
-	module.exports = UsersApiUtil;
-
-/***/ },
-/* 255 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var AppDispatcher = __webpack_require__(227);
-	var UserConstants = __webpack_require__(253);
-	
-	var UserActions = {
-	  receiveUser: function (user) {
-	    AppDispatcher.dispatch({
-	      actionType: UserConstants.RECEIVE_USER,
-	      user: user
-	    });
-	  }
-	};
-	
-	module.exports = UserActions;
-
-/***/ },
-/* 256 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	var UsersStore = __webpack_require__(252);
-	var UsersApiUtil = __webpack_require__(254);
-	
-	var UserShow = React.createClass({
-	  displayName: 'UserShow',
-	
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      null,
-	      'User show page'
-	    );
-	  }
-	
-	});
-	
-	module.exports = UserShow;
-
-/***/ },
-/* 257 */
-/***/ function(module, exports, __webpack_require__) {
-
 	var React = __webpack_require__(1);
 	var ApiUtil = __webpack_require__(230);
 	var ArticleStore = __webpack_require__(207);
@@ -32622,6 +31513,1092 @@
 	module.exports = UploadButton;
 
 /***/ },
+/* 239 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// This is the Homepage that displays what's new and various other things
+	// users might find interesting.
+	
+	var React = __webpack_require__(1);
+	var ReactRouter = __webpack_require__(159);
+	
+	var ArticleStore = __webpack_require__(207);
+	var ApiUtil = __webpack_require__(230);
+	
+	var Article = __webpack_require__(206);
+	var ArticleFragment = __webpack_require__(240);
+	var WikiFetcher = __webpack_require__(241);
+	
+	var History = __webpack_require__(159).History;
+	
+	// this is the display logic for the main page.
+	// The main page should render an Article Fragment for the 20 most recent
+	// articles in the database.  Style the Article Fragments to be divs with fixed
+	// widths and heights, float them to the left with a margin of 20px, making them
+	// main page index a cool tilework of articles.
+	
+	var ArticleIndex = React.createClass({
+	  displayName: 'ArticleIndex',
+	
+	  mixins: [History],
+	
+	  getInitialState: function () {
+	    return {
+	      title: new Date(),
+	      articles: [{ title: "temp", body: "temp" }]
+	    };
+	  },
+	
+	  componentDidMount: function () {
+	    this.articleListener = ArticleStore.addListener(this.__onChange);
+	    ApiUtil.fetchArticles();
+	  },
+	
+	  __onChange: function () {
+	    var articles = ArticleStore.lastNArticles(12);
+	    this.setState({ title: new Date(), articles: articles });
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.articleListener.remove();
+	  },
+	
+	  render: function () {
+	    var articles;
+	
+	    if (this.state.articles) {
+	      articles = this.state.articles.map(function (article) {
+	        return React.createElement(
+	          'li',
+	          { key: article.id },
+	          React.createElement(ArticleFragment, { article: article })
+	        );
+	      });
+	    } else {
+	      articles = React.createElement(
+	        'div',
+	        null,
+	        'No articles to render'
+	      );
+	    }
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'index group' },
+	      React.createElement(
+	        'div',
+	        { className: 'wiki-fetcher' },
+	        React.createElement(WikiFetcher, null)
+	      ),
+	      React.createElement(
+	        'ul',
+	        { className: 'articles-list' },
+	        articles
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = ArticleIndex;
+
+/***/ },
+/* 240 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ReactRouter = __webpack_require__(159);
+	var ArticleStore = __webpack_require__(207);
+	var ApiUtil = __webpack_require__(230);
+	var ApiActions = __webpack_require__(231);
+	var History = __webpack_require__(159).History;
+	
+	// This file is a helper to render article teasers on the homepage.
+	// and perhaps at the end of other articles to show off related articles...
+	// MAKE SURE TO PASS AN ARTICLE AS A PROP TO THE FRAGMENT
+	
+	var ArticleFragment = React.createClass({
+	  displayName: 'ArticleFragment',
+	
+	  mixins: [History],
+	
+	  getInitialState: function () {
+	    return {
+	      article: this.props.article
+	    };
+	  },
+	
+	  componentWillReceiveProps: function (newProps) {
+	    this.setState({ article: newProps.article });
+	  },
+	
+	  render: function () {
+	    var title, fragment, id;
+	
+	    if (this.state) {
+	      id = this.state.article.id;
+	      if (this.state.article.title) {
+	        title = this.state.article.title;
+	      } else {
+	        title = "Refresh to view article";
+	      }
+	      if (this.state.article.fragment) {
+	        fragment = this.state.article.fragment.slice(0, 280) + "...";
+	      } else {
+	        fragment = "No preview available";
+	      }
+	    } else {
+	      title = "...";
+	      fragment = "...";
+	    }
+	
+	    return React.createElement(
+	      'a',
+	      { href: "#/article/" + id, className: 'article-fragment' },
+	      React.createElement(
+	        'h2',
+	        { className: 'frag-title' },
+	        title
+	      ),
+	      React.createElement(
+	        'article',
+	        { className: 'frag-text' },
+	        fragment
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = ArticleFragment;
+
+/***/ },
+/* 241 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ReactRouter = __webpack_require__(159);
+	var ArticleStore = __webpack_require__(207);
+	var ApiUtil = __webpack_require__(230);
+	var History = __webpack_require__(159).History;
+	
+	// this is the display logic for a single article.
+	
+	var WikiFetcher = React.createClass({
+	  displayName: 'WikiFetcher',
+	
+	  mixins: [History],
+	
+	  getInitialState: function () {
+	    return { value: "" };
+	  },
+	
+	  handleChange: function (e) {
+	    this.setState({ value: e.target.value });
+	  },
+	
+	  handleSubmit: function (e) {
+	    e.preventDefault();
+	    ApiUtil.fetchFromWikipedia(this.state.value);
+	  },
+	
+	  render: function () {
+	    var value = this.state.value;
+	    return React.createElement(
+	      'form',
+	      { onSubmit: this.handleSubmit, className: 'wiki-fetcher-form' },
+	      React.createElement(
+	        'label',
+	        null,
+	        'WikiFetcher',
+	        React.createElement('input', { className: 'wiki-fetcher-input',
+	          type: 'text',
+	          onChange: this.handleChange,
+	          value: value,
+	          placeholder: 'Enter the page you want fetched' })
+	      ),
+	      React.createElement('input', { className: 'wiki-fetcher-button submit',
+	        type: 'submit',
+	        value: 'Fetch' })
+	    );
+	  }
+	});
+	
+	module.exports = WikiFetcher;
+
+/***/ },
+/* 242 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// this file will replace the current logic above yield in the application
+	// layout page.
+	
+	var React = __webpack_require__(1);
+	var ReactRouter = __webpack_require__(159);
+	var SessionsApiUtil = __webpack_require__(243);
+	var CurrentUserStore = __webpack_require__(236);
+	var Search = __webpack_require__(245);
+	
+	var History = __webpack_require__(159).History;
+	
+	var NavBar = React.createClass({
+	  displayName: 'NavBar',
+	
+	  mixins: [History],
+	
+	  getInitialState: function () {
+	    return { currentUser: CurrentUserStore.currentUser() };
+	  },
+	
+	  componentDidMount: function () {
+	    CurrentUserStore.addListener(this._onChange);
+	    SessionsApiUtil.fetchCurrentUser();
+	  },
+	
+	  _onChange: function () {
+	    this.setState({ currentUser: CurrentUserStore.currentUser() });
+	  },
+	
+	  render: function () {
+	    var currentUser = this.state.currentUser;
+	
+	    return React.createElement(
+	      'nav',
+	      { className: 'nav-bar group' },
+	      React.createElement(
+	        'div',
+	        { className: 'nav-header group' },
+	        React.createElement(SidebarToggle, null),
+	        React.createElement(
+	          'a',
+	          { className: 'nav-logo', href: '#/' },
+	          'Clickapedia'
+	        ),
+	        React.createElement(
+	          'ul',
+	          { className: 'nav-list' },
+	          React.createElement(
+	            'li',
+	            { key: '1' },
+	            React.createElement(CurrentUser, { currentUser: currentUser })
+	          ),
+	          React.createElement(
+	            'li',
+	            { key: '2' },
+	            React.createElement(LogInOut, { currentUser: currentUser })
+	          ),
+	          React.createElement(
+	            'li',
+	            { key: '3' },
+	            React.createElement(SearchToggle, null)
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	var CurrentUser = React.createClass({
+	  displayName: 'CurrentUser',
+	
+	  render: function () {
+	    var link;
+	    var user = this.props.currentUser;
+	
+	    if (user.username) {
+	      link = React.createElement(
+	        'div',
+	        null,
+	        React.createElement('i', { className: 'fa fa-user' }),
+	        " " + user.username
+	      );
+	    } else {
+	      link = React.createElement('div', null);
+	    }
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'current-user' },
+	      link
+	    );
+	  }
+	});
+	
+	var LogInOut = React.createClass({
+	  displayName: 'LogInOut',
+	
+	  handleLogout: function () {
+	    SessionsApiUtil.logout();
+	  },
+	
+	  render: function () {
+	    var user = this.props.currentUser;
+	
+	    if (user.username) {
+	      links = React.createElement(
+	        'a',
+	        { href: '#/', onClick: this.handleLogout },
+	        'Log out'
+	      );
+	    } else {
+	      links = React.createElement(
+	        'a',
+	        { href: '#/login' },
+	        'Log in'
+	      );
+	    }
+	
+	    return React.createElement(
+	      'div',
+	      null,
+	      links
+	    );
+	  }
+	});
+	
+	var SidebarToggle = React.createClass({
+	  displayName: 'SidebarToggle',
+	
+	  getInitialState: function () {
+	    return { mode: "showing" };
+	  },
+	
+	  toggleShow: function () {
+	    if (this.state.mode === "hiding") {
+	      $(".sidebar").removeClass("hiding");
+	      $(".content").removeClass("expand");
+	      this.setState({ mode: "showing" });
+	    } else {
+	      $(".sidebar").addClass("hiding");
+	      $(".content").addClass("expand");
+	      this.setState({ mode: "hiding" });
+	    }
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'toggle-sidebar', onClick: this.toggleShow },
+	      React.createElement('i', { className: 'fa fa-bars' })
+	    );
+	  }
+	});
+	
+	var SearchToggle = React.createClass({
+	  displayName: 'SearchToggle',
+	
+	  toggleSearch: function () {
+	    alert("toggle Search");
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'a',
+	      { className: 'toggle-search', href: '#/search' },
+	      React.createElement('i', { className: 'fa fa-search' })
+	    );
+	  }
+	});
+	
+	module.exports = NavBar;
+
+/***/ },
+/* 243 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var CurrentUserActions = __webpack_require__(244);
+	
+	var SessionsApiUtil = {
+	  login: function (credentials, success) {
+	    $.ajax({
+	      url: '/api/session',
+	      type: 'POST',
+	      dataType: 'json',
+	      data: credentials,
+	      success: function (currentUser) {
+	        CurrentUserActions.receiveCurrentUser(currentUser);
+	        success && success();
+	        console.log("login success");
+	      },
+	      error: function (msg) {
+	        console.log("login error");
+	      }
+	    });
+	  },
+	
+	  logout: function (currentUser, success) {
+	
+	    $.ajax({
+	      url: '/api/session',
+	      type: 'DELETE',
+	      dataType: 'json',
+	      data: currentUser,
+	      success: function (currentUser) {
+	        CurrentUserActions.deleteCurrentUser(currentUser);
+	        success && success();
+	      },
+	      error: function (msg) {
+	        debugger;
+	      }
+	    });
+	  },
+	
+	  fetchCurrentUser: function (callback) {
+	    $.ajax({
+	      url: '/api/session',
+	      type: 'GET',
+	      dataType: 'json',
+	      success: function (currentUser) {
+	        CurrentUserActions.receiveCurrentUser(currentUser);
+	        callback && callback();
+	      }
+	    });
+	  }
+	
+	};
+	
+	window.SessionsApiUtil = SessionsApiUtil;
+	
+	module.exports = SessionsApiUtil;
+
+/***/ },
+/* 244 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(227);
+	var CurrentUserConstants = __webpack_require__(237);
+	
+	var CurrentUserActions = {
+	
+	  receiveCurrentUser: function (currentUser) {
+	    AppDispatcher.dispatch({
+	      actionType: CurrentUserConstants.RECEIVE_CURRENT_USER,
+	      currentUser: currentUser
+	    });
+	  },
+	
+	  deleteCurrentUser: function (currentUser) {
+	    AppDispatcher.dispatch({
+	      actionType: CurrentUserConstants.DELETE_CURRENT_USER,
+	      currentUser: currentUser
+	    });
+	  }
+	};
+	
+	module.exports = CurrentUserActions;
+
+/***/ },
+/* 245 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var SearchResultsStore = __webpack_require__(246);
+	var SearchApiUtil = __webpack_require__(248);
+	var ArticleFragment = __webpack_require__(240);
+	var HeaderImage = __webpack_require__(233);
+	var ImageStore = __webpack_require__(234);
+	
+	var Search = React.createClass({
+	  displayName: 'Search',
+	
+	  componentDidMount: function () {
+	    this.listener = SearchResultsStore.addListener(this._onChange);
+	  },
+	
+	  getInitialState: function () {
+	    return { page: 1, query: "" };
+	  },
+	
+	  _onChange: function () {
+	    this.forceUpdate();
+	  },
+	
+	  setQuery: function (e) {
+	    this.setState({ query: e.currentTarget.value });
+	  },
+	
+	  search: function (e) {
+	    e.preventDefault();
+	    var query = this.state.query;
+	
+	    SearchApiUtil.search(query, 1);
+	    this.setState({ page: 1, query: query });
+	  },
+	
+	  nextPage: function () {
+	    var nextPage = this.state.page + 1;
+	    SearchApiUtil.search(this.state.query, nextPage);
+	
+	    this.setState({ page: nextPage });
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.listener.remove();
+	  },
+	
+	  render: function () {
+	
+	    var searchResults = SearchResultsStore.all().map(function (searchResult) {
+	      return React.createElement(ArticleFragment, { article: searchResult });
+	    });
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'search-page' },
+	      React.createElement(
+	        'form',
+	        { onSubmit: this.search, className: 'search-form' },
+	        React.createElement(
+	          'label',
+	          null,
+	          ' Search',
+	          React.createElement('input', { type: 'text',
+	            placeholder: 'search articles',
+	            onChange: this.setQuery,
+	            value: this.state.query }),
+	          React.createElement('input', { type: 'submit', className: 'submit', value: 'Search!' })
+	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'search-info' },
+	        React.createElement(
+	          'a',
+	          { onClick: this.previousPage },
+	          React.createElement('i', { className: 'fa fa-chevron-left' }),
+	          ' '
+	        ),
+	        'Displaying ',
+	        SearchResultsStore.all().length,
+	        ' of ',
+	        SearchResultsStore.meta().total_count || 0,
+	        React.createElement(
+	          'a',
+	          { onClick: this.nextPage },
+	          ' ',
+	          React.createElement('i', { className: 'fa fa-chevron-right' })
+	        )
+	      ),
+	      React.createElement(
+	        'ul',
+	        { className: 'articles-index' },
+	        searchResults
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = Search;
+
+/***/ },
+/* 246 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Store = __webpack_require__(208).Store;
+	var AppDispatcher = __webpack_require__(227);
+	var SearchConstants = __webpack_require__(247);
+	
+	var SearchResultsStore = new Store(AppDispatcher);
+	
+	var _searchResults = [];
+	var _meta = {};
+	
+	SearchResultsStore.all = function () {
+	  return _searchResults.slice();
+	};
+	
+	SearchResultsStore.meta = function () {
+	  return _meta;
+	};
+	
+	SearchResultsStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case SearchConstants.RECEIVE_SEARCH_RESULTS:
+	      _searchResults = payload.data.results;
+	      _meta = payload.meta;
+	      SearchResultsStore.__emitChange();
+	
+	  }
+	};
+	
+	module.exports = SearchResultsStore;
+
+/***/ },
+/* 247 */
+/***/ function(module, exports) {
+
+	var SearchConstants = {
+	  RECEIVE_SEARCH_RESULTS: "RECEIVE_SEARCH_RESULTS"
+	};
+	
+	module.exports = SearchConstants;
+
+/***/ },
+/* 248 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var SearchActions = __webpack_require__(249);
+	
+	var SearchApiUtil = {
+	  search: function (query, page) {
+	    $.ajax({
+	      url: '/api/search',
+	      type: 'GET',
+	      dataType: 'json',
+	      data: { query: query, page: page },
+	      success: function (data) {
+	        SearchActions.receiveResults(data);
+	      }
+	    });
+	  }
+	};
+	
+	module.exports = SearchApiUtil;
+
+/***/ },
+/* 249 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(227);
+	var SearchConstants = __webpack_require__(247);
+	
+	var SearchActions = {
+	  receiveResults: function (data) {
+	    AppDispatcher.dispatch({
+	      actionType: SearchConstants.RECEIVE_SEARCH_RESULTS,
+	      data: data,
+	      meta: { total_count: data.total_count }
+	    });
+	  }
+	};
+	
+	module.exports = SearchActions;
+
+/***/ },
+/* 250 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ReactRouter = __webpack_require__(159);
+	var ArticleStore = __webpack_require__(207);
+	
+	var History = __webpack_require__(159).History;
+	
+	var Sidebar = React.createClass({
+	  displayName: 'Sidebar',
+	
+	  componentDidMount: function () {
+	    ArticleStore.addListener(this._onChange);
+	  },
+	
+	  _onChange: function () {
+	    this.forceUpdate();
+	  },
+	
+	  handleMouseOver: function (i) {
+	    var $el = $(this.refs["scrollable" + i]);
+	  },
+	
+	  render: function () {
+	    var tabs;
+	    var tabsList;
+	
+	    if (this.props.path.pathname.slice(0, 9) === "/article/") {
+	      if (ArticleStore.fetchArticle()) {
+	        tabsList = JSON.parse(ArticleStore.fetchArticle().table_of_contents);
+	
+	        tabs = tabsList.map(function (tab, i) {
+	          return React.createElement('div', { className: 'sidebar-list-item',
+	            key: i,
+	            dangerouslySetInnerHTML: { __html: tab },
+	            ref: "scrollable" + i,
+	            onMouseOver: this.handleMouseOver.bind(this, i) });
+	        }.bind(this));
+	      }
+	    } else {
+	
+	      tabsList = [React.createElement(
+	        'a',
+	        { href: '#/' },
+	        'Main Page'
+	      ), React.createElement(
+	        'a',
+	        { href: '#/search' },
+	        'Search'
+	      )];
+	
+	      tabs = tabsList.map(function (tab, i) {
+	        return React.createElement(
+	          'div',
+	          { className: 'sidebar-list-item', key: i },
+	          tab
+	        );
+	      });
+	    }
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'sidebar group' },
+	      React.createElement(
+	        'ul',
+	        { className: 'sidebar-list' },
+	        tabs
+	      )
+	    );
+	  }
+	});
+	
+	// var SidebarItem = React.createClass({
+	//   componentDidMount: function () {
+	//     $(".scroll_on_hover").mouseover(function() {
+	//       $(this).removeClass("ellipsis");
+	//       var maxscroll = $(this).width();
+	//       var speed = maxscroll * 15;
+	//       $(this).animate({
+	//           scrollLeft: maxscroll
+	//       }, speed, "linear");
+	//     });
+	//
+	//     $(".scroll_on_hover").mouseout(function() {
+	//       $(this).stop();
+	//       $(this).addClass("ellipsis");
+	//       $(this).animate({
+	//           scrollLeft: 0
+	//       }, 'slow');
+	//     });
+	//   },
+	//
+	//   render: function () {
+	//
+	//   }
+	//
+	// });
+	
+	module.exports = Sidebar;
+
+/***/ },
+/* 251 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var History = __webpack_require__(159).History;
+	var SessionsApiUtil = __webpack_require__(243);
+	
+	var SessionForm = React.createClass({
+	  displayName: 'SessionForm',
+	
+	  mixins: [History],
+	
+	  submit: function (e) {
+	    e.preventDefault();
+	    var credentials = $(e.currentTarget).serializeJSON();
+	
+	    SessionsApiUtil.login(credentials, function () {
+	      this.history.pushState({}, "/");
+	    }.bind(this));
+	  },
+	
+	  render: function () {
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'auth-page group' },
+	      React.createElement(
+	        'h1',
+	        null,
+	        'Log in'
+	      ),
+	      React.createElement(
+	        'form',
+	        { onSubmit: this.submit },
+	        React.createElement(
+	          'label',
+	          { 'for': 'username' },
+	          'Username'
+	        ),
+	        React.createElement('br', null),
+	        React.createElement('input', { id: 'username',
+	          type: 'text',
+	          name: 'user[username]',
+	          placeholder: 'Enter your username' }),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          { 'for': 'password' },
+	          'Password'
+	        ),
+	        React.createElement('br', null),
+	        React.createElement('input', { id: 'password',
+	          type: 'password',
+	          name: 'user[password]',
+	          placeholder: 'Enter your password' }),
+	        React.createElement('br', null),
+	        React.createElement('input', { className: 'submit', type: 'submit', value: 'Log In' })
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'join-block' },
+	        'Don\'t have an account?',
+	        React.createElement(
+	          'a',
+	          { className: 'join-button', href: '#/users/new' },
+	          'Join Clickapedia'
+	        )
+	      ),
+	      React.createElement(
+	        'form',
+	        { onSubmit: this.submit },
+	        React.createElement('input', { type: 'hidden', name: 'user[username]', value: 'guest' }),
+	        React.createElement('input', { type: 'hidden', name: 'user[password]', value: 'password' }),
+	        React.createElement('input', { className: 'demo-user', type: 'submit', value: 'Log In As Guest' })
+	      ),
+	      React.createElement(
+	        'div',
+	        null,
+	        'Log in with',
+	        React.createElement(
+	          'form',
+	          { onSubmit: this.logInWithFacebook, className: 'oauth-facebook' },
+	          React.createElement(
+	            'a',
+	            { href: '/auth/facebook' },
+	            React.createElement('i', { className: 'fa fa-facebook-official fa-fw' })
+	          )
+	        )
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = SessionForm;
+
+/***/ },
+/* 252 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var History = __webpack_require__(159).History;
+	var UserStore = __webpack_require__(253);
+	var UsersApiUtil = __webpack_require__(255);
+	// var SessionsApiUtil = require('./../../util/sessions_api_util');
+	
+	var UserForm = React.createClass({
+	  displayName: 'UserForm',
+	
+	  mixins: [History],
+	
+	  submit: function (e) {
+	    e.preventDefault();
+	
+	    var credentials = $(e.currentTarget).serializeJSON();
+	    UsersApiUtil.createUser(credentials, function () {
+	      this.history.pushState({}, "/");
+	    }.bind(this));
+	  },
+	
+	  render: function () {
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'auth-page group' },
+	      React.createElement(
+	        'h1',
+	        null,
+	        'Create account'
+	      ),
+	      React.createElement(
+	        'form',
+	        { onSubmit: this.submit },
+	        React.createElement(
+	          'label',
+	          { 'for': 'username' },
+	          'Username'
+	        ),
+	        React.createElement('br', null),
+	        React.createElement('input', { id: 'username',
+	          type: 'text',
+	          name: 'user[username]',
+	          placeholder: 'Enter your username' }),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          { 'for': 'password' },
+	          'Password'
+	        ),
+	        React.createElement('br', null),
+	        React.createElement('input', { id: 'password',
+	          type: 'password',
+	          name: 'user[password]',
+	          placeholder: 'Enter your password' }),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          { 'for': 'password2' },
+	          'Confirm password'
+	        ),
+	        React.createElement('br', null),
+	        React.createElement('input', { id: 'password2',
+	          type: 'password',
+	          name: 'user[password_confirm]',
+	          placeholder: 'Enter your password again' }),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          { 'for': 'email' },
+	          'Email address (optional)'
+	        ),
+	        React.createElement('br', null),
+	        React.createElement('input', { id: 'email',
+	          type: 'text',
+	          name: 'user[email]',
+	          placeholder: 'Enter your email address' }),
+	        React.createElement('br', null),
+	        React.createElement('input', { className: 'submit', type: 'submit', value: 'Create account' })
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'stats' },
+	        'Clickapedia is made by people like you.'
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = UserForm;
+
+/***/ },
+/* 253 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(227);
+	var UserConstants = __webpack_require__(254);
+	var Store = __webpack_require__(208).Store;
+	
+	var _users = [];
+	// var CHANGE_EVENT = "change";
+	
+	var _addUser = function (newUser) {
+	  _users.unshift(newUser);
+	};
+	
+	var UsersStore = new Store(AppDispatcher);
+	
+	UsersStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case UserConstants.RECEIVE_USER:
+	      _addUser(payload.user);
+	      UsersStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	// UsersStore.findUserById = function (id) {
+	//   for (var i = 0; i < _users.length; i++) {
+	//     if (_users[i].id === id) {
+	//       return _users[i];
+	//     }
+	//   }
+	//
+	//   return;
+	// };
+	
+	module.exports = UsersStore;
+
+/***/ },
+/* 254 */
+/***/ function(module, exports) {
+
+	var UserConstants = {
+	  RECEIVE_USER: "RECEIVE_USER"
+	};
+	
+	module.exports = UserConstants;
+
+/***/ },
+/* 255 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var UserActions = __webpack_require__(256);
+	var CurrentUserActions = __webpack_require__(244);
+	
+	var UsersApiUtil = {
+	  fetchUser: function (id) {
+	    $.ajax({
+	      url: '/api/users/' + id,
+	      type: 'GET',
+	      dataType: 'json',
+	      success: function (user) {
+	        UserActions.receiveUser(user);
+	      },
+	      error: function (msg) {
+	        //console.log(msg);
+	      }
+	    });
+	  },
+	
+	  createUser: function (attrs, callback) {
+	    $.ajax({
+	      url: '/api/users',
+	      method: 'POST',
+	      dataType: 'json',
+	      data: attrs,
+	      success: function (user) {
+	        UserActions.receiveUser(user);
+	        CurrentUserActions.receiveCurrentUser(user);
+	        callback && callback();
+	      },
+	      error: function (msg) {
+	        //console.log(msg);
+	      }
+	    });
+	  }
+	};
+	
+	module.exports = UsersApiUtil;
+
+/***/ },
+/* 256 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var AppDispatcher = __webpack_require__(227);
+	var UserConstants = __webpack_require__(254);
+	
+	var UserActions = {
+	  receiveUser: function (user) {
+	    AppDispatcher.dispatch({
+	      actionType: UserConstants.RECEIVE_USER,
+	      user: user
+	    });
+	  }
+	};
+	
+	module.exports = UserActions;
+
+/***/ },
+/* 257 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var UsersStore = __webpack_require__(253);
+	var UsersApiUtil = __webpack_require__(255);
+	
+	var UserShow = React.createClass({
+	  displayName: 'UserShow',
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      'User show page'
+	    );
+	  }
+	
+	});
+	
+	module.exports = UserShow;
+
+/***/ },
 /* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -32635,8 +32612,8 @@
 	var ApiUtil = __webpack_require__(230);
 	
 	var Article = __webpack_require__(206);
-	var ArticleFragment = __webpack_require__(239);
-	var WikiFetcher = __webpack_require__(240);
+	var ArticleFragment = __webpack_require__(240);
+	var WikiFetcher = __webpack_require__(241);
 	
 	var History = __webpack_require__(159).History;
 	
@@ -32646,6 +32623,7 @@
 	  mixins: [History],
 	
 	  render: function () {
+	    debugger;
 	    return React.createElement(
 	      'div',
 	      { className: 'rescue' },

@@ -1,11 +1,6 @@
 # TODO:
 // fix sidebar css.
 // fix application.yml for o-auth
-// how to route to articles by title rather than id?
-// fetching article should list current user as author (or "0")
-// DO IMAGES
-// fix article rendering to include header image
-// RESCUE ROUTING ERRORS that says "that page does not exist, would you like to create it?"
 // remove "edit section" when scraping wikipedia
 // get index to tile properly
 // format content table, link to sidebar

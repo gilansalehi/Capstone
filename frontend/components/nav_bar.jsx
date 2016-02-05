@@ -88,19 +88,14 @@ var SidebarToggle = React.createClass({
 
   toggleShow: function () {
     if (this.state.mode === "hiding") {
-      this.show();
+      $(".sidebar").removeClass("hiding");
+      $(".content").removeClass("expand");
+      this.setState({ mode: "showing" });
     } else {
-      this.hide();
+      $(".sidebar").addClass("hiding");
+      $(".content").addClass("expand");
+      this.setState({ mode: "hiding" });
     }
-    alert(this.state.mode);
-  },
-
-  hide: function () {
-    this.setState({ mode: "hiding" });
-  },
-
-  show: function () {
-    this.setState({ mode: "showing" });
   },
 
   render: function () {
@@ -126,23 +121,5 @@ var SearchToggle = React.createClass({
     );
   }
 });
-
-// var Sidebar = React.createClass({
-//
-//   render: function () {
-//     var pageHeaders = ["header 1", "header 2", "header 3", "etc"];
-//     var headerList = pageHeaders.map(function (header) {
-//       return <li>{header}</li>;
-//     });
-//
-//     return(
-//     <div className="sidebar group">
-//       <ul className="sidebar-list">
-//         {headerList}
-//       </ul>
-//     </div>
-//     );
-//   }
-// });
 
 module.exports = NavBar;

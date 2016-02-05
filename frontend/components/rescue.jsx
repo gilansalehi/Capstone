@@ -17,6 +17,7 @@ var Rescue = React.createClass({
   mixins: [History],
 
   render: function () {
+    debugger
     return (
       <div className="rescue">
         <p>The article you are looking for is not in the database. Help us out by creating it!</p>
