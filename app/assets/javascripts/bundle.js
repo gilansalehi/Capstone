@@ -31413,18 +31413,20 @@
 	    if (this.state.mode === "reading") {
 	      this.setState({ mode: "editing" });
 	      $(".body").attr("contentEditable", "true");
+	      // make the styler invisible.
 	    } else {
-	      this.setState({ mode: "reading" });
-	      $(".body").attr("contentEditable", "false");
-	      var ca = ArticleStore.fetchArticle();
-	      var body = $(".body").html();
-	      var author = CurrentUserStore.currentUser();
-	      var formData = new FormData();
-	      formData.append("article[body]", body);
-	      formData.append("article[author_id]", author.id);
+	        this.setState({ mode: "reading" });
+	        $(".body").attr("contentEditable", "false");
+	        // make the syler visible.
+	        var ca = ArticleStore.fetchArticle();
+	        var body = $(".body").html();
+	        var author = CurrentUserStore.currentUser();
+	        var formData = new FormData();
+	        formData.append("article[body]", body);
+	        formData.append("article[author_id]", author.id);
 	
-	      ApiUtil.saveEditedArticle(ca.id, formData);
-	    }
+	        ApiUtil.saveEditedArticle(ca.id, formData);
+	      }
 	  },
 	
 	  handleClick: function () {

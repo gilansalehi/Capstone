@@ -1,5 +1,11 @@
 # TODO:
 // fix sidebar css.
+// when user clicks pencil to edit article, pop up a modal with z index 1.  
+// fontend/components/article_styler
+// Make it draggable
+// (https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API).  
+// Make it minimizable.  It has buttons to style the text you are
+// editing using document.executeCommand()
 // amend article fragments so the index doesn't pull the WHOLE article.
 // fix application.yml for o-auth
 // remove "edit section" when scraping wikipedia
