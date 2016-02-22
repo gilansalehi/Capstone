@@ -12,7 +12,9 @@ lightning-fast search feature that searches over the full text of the article,
 so you'll never waste time searching for that awesome paragraph you read that
 one time on a late-night wikiwalk.
 
-Stay up-to-date on the most recent articles and world news from the Clickapedia
+Stay up-to-date on the most recent articles and goings-on from the Clickapedia
 home page, with a running list of all the latest and greatest, updated in
 real time right on the home page.  Just hide the sidebar and this site will
 look great on mobile devices too.
+
+[github]: https://github.com/gilansalehi/Capstone 
