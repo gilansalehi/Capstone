@@ -7,6 +7,7 @@ var ArticleStore = new Store(AppDispatcher);
 
 var _articles = [];
 var _currentArticle = [];
+var _pinnedArticle = [];
 
 var resetArticles = function (articles) {
   _articles = articles.slice();
@@ -20,6 +21,10 @@ ArticleStore.__onDispatch = function (payload) {
   switch (payload.actionType) {
     case ArticleConstants.ARTICLES_RECEIVED:
       resetArticles(payload.articles);
+      ArticleStore.__emitChange();
+      break;
+    case ArticleConstants.PINNED_ARTICLE_RECEIVED:
+      _pinnedArticle = payload;
       ArticleStore.__emitChange();
       break;
     case ArticleConstants.ARTICLE_RECEIVED:
@@ -43,6 +48,10 @@ ArticleStore.fetchArticle = function () {
 
 ArticleStore.firstNArticles = function (n) {
   return _articles.slice(0, n);
+};
+
+ArticleStore.pinnedArticle = function () {
+  return _pinnedArticle.article;
 };
 
 ArticleStore.lastNArticles = function (n) {

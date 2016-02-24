@@ -1,6 +1,3 @@
-// This is the Homepage that displays what's new and various other things
-// users might find interesting.
-
 var React = require('react');
 var ReactRouter = require('react-router');
 
@@ -9,15 +6,10 @@ var ApiUtil = require('../util/api_util.js');
 
 var Article = require('./article.jsx');
 var ArticleFragment = require('./article_fragment.jsx');
+var ArticleTeaser = require('./article_teaser.jsx');
 var WikiFetcher = require('./wiki_fetcher.jsx');
 
 var History = require('react-router').History;
-
-// this is the display logic for the main page.
-// The main page should render an Article Fragment for the 20 most recent
-// articles in the database.  Style the Article Fragments to be divs with fixed
-// widths and heights, float them to the left with a margin of 20px, making them
-// main page index a cool tilework of articles.
 
 var ArticleIndex = React.createClass({
   mixins: [History],
@@ -25,18 +17,21 @@ var ArticleIndex = React.createClass({
   getInitialState: function () {
     return ({
       title: new Date(),
-      articles: [{title: "temp", body: "temp"}]
+      articles: [{title: "Loading...", body: "This will only take a moment."}],
+      pinned: [{title: "Loading...", body: "This will only take a moment."}]
     });
   },
 
   componentDidMount: function () {
     this.articleListener = ArticleStore.addListener(this.__onChange);
     ApiUtil.fetchArticles();
+    ApiUtil.fetchPinnedArticle(1);
   },
 
   __onChange: function () {
     var articles = ArticleStore.lastNArticles(12);
-    this.setState({ title: new Date(), articles: articles });
+    var pinned = ArticleStore.pinnedArticle();
+    this.setState({ title: new Date(), articles: articles, pinned: pinned });
   },
 
   componentWillUnmount: function () {
@@ -45,6 +40,7 @@ var ArticleIndex = React.createClass({
 
   render: function () {
     var articles;
+    var pinnedArticle = this.state.pinned;
 
     if (this.state.articles) {
       articles = this.state.articles.map(function (article) {
@@ -63,6 +59,7 @@ var ArticleIndex = React.createClass({
         <div className="wiki-fetcher">
           <WikiFetcher />
         </div>
+        <ArticleTeaser article={pinnedArticle} />
         <ul className="articles-list">
           {articles}
         </ul>

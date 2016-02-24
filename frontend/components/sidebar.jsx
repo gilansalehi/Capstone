@@ -23,7 +23,7 @@ var Sidebar = React.createClass({
     var tabsList;
 
     if (this.props.path.pathname.slice(0, 9) === "/article/") {
-      if (ArticleStore.fetchArticle()) {
+      if (ArticleStore.fetchArticle() && ArticleStore.fetchArticle().table_of_contents) {
         tabsList = JSON.parse(ArticleStore.fetchArticle().table_of_contents);
 
         tabs = tabsList.map(function (tab, i) {
@@ -38,7 +38,7 @@ var Sidebar = React.createClass({
         }.bind(this));
 
       }
-      
+
     } else {
 
       tabsList = [

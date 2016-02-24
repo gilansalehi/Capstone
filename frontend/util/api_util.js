@@ -27,6 +27,19 @@ var ApiUtil = {
     });
   },
 
+  fetchPinnedArticle : function (id) {
+    $.ajax({
+      url: '/api/articles/' + id,
+      method: 'GET',
+      dataType: 'json',
+      success: function (article) {
+        ApiActions.addPinnedArticle(article);
+      },
+      error: function () {
+      },
+    });
+  },
+
   fetchFromWikipedia: function (title) {
 
     var fixedTitle = "";

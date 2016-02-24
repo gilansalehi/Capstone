@@ -26,6 +26,13 @@ var ApiActions = {
     });
   },
 
+  addPinnedArticle: function (article) {
+    AppDispatcher.dispatch({
+      actionType: ArticleConstants.PINNED_ARTICLE_RECEIVED,
+      article: article,
+    });
+  },
+
   addHeaderImage: function (url) {
     AppDispatcher.dispatch({
       actionType: ImageConstants.HEADER_IMAGE_RECEIVED,

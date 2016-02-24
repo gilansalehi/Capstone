@@ -55,16 +55,16 @@
 	var Article = __webpack_require__(208);
 	var ArticleIndex = __webpack_require__(241);
 	var ArticleStore = __webpack_require__(209);
-	var NavBar = __webpack_require__(244);
-	var Sidebar = __webpack_require__(252);
-	var SessionForm = __webpack_require__(253);
-	var UserForm = __webpack_require__(254);
-	var UserShow = __webpack_require__(259);
-	var Search = __webpack_require__(247);
-	var Rescue = __webpack_require__(260);
+	var NavBar = __webpack_require__(245);
+	var Sidebar = __webpack_require__(253);
+	var SessionForm = __webpack_require__(254);
+	var UserForm = __webpack_require__(255);
+	var UserShow = __webpack_require__(260);
+	var Search = __webpack_require__(248);
+	var Rescue = __webpack_require__(261);
 	
 	var CurrentUserStore = __webpack_require__(238);
-	var SessionsApiUtil = __webpack_require__(245);
+	var SessionsApiUtil = __webpack_require__(246);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -24277,6 +24277,7 @@
 	
 	var _articles = [];
 	var _currentArticle = [];
+	var _pinnedArticle = [];
 	
 	var resetArticles = function (articles) {
 	  _articles = articles.slice();
@@ -24290,6 +24291,10 @@
 	  switch (payload.actionType) {
 	    case ArticleConstants.ARTICLES_RECEIVED:
 	      resetArticles(payload.articles);
+	      ArticleStore.__emitChange();
+	      break;
+	    case ArticleConstants.PINNED_ARTICLE_RECEIVED:
+	      _pinnedArticle = payload;
 	      ArticleStore.__emitChange();
 	      break;
 	    case ArticleConstants.ARTICLE_RECEIVED:
@@ -24319,6 +24324,10 @@
 	
 	ArticleStore.firstNArticles = function (n) {
 	  return _articles.slice(0, n);
+	};
+	
+	ArticleStore.pinnedArticle = function () {
+	  return _pinnedArticle.article;
 	};
 	
 	ArticleStore.lastNArticles = function (n) {
@@ -30845,7 +30854,8 @@
 	var ArticleConstants = {
 	  ARTICLE_RECEIVED: "ARTICLE_RECEIVED",
 	  ARTICLES_RECEIVED: "ARTICLES_RECEIVED",
-	  HEADER_IMAGE_RECEIVED: "HEADER_IMAGE_RECEIVED"
+	  HEADER_IMAGE_RECEIVED: "HEADER_IMAGE_RECEIVED",
+	  PINNED_ARTICLE_RECEIVED: "PINNED_ARTICLE_RECEIVED"
 	};
 	
 	module.exports = ArticleConstants;
@@ -31142,6 +31152,18 @@
 	    });
 	  },
 	
+	  fetchPinnedArticle: function (id) {
+	    $.ajax({
+	      url: '/api/articles/' + id,
+	      method: 'GET',
+	      dataType: 'json',
+	      success: function (article) {
+	        ApiActions.addPinnedArticle(article);
+	      },
+	      error: function () {}
+	    });
+	  },
+	
 	  fetchFromWikipedia: function (title) {
 	
 	    var fixedTitle = "";
@@ -31291,6 +31313,13 @@
 	  addArticle: function (article) {
 	    AppDispatcher.dispatch({
 	      actionType: ArticleConstants.ARTICLE_RECEIVED,
+	      article: article
+	    });
+	  },
+	
+	  addPinnedArticle: function (article) {
+	    AppDispatcher.dispatch({
+	      actionType: ArticleConstants.PINNED_ARTICLE_RECEIVED,
 	      article: article
 	    });
 	  },
@@ -31652,9 +31681,6 @@
 /* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// This is the Homepage that displays what's new and various other things
-	// users might find interesting.
-	
 	var React = __webpack_require__(1);
 	var ReactRouter = __webpack_require__(159);
 	
@@ -31663,15 +31689,10 @@
 	
 	var Article = __webpack_require__(208);
 	var ArticleFragment = __webpack_require__(242);
-	var WikiFetcher = __webpack_require__(243);
+	var ArticleTeaser = __webpack_require__(243);
+	var WikiFetcher = __webpack_require__(244);
 	
 	var History = __webpack_require__(159).History;
-	
-	// this is the display logic for the main page.
-	// The main page should render an Article Fragment for the 20 most recent
-	// articles in the database.  Style the Article Fragments to be divs with fixed
-	// widths and heights, float them to the left with a margin of 20px, making them
-	// main page index a cool tilework of articles.
 	
 	var ArticleIndex = React.createClass({
 	  displayName: 'ArticleIndex',
@@ -31681,18 +31702,21 @@
 	  getInitialState: function () {
 	    return {
 	      title: new Date(),
-	      articles: [{ title: "temp", body: "temp" }]
+	      articles: [{ title: "Loading...", body: "This will only take a moment." }],
+	      pinned: [{ title: "Loading...", body: "This will only take a moment." }]
 	    };
 	  },
 	
 	  componentDidMount: function () {
 	    this.articleListener = ArticleStore.addListener(this.__onChange);
 	    ApiUtil.fetchArticles();
+	    ApiUtil.fetchPinnedArticle(1);
 	  },
 	
 	  __onChange: function () {
 	    var articles = ArticleStore.lastNArticles(12);
-	    this.setState({ title: new Date(), articles: articles });
+	    var pinned = ArticleStore.pinnedArticle();
+	    this.setState({ title: new Date(), articles: articles, pinned: pinned });
 	  },
 	
 	  componentWillUnmount: function () {
@@ -31701,6 +31725,7 @@
 	
 	  render: function () {
 	    var articles;
+	    var pinnedArticle = this.state.pinned;
 	
 	    if (this.state.articles) {
 	      articles = this.state.articles.map(function (article) {
@@ -31726,6 +31751,7 @@
 	        { className: 'wiki-fetcher' },
 	        React.createElement(WikiFetcher, null)
 	      ),
+	      React.createElement(ArticleTeaser, { article: pinnedArticle }),
 	      React.createElement(
 	        'ul',
 	        { className: 'articles-list' },
@@ -31814,6 +31840,57 @@
 	var ReactRouter = __webpack_require__(159);
 	var ArticleStore = __webpack_require__(209);
 	var ApiUtil = __webpack_require__(232);
+	var ApiActions = __webpack_require__(233);
+	var Article = __webpack_require__(208);
+	var History = __webpack_require__(159).History;
+	
+	// This file is a helper to render article teasers on the homepage.
+	// and perhaps at the end of other articles to show off related articles...
+	// MAKE SURE TO PASS AN ARTICLE AS A PROP TO THE FRAGMENT
+	
+	var ArticleTeaser = React.createClass({
+	  displayName: 'ArticleTeaser',
+	
+	  mixins: [History],
+	
+	  getInitialState: function () {
+	    return {
+	      article: this.props.article
+	    };
+	  },
+	
+	  componentWillReceiveProps: function (newProps) {
+	    this.setState({ article: newProps.article });
+	  },
+	
+	  render: function () {
+	    var article = this.state.article;
+	    return React.createElement(
+	      'a',
+	      { href: "#/article/" + this.state.article.id,
+	        className: 'pinned-article group',
+	        'background-image': "url(" + article.image + ")",
+	        'background-size': 'cover' },
+	      React.createElement(
+	        'h2',
+	        null,
+	        article.title
+	      ),
+	      React.createElement('article', { dangerouslySetInnerHTML: { __html: this.state.article.body } })
+	    );
+	  }
+	});
+	
+	module.exports = ArticleTeaser;
+
+/***/ },
+/* 244 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ReactRouter = __webpack_require__(159);
+	var ArticleStore = __webpack_require__(209);
+	var ApiUtil = __webpack_require__(232);
 	var History = __webpack_require__(159).History;
 	
 	// this is the display logic for a single article.
@@ -31861,7 +31938,7 @@
 	module.exports = WikiFetcher;
 
 /***/ },
-/* 244 */
+/* 245 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// this file will replace the current logic above yield in the application
@@ -31869,9 +31946,9 @@
 	
 	var React = __webpack_require__(1);
 	var ReactRouter = __webpack_require__(159);
-	var SessionsApiUtil = __webpack_require__(245);
+	var SessionsApiUtil = __webpack_require__(246);
 	var CurrentUserStore = __webpack_require__(238);
-	var Search = __webpack_require__(247);
+	var Search = __webpack_require__(248);
 	
 	var History = __webpack_require__(159).History;
 	
@@ -32054,10 +32131,10 @@
 	module.exports = NavBar;
 
 /***/ },
-/* 245 */
+/* 246 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var CurrentUserActions = __webpack_require__(246);
+	var CurrentUserActions = __webpack_require__(247);
 	
 	var SessionsApiUtil = {
 	  login: function (credentials, success) {
@@ -32113,7 +32190,7 @@
 	module.exports = SessionsApiUtil;
 
 /***/ },
-/* 246 */
+/* 247 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(229);
@@ -32139,12 +32216,12 @@
 	module.exports = CurrentUserActions;
 
 /***/ },
-/* 247 */
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var SearchResultsStore = __webpack_require__(248);
-	var SearchApiUtil = __webpack_require__(250);
+	var SearchResultsStore = __webpack_require__(249);
+	var SearchApiUtil = __webpack_require__(251);
 	var ArticleFragment = __webpack_require__(242);
 	var HeaderImage = __webpack_require__(235);
 	var ImageStore = __webpack_require__(236);
@@ -32243,12 +32320,12 @@
 	module.exports = Search;
 
 /***/ },
-/* 248 */
+/* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Store = __webpack_require__(210).Store;
 	var AppDispatcher = __webpack_require__(229);
-	var SearchConstants = __webpack_require__(249);
+	var SearchConstants = __webpack_require__(250);
 	
 	var SearchResultsStore = new Store(AppDispatcher);
 	
@@ -32276,7 +32353,7 @@
 	module.exports = SearchResultsStore;
 
 /***/ },
-/* 249 */
+/* 250 */
 /***/ function(module, exports) {
 
 	var SearchConstants = {
@@ -32286,10 +32363,10 @@
 	module.exports = SearchConstants;
 
 /***/ },
-/* 250 */
+/* 251 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var SearchActions = __webpack_require__(251);
+	var SearchActions = __webpack_require__(252);
 	
 	var SearchApiUtil = {
 	  search: function (query, page) {
@@ -32308,11 +32385,11 @@
 	module.exports = SearchApiUtil;
 
 /***/ },
-/* 251 */
+/* 252 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(229);
-	var SearchConstants = __webpack_require__(249);
+	var SearchConstants = __webpack_require__(250);
 	
 	var SearchActions = {
 	  receiveResults: function (data) {
@@ -32327,7 +32404,7 @@
 	module.exports = SearchActions;
 
 /***/ },
-/* 252 */
+/* 253 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -32357,7 +32434,7 @@
 	    var tabsList;
 	
 	    if (this.props.path.pathname.slice(0, 9) === "/article/") {
-	      if (ArticleStore.fetchArticle()) {
+	      if (ArticleStore.fetchArticle() && ArticleStore.fetchArticle().table_of_contents) {
 	        tabsList = JSON.parse(ArticleStore.fetchArticle().table_of_contents);
 	
 	        tabs = tabsList.map(function (tab, i) {
@@ -32430,12 +32507,12 @@
 	module.exports = Sidebar;
 
 /***/ },
-/* 253 */
+/* 254 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var History = __webpack_require__(159).History;
-	var SessionsApiUtil = __webpack_require__(245);
+	var SessionsApiUtil = __webpack_require__(246);
 	
 	var SessionForm = React.createClass({
 	  displayName: 'SessionForm',
@@ -32527,13 +32604,13 @@
 	module.exports = SessionForm;
 
 /***/ },
-/* 254 */
+/* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
 	var History = __webpack_require__(159).History;
-	var UserStore = __webpack_require__(255);
-	var UsersApiUtil = __webpack_require__(257);
+	var UserStore = __webpack_require__(256);
+	var UsersApiUtil = __webpack_require__(258);
 	// var SessionsApiUtil = require('./../../util/sessions_api_util');
 	
 	var UserForm = React.createClass({
@@ -32622,11 +32699,11 @@
 	module.exports = UserForm;
 
 /***/ },
-/* 255 */
+/* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(229);
-	var UserConstants = __webpack_require__(256);
+	var UserConstants = __webpack_require__(257);
 	var Store = __webpack_require__(210).Store;
 	
 	var _users = [];
@@ -32660,7 +32737,7 @@
 	module.exports = UsersStore;
 
 /***/ },
-/* 256 */
+/* 257 */
 /***/ function(module, exports) {
 
 	var UserConstants = {
@@ -32670,11 +32747,11 @@
 	module.exports = UserConstants;
 
 /***/ },
-/* 257 */
+/* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var UserActions = __webpack_require__(258);
-	var CurrentUserActions = __webpack_require__(246);
+	var UserActions = __webpack_require__(259);
+	var CurrentUserActions = __webpack_require__(247);
 	
 	var UsersApiUtil = {
 	  fetchUser: function (id) {
@@ -32712,11 +32789,11 @@
 	module.exports = UsersApiUtil;
 
 /***/ },
-/* 258 */
+/* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var AppDispatcher = __webpack_require__(229);
-	var UserConstants = __webpack_require__(256);
+	var UserConstants = __webpack_require__(257);
 	
 	var UserActions = {
 	  receiveUser: function (user) {
@@ -32730,12 +32807,12 @@
 	module.exports = UserActions;
 
 /***/ },
-/* 259 */
+/* 260 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	var UsersStore = __webpack_require__(255);
-	var UsersApiUtil = __webpack_require__(257);
+	var UsersStore = __webpack_require__(256);
+	var UsersApiUtil = __webpack_require__(258);
 	var Article = __webpack_require__(208);
 	
 	var UserShow = React.createClass({
@@ -32755,7 +32832,7 @@
 	module.exports = UserShow;
 
 /***/ },
-/* 260 */
+/* 261 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// This is the Homepage that displays what's new and various other things
@@ -32769,7 +32846,7 @@
 	
 	var Article = __webpack_require__(208);
 	var ArticleFragment = __webpack_require__(242);
-	var WikiFetcher = __webpack_require__(243);
+	var WikiFetcher = __webpack_require__(244);
 	
 	var History = __webpack_require__(159).History;
 	
