@@ -29,13 +29,14 @@ var ArticleIndex = React.createClass({
   },
 
   __onChange: function () {
-    var articles = ArticleStore.lastNArticles(12);
-    var pinned = ArticleStore.pinnedArticle();
-    this.setState({ title: new Date(), articles: articles, pinned: pinned });
+    var articles = ArticleStore.firstNArticles(12);
+    this.setState({ title: new Date(), articles: articles });
+    console.log("article index updated");
   },
 
   componentWillUnmount: function () {
     this.articleListener.remove();
+    console.log("listener removed")
   },
 
   render: function () {
@@ -43,10 +44,10 @@ var ArticleIndex = React.createClass({
     var pinnedArticle = this.state.pinned;
 
     if (this.state.articles) {
-      articles = this.state.articles.map(function (article) {
+      articles = this.state.articles.map(function (article, i) {
         return (
-          <li key={article.id}>
-              <ArticleFragment article={article} />
+          <li key={i}>
+            <ArticleFragment key={i} article={article} />
           </li>
         );
       });
@@ -59,7 +60,7 @@ var ArticleIndex = React.createClass({
         <div className="wiki-fetcher">
           <WikiFetcher />
         </div>
-        <ArticleTeaser article={pinnedArticle} />
+        <ArticleTeaser key="pinned" article={pinnedArticle} />
         <ul className="articles-list">
           {articles}
         </ul>

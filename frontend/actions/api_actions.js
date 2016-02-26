@@ -2,15 +2,6 @@ var AppDispatcher = require('../dispatcher/dispatcher');
 var ArticleConstants = require('../constants/article_constants');
 var ImageConstants = require('../constants/image_constants');
 
-// var ApiActions = {
-//   receiveAll: function(articles){
-//     AppDispatcher.dispatch({
-//       actionType: BenchConstants.BENCHES_RECEIVED,
-//       benches: benches
-//     });
-//   }
-// };
-
 var ApiActions = {
   allArticles: function (articles) {
     AppDispatcher.dispatch({
@@ -40,11 +31,6 @@ var ApiActions = {
     });
   },
 
-  // pingStore: function () {
-  //   AppDispatcher.dispatch({
-  //     actionType: ArticleConstants.PING,
-  //   });
-  // }
 };
 
 module.exports = ApiActions;

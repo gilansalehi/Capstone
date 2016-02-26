@@ -1,4 +1,5 @@
 require 'open-uri'
+require 'byebug'
 
 class Api::FetchersController < ApplicationController
 
@@ -13,6 +14,7 @@ class Api::FetchersController < ApplicationController
     # contents = doc.xpath("//div[@id='toc']//li").map{ |node| node.inner_html }
     # test1 = doc.xpath("//div[@id='toc']//li/a").map{ |node| node.text }
     # test2 = doc.xpath("//div[@id='toc']//li/a").map{ |link| link["href"] }
+    
 
     @page = Article.new(
       title: title,

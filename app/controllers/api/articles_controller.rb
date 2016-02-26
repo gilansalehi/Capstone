@@ -26,6 +26,7 @@ class Api::ArticlesController < ApplicationController
   def update
     @article = Article.find_by_id(params[:id])
 
+    debugger
     if @article.update(article_params)
       render :show
     else

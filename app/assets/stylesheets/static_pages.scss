@@ -92,7 +92,7 @@
 }
 
 .sidebar-list-item:hover a {
-  margin-left: -75%;
+  // margin-left: -75%;
 }
 
 .sidebar-list-item:hover {
@@ -125,8 +125,9 @@
   width: 82%;
   margin: 10px 20px;
   padding: 20px;
-  border: 1px solid #3ad;
+  border: 1px solid #CEE3F6;
   overflow: hidden;
+  background-color: #EFFBF2;
 }
 
 .pinned-article > p {

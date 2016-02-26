@@ -6,9 +6,6 @@ var ApiActions = require('../actions/api_actions.js');
 var Article = require('./article.jsx');
 var History = require('react-router').History;
 
-// This file is a helper to render article teasers on the homepage.
-// and perhaps at the end of other articles to show off related articles...
-// MAKE SURE TO PASS AN ARTICLE AS A PROP TO THE FRAGMENT
 
 var ArticleTeaser = React.createClass({
   mixins: [History],
@@ -21,7 +18,6 @@ var ArticleTeaser = React.createClass({
 
   componentWillReceiveProps: function (newProps) {
     this.setState({ article: newProps.article });
-
   },
 
   render: function () {

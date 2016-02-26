@@ -52,9 +52,33 @@ var ApiUtil = {
 
     $.ajax({
       type: 'POST',
-      url: '/api/fetcher',
+      url: '/api/fetcher/create',
       dataType: "json",
       data: { url: urlString },
+      success: function(data) {
+        ApiActions.addArticle(data);
+      },
+      error: function (message) {
+        console.log("No such article found on Wikipedia.");
+      }
+    });
+  },
+
+  smartFetch: function (title) {
+
+    var fixedTitle = "";
+    for (var i = 0; i < title.length; i++) {
+      if (title[i] === " ") { fixedTitle += "_"; }
+      else { fixedTitle += title[i]; }
+    }
+
+    var urlString = "https://en.wikipedia.org/wiki/" + fixedTitle;
+
+    $.ajax({
+      type: 'POST',
+      url: '/api/fetcher/smartFetch',
+      dataType: "json",
+      data: { url: urlString, title: title },
       success: function(data) {
         ApiActions.addArticle(data);
       },

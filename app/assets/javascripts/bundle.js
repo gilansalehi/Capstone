@@ -24312,6 +24312,13 @@
 	        }
 	      });
 	
+	      var titles = _articles.map(function (article) {
+	        return article.title;
+	      });
+	
+	      console.log(titles);
+	
+	      console.log("Article received: " + payload.article.title);
 	      _currentArticle = payload;
 	      ArticleStore.__emitChange();
 	      break;
@@ -31179,9 +31186,36 @@
 	
 	    $.ajax({
 	      type: 'POST',
-	      url: '/api/fetcher',
+	      url: '/api/fetcher/create',
 	      dataType: "json",
 	      data: { url: urlString },
+	      success: function (data) {
+	        ApiActions.addArticle(data);
+	      },
+	      error: function (message) {
+	        console.log("No such article found on Wikipedia.");
+	      }
+	    });
+	  },
+	
+	  smartFetch: function (title) {
+	
+	    var fixedTitle = "";
+	    for (var i = 0; i < title.length; i++) {
+	      if (title[i] === " ") {
+	        fixedTitle += "_";
+	      } else {
+	        fixedTitle += title[i];
+	      }
+	    }
+	
+	    var urlString = "https://en.wikipedia.org/wiki/" + fixedTitle;
+	
+	    $.ajax({
+	      type: 'POST',
+	      url: '/api/fetcher/smartFetch',
+	      dataType: "json",
+	      data: { url: urlString, title: title },
 	      success: function (data) {
 	        ApiActions.addArticle(data);
 	      },
@@ -31293,15 +31327,6 @@
 	var ArticleConstants = __webpack_require__(228);
 	var ImageConstants = __webpack_require__(234);
 	
-	// var ApiActions = {
-	//   receiveAll: function(articles){
-	//     AppDispatcher.dispatch({
-	//       actionType: BenchConstants.BENCHES_RECEIVED,
-	//       benches: benches
-	//     });
-	//   }
-	// };
-	
 	var ApiActions = {
 	  allArticles: function (articles) {
 	    AppDispatcher.dispatch({
@@ -31333,11 +31358,6 @@
 	
 	};
 	
-	// pingStore: function () {
-	//   AppDispatcher.dispatch({
-	//     actionType: ArticleConstants.PING,
-	//   });
-	// }
 	module.exports = ApiActions;
 
 /***/ },
@@ -31621,6 +31641,7 @@
 	    } else {
 	      formData.append("article[image]", this.state.imageFile);
 	    }
+	
 	    ApiUtil.saveEditedArticle(ca.id, formData, this.resetForm);
 	    this.closeModal();
 	  },
@@ -31714,13 +31735,14 @@
 	  },
 	
 	  __onChange: function () {
-	    var articles = ArticleStore.lastNArticles(12);
-	    var pinned = ArticleStore.pinnedArticle();
-	    this.setState({ title: new Date(), articles: articles, pinned: pinned });
+	    var articles = ArticleStore.firstNArticles(12);
+	    this.setState({ title: new Date(), articles: articles });
+	    console.log("article index updated");
 	  },
 	
 	  componentWillUnmount: function () {
 	    this.articleListener.remove();
+	    console.log("listener removed");
 	  },
 	
 	  render: function () {
@@ -31728,11 +31750,11 @@
 	    var pinnedArticle = this.state.pinned;
 	
 	    if (this.state.articles) {
-	      articles = this.state.articles.map(function (article) {
+	      articles = this.state.articles.map(function (article, i) {
 	        return React.createElement(
 	          'li',
-	          { key: article.id },
-	          React.createElement(ArticleFragment, { article: article })
+	          { key: i },
+	          React.createElement(ArticleFragment, { key: i, article: article })
 	        );
 	      });
 	    } else {
@@ -31751,7 +31773,7 @@
 	        { className: 'wiki-fetcher' },
 	        React.createElement(WikiFetcher, null)
 	      ),
-	      React.createElement(ArticleTeaser, { article: pinnedArticle }),
+	      React.createElement(ArticleTeaser, { key: 'pinned', article: pinnedArticle }),
 	      React.createElement(
 	        'ul',
 	        { className: 'articles-list' },
@@ -31843,10 +31865,6 @@
 	var ApiActions = __webpack_require__(233);
 	var Article = __webpack_require__(208);
 	var History = __webpack_require__(159).History;
-	
-	// This file is a helper to render article teasers on the homepage.
-	// and perhaps at the end of other articles to show off related articles...
-	// MAKE SURE TO PASS AN ARTICLE AS A PROP TO THE FRAGMENT
 	
 	var ArticleTeaser = React.createClass({
 	  displayName: 'ArticleTeaser',

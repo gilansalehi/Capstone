@@ -36,6 +36,13 @@ ArticleStore.__onDispatch = function (payload) {
         else { return 0; }
       });
 
+      var titles = _articles.map( function (article) {
+        return article.title;
+      });
+
+      console.log(titles);
+
+      console.log("Article received: " + payload.article.title);
       _currentArticle = payload;
       ArticleStore.__emitChange();
       break;

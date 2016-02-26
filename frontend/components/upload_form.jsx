@@ -65,6 +65,7 @@ var UploadForm = React.createClass({
     } else {
       formData.append("article[image]", this.state.imageFile);
     }
+
     ApiUtil.saveEditedArticle(ca.id, formData, this.resetForm);
     this.closeModal();
   },

@@ -10,8 +10,9 @@ Rails.application.routes.draw do
     resources :articles, only: [:index, :new, :create, :show, :update]
     resources :users, only: [:create, :show]
     resource :session, only: [:create, :destroy, :show]
-    resource :fetcher, only: [:create]
+    post "fetcher/create", to: "fetchers#create"
     post "fetcher/header", to: "fetchers#header"
+    post "fetcher/smartFetch", to: "fetchers#smartFetch"
     get "search", to: "utils#search"
   end
 
