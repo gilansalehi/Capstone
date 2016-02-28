@@ -31273,7 +31273,7 @@
 	        ApiActions.addArticle(article);
 	      },
 	      error: function (msg) {
-	        console.log("error with saving edited article");
+	        console.log("error with creating new article");
 	      }
 	    });
 	  },
@@ -31967,6 +31967,7 @@
 	var SessionsApiUtil = __webpack_require__(246);
 	var CurrentUserStore = __webpack_require__(238);
 	var Search = __webpack_require__(248);
+	var CreateButton = __webpack_require__(262);
 	
 	var History = __webpack_require__(159).History;
 	
@@ -32019,6 +32020,11 @@
 	          React.createElement(
 	            'li',
 	            { key: '3' },
+	            React.createElement(CreateButton, null)
+	          ),
+	          React.createElement(
+	            'li',
+	            { key: '4' },
 	            React.createElement(SearchToggle, null)
 	          )
 	        )
@@ -32132,10 +32138,6 @@
 	var SearchToggle = React.createClass({
 	  displayName: 'SearchToggle',
 	
-	
-	  toggleSearch: function () {
-	    alert("toggle Search");
-	  },
 	
 	  render: function () {
 	    return React.createElement(
@@ -32893,6 +32895,135 @@
 	});
 	
 	module.exports = Rescue;
+
+/***/ },
+/* 262 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ApiUtil = __webpack_require__(232);
+	var ArticleStore = __webpack_require__(209);
+	var CurrentUserStore = __webpack_require__(238);
+	
+	var CreateButton = React.createClass({
+	  displayName: 'CreateButton',
+	
+	
+	  renderModal: function () {
+	    $("#modal").addClass("is-active");
+	  },
+	
+	  handleClick: function () {
+	    if (CurrentUserStore.currentUser()) {
+	      this.renderModal();
+	    } else {
+	      alert("Please log in.");
+	    }
+	  },
+	
+	  render: function () {
+	
+	    return React.createElement(
+	      'div',
+	      { className: 'toggle-create' },
+	      React.createElement(
+	        'div',
+	        { className: 'article-create icon' },
+	        React.createElement('i', { className: 'fa fa-plus', onClick: this.handleClick })
+	      ),
+	      React.createElement(CreationForm, null)
+	    );
+	  }
+	});
+	
+	var CreationForm = React.createClass({
+	  displayName: 'CreationForm',
+	
+	
+	  getInitialState: function () {
+	    return { title: "", wikiFetcher: "" };
+	  },
+	
+	  changeTitle: function (e) {
+	    this.setState({ title: e.currentTarget.value, wikiFetcher: "" });
+	  },
+	
+	  changeWiki: function (e) {
+	    this.setState({ title: "", wikiFetcher: e.currentTarget.value });
+	  },
+	
+	  handleSubmit: function (e) {
+	    e.preventDefault();
+	
+	    var cu = CurrentUserStore.currentUser();
+	
+	    if (this.state.title) {
+	      ApiUtil.createNewArticle({
+	        title: this.state.title,
+	        body: "Click the stylus above to add text to this article.  You can do it!",
+	        author_id: cu.id });
+	    } else {
+	      ApiUtil.fetchFromWikipedia(this.state.wikiFetcher);
+	    }
+	
+	    this.closeModal();
+	  },
+	
+	  resetForm: function () {
+	    this.setState({ title: "", imageFile: null, imageUrl: "" });
+	  },
+	
+	  closeModal: function () {
+	    $("#modal").removeClass("is-active");
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { id: 'modal', className: 'modal' },
+	      React.createElement(
+	        'form',
+	        { onSubmit: this.handleSubmit },
+	        React.createElement(
+	          'label',
+	          { className: 'modal-header' },
+	          'Create Article'
+	        ),
+	        React.createElement('br', null),
+	        React.createElement('img', { className: 'preview-image', src: this.state.imageUrl }),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          { 'for': 'title-input' },
+	          'New article'
+	        ),
+	        React.createElement('br', null),
+	        React.createElement('input', { id: 'title-input',
+	          type: 'text',
+	          onChange: this.changeTitle,
+	          value: this.state.title,
+	          placeholder: 'Enter the title for a new article' }),
+	        React.createElement('br', null),
+	        React.createElement(
+	          'label',
+	          { 'for': 'wiki-fetcher-input' },
+	          'Import from Wikipedia'
+	        ),
+	        React.createElement('br', null),
+	        React.createElement('input', { id: 'wiki-fetcher-input',
+	          type: 'text',
+	          onChange: this.changeWiki,
+	          value: this.state.wikiFetcher,
+	          placeholder: 'Enter the title of a Wikipedia article' }),
+	        React.createElement('br', null),
+	        React.createElement('input', { className: 'submit-button', type: 'submit', value: 'Submit' }),
+	        React.createElement('input', { className: 'cancel-button', value: 'Cancel', onClick: this.closeModal })
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = CreateButton;
 
 /***/ }
 /******/ ]);

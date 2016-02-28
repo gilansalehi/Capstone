@@ -133,7 +133,7 @@ var ApiUtil = {
         ApiActions.addArticle(article);
       },
       error: function (msg) {
-        console.log("error with saving edited article");
+        console.log("error with creating new article");
       }
     });
   },

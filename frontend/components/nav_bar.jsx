@@ -6,6 +6,7 @@ var ReactRouter = require('react-router');
 var SessionsApiUtil = require('./../util/sessions_api_util.js');
 var CurrentUserStore = require('./../stores/current_user_store.js');
 var Search = require('./search');
+var CreateButton = require('./create_article.jsx');
 
 var History = require('react-router').History;
 
@@ -36,7 +37,8 @@ var NavBar = React.createClass({
           <ul className="nav-list">
             <li key="1"><CurrentUser currentUser={currentUser} /></li>
             <li key="2"><LogInOut currentUser={currentUser} /></li>
-            <li key="3"><SearchToggle /></li>
+            <li key="3"><CreateButton /></li>
+            <li key="4"><SearchToggle /></li>
           </ul>
         </div>
       </nav>
@@ -117,10 +119,6 @@ var SidebarToggle = React.createClass({
 });
 
 var SearchToggle = React.createClass({
-
-  toggleSearch: function () {
-    alert("toggle Search");
-  },
 
   render: function () {
     return (
