@@ -10,7 +10,7 @@ var CreateButton = React.createClass({
   },
 
   handleClick: function () {
-    if (CurrentUserStore.currentUser()) {
+    if (CurrentUserStore.isLoggedIn()) {
       this.renderModal();
     } else {
       alert("Please log in.");
@@ -52,7 +52,7 @@ var CreationForm = React.createClass({
     if (this.state.title) {
       ApiUtil.createNewArticle({
         title: this.state.title,
-        body: "Click the stylus above to add text to this article.  You can do it!", 
+        body: "Click the stylus above to add text to this article.  You can do it!",
         author_id: cu.id });
     } else {
       ApiUtil.fetchFromWikipedia(this.state.wikiFetcher);

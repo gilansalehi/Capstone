@@ -41,7 +41,7 @@ var ArticleEditor = React.createClass({
   },
 
   handleClick: function () {
-    if (CurrentUserStore.currentUser()) {
+    if (CurrentUserStore.isLoggedIn()) {
       this.toggleState();
     } else {
       alert("Please log in.");
