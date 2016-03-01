@@ -31572,7 +31572,7 @@
 	
 	
 	  renderModal: function () {
-	    $("#modal").addClass("is-active");
+	    $("#image-modal").addClass("is-active");
 	  },
 	
 	  handleClick: function () {
@@ -31646,13 +31646,13 @@
 	  },
 	
 	  closeModal: function () {
-	    $("#modal").removeClass("is-active");
+	    $("#image-modal").removeClass("is-active");
 	  },
 	
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      { id: 'modal', className: 'modal' },
+	      { id: 'image-modal', className: 'image-modal modal' },
 	      React.createElement(
 	        'form',
 	        { onSubmit: this.handleSubmit },
@@ -32432,7 +32432,7 @@
 	
 	
 	  renderModal: function () {
-	    $("#modal").addClass("is-active");
+	    $("#create-modal").addClass("is-active");
 	  },
 	
 	  handleClick: function () {
@@ -32496,13 +32496,13 @@
 	  },
 	
 	  closeModal: function () {
-	    $("#modal").removeClass("is-active");
+	    $("#create-modal").removeClass("is-active");
 	  },
 	
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      { id: 'modal', className: 'modal' },
+	      { id: 'create-modal', className: 'create-modal modal' },
 	      React.createElement(
 	        'form',
 	        { onSubmit: this.handleSubmit },

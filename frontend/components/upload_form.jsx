@@ -5,7 +5,7 @@ var ArticleStore = require('../stores/article');
 var UploadButton = React.createClass({
 
   renderModal: function () {
-    $("#modal").addClass("is-active");
+    $("#image-modal").addClass("is-active");
   },
 
   handleClick: function () {
@@ -75,12 +75,12 @@ var UploadForm = React.createClass({
   },
 
   closeModal: function () {
-    $("#modal").removeClass("is-active");
+    $("#image-modal").removeClass("is-active");
   },
 
   render: function() {
     return (
-      <div id="modal" className="modal">
+      <div id="image-modal" className="image-modal modal">
         <form onSubmit={this.handleSubmit}>
           <label className="modal-header">Upload Image</label><br></br>
 

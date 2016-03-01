@@ -6,7 +6,7 @@ var CurrentUserStore = require('../stores/current_user_store');
 var CreateButton = React.createClass({
 
   renderModal: function () {
-    $("#modal").addClass("is-active");
+    $("#create-modal").addClass("is-active");
   },
 
   handleClick: function () {
@@ -66,12 +66,12 @@ var CreationForm = React.createClass({
   },
 
   closeModal: function () {
-    $("#modal").removeClass("is-active");
+    $("#create-modal").removeClass("is-active");
   },
 
   render: function() {
     return (
-      <div id="modal" className="modal">
+      <div id="create-modal" className="create-modal modal">
         <form onSubmit={this.handleSubmit}>
           <label className="modal-header">Create Article</label><br></br>
 
