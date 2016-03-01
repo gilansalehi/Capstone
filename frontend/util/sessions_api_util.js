@@ -30,7 +30,7 @@ var SessionsApiUtil = {
         success && success();
       },
       error: function (msg) {
-        debugger
+        console.log(msg);
       }
     });
   },

@@ -31304,18 +31304,13 @@
 	      url: '/api/users/' + id,
 	      dataType: 'json',
 	      success: function (article) {
-	        debugger;
 	        ApiActions.addArticle(article);
 	      },
-	      error: function (msg) {
-	        debugger;
-	      }
+	      error: function (msg) {}
 	    });
 	  }
 	
 	};
-	
-	window.ApiUtil = ApiUtil;
 	
 	module.exports = ApiUtil;
 
@@ -32186,7 +32181,7 @@
 	        success && success();
 	      },
 	      error: function (msg) {
-	        debugger;
+	        console.log(msg);
 	      }
 	    });
 	  },

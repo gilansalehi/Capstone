@@ -164,17 +164,13 @@ var ApiUtil = {
       url: '/api/users/' + id,
       dataType: 'json',
       success: function (article) {
-        debugger
         ApiActions.addArticle(article);
       },
       error: function (msg) {
-        debugger
       }
     });
   }
 
 };
-
-window.ApiUtil = ApiUtil;
 
 module.exports = ApiUtil;
