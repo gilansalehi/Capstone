@@ -33,6 +33,11 @@ class Api::ArticlesController < ApplicationController
     end
   end
 
+  def fetch
+    @article = Article.find_by_title(params[:title])
+    render :show
+  end
+
   private
   def article_params
     params.require(:article).permit(:id, :title, :body, :author_id, :table_of_contents, :image)

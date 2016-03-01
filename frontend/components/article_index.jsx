@@ -30,8 +30,8 @@ var ArticleIndex = React.createClass({
 
   __onChange: function () {
     var articles = ArticleStore.firstNArticles(12);
-    this.setState({ title: new Date(), articles: articles });
-    console.log("article index updated");
+    var pinned = ArticleStore.pinnedArticle();
+    this.setState({ title: new Date(), articles: articles, pinned: pinned });
   },
 
   componentWillUnmount: function () {

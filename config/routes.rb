@@ -12,7 +12,7 @@ Rails.application.routes.draw do
     resource :session, only: [:create, :destroy, :show]
     post "fetcher/create", to: "fetchers#create"
     post "fetcher/header", to: "fetchers#header"
-    post "fetcher/smartFetch", to: "fetchers#smartFetch"
+    get "articles/title", to: "articles#fetch"
     get "search", to: "utils#search"
   end
 
