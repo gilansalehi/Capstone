@@ -25,7 +25,7 @@ var ArticleIndex = React.createClass({
   componentDidMount: function () {
     this.articleListener = ArticleStore.addListener(this.__onChange);
     ApiUtil.fetchArticles();
-    ApiUtil.fetchPinnedArticle(1);
+    ApiUtil.fetchPinnedArticle(61);
   },
 
   __onChange: function () {
